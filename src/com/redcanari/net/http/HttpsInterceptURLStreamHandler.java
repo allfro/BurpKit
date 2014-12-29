@@ -1,4 +1,4 @@
-package com.redcanari.net;
+package com.redcanari.net.http;
 
 import sun.net.www.protocol.https.Handler;
 import sun.net.www.protocol.https.HttpsURLConnectionImpl;

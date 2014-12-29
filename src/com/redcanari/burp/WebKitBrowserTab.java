@@ -1,8 +1,8 @@
 package com.redcanari.burp;
 
 import burp.*;
-import com.redcanari.net.CachedHttpResponse;
-import com.redcanari.net.cache.HttpResponseCache;
+import com.redcanari.net.http.HttpMockResponse;
+import com.redcanari.net.cache.HttpMockResponseCache;
 import com.redcanari.ui.WebKitBrowser;
 import com.redcanari.util.DigestUtils;
 import com.redcanari.util.HttpUtils;
@@ -20,18 +20,18 @@ public class WebKitBrowserTab implements IMessageEditorTab
     private IMessageEditorController controller;
     private IExtensionHelpers helpers;
     private byte[] currentResponse;
-    private HttpResponseCache httpResponseCache;
+    private HttpMockResponseCache httpMockResponseCache;
 
     public static final String REPEATER_PARAM_NAME = "__repeater_id__";
 
     public WebKitBrowserTab(BurpExtender burpExtender, IMessageEditorController controller, boolean editable)
     {
+//        System.out.println("Initialized new tab");
         this.burpExtender = burpExtender;
         this.controller = controller;
         helpers = burpExtender.getHelpers();
-        httpResponseCache = HttpResponseCache.getInstance();
-        // create an instance of Burp's text editor, to display our deserialized data
-        webkitBrowser = new WebKitBrowser();
+        httpMockResponseCache = HttpMockResponseCache.getInstance();
+        webkitBrowser = new WebKitBrowser(controller);
     }
 
     //
@@ -53,7 +53,7 @@ public class WebKitBrowserTab implements IMessageEditorTab
     @Override
     public boolean isEnabled(byte[] content, boolean isRequest)
     {
-        return !isRequest;
+        return !isRequest && helpers.analyzeResponse(content).getInferredMimeType().equals("HTML");
     }
 
     private void cacheResponseAndFakeRequest(byte[] requestContent, byte[] responseContent) {
@@ -69,9 +69,9 @@ public class WebKitBrowserTab implements IMessageEditorTab
 
         // Save response for fake request
         URL url = requestInfo.getUrl();
-        httpResponseCache.put(
+        httpMockResponseCache.put(
                 url,
-                new CachedHttpResponse(helpers.analyzeResponse(responseContent), responseContent)
+                new HttpMockResponse(helpers.analyzeResponse(responseContent), responseContent)
         );
 
         // Go to fake URL
@@ -79,13 +79,10 @@ public class WebKitBrowserTab implements IMessageEditorTab
     }
 
     @Override
-    public void setMessage(byte[] content, boolean isRequest)
-    {
+    public void setMessage(byte[] content, boolean isRequest) {
         if (content != null)
             cacheResponseAndFakeRequest(controller.getRequest(), content);
     }
-
-
 
     @Override
     public byte[] getMessage()
@@ -104,4 +101,8 @@ public class WebKitBrowserTab implements IMessageEditorTab
     {
         return new byte[]{};
     }
+
+
+
+
 }

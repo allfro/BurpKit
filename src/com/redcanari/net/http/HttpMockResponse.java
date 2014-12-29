@@ -1,4 +1,4 @@
-package com.redcanari.net;
+package com.redcanari.net.http;
 
 import burp.IResponseInfo;
 
@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Created by ndouba on 2014-06-02.
  */
-public class CachedHttpResponse {
+public class HttpMockResponse {
 
     private short statusCode;
     private byte[] body;
@@ -17,9 +17,9 @@ public class CachedHttpResponse {
     private String inferredMimeType;
     private String statedMimeType;
 
-    public CachedHttpResponse(IResponseInfo responseInfo, byte[] content) {
+    public HttpMockResponse(IResponseInfo responseInfo, byte[] content) {
         this.body = Arrays.copyOfRange(content, responseInfo.getBodyOffset(), content.length);
-        headers = new TreeMap<String, List<String>>(String.CASE_INSENSITIVE_ORDER);
+        headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         inferredMimeType = responseInfo.getInferredMimeType();
         statedMimeType = responseInfo.getStatedMimeType();
         statusCode = responseInfo.getStatusCode();

@@ -1,4 +1,4 @@
-package com.redcanari.net;
+package com.redcanari.net.http;
 
 import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;

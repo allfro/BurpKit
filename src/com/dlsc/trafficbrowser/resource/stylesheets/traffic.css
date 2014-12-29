@@ -1,0 +1,59 @@
+.root {
+	-fx-font-size: 0.9em;	
+}
+
+.timebar {
+	-fx-pref-height: 10px;
+	-fx-background-color: aliceblue;
+	-fx-background-radius: 4px;
+	-fx-border-color: derive(aliceblue, -25%);
+	-fx-border-radius: 4px;
+}
+
+.label2 {
+	-fx-text-fill: gray;	
+}
+
+.error {
+	-fx-text-fill: red;
+}
+
+.bar-type-generic {
+	-fx-image: url("../images/type-generic.png");
+	-fx-background-color: palegoldenrod ;
+	-fx-border-color: derive(palegoldenrod , -25%);
+}
+
+.bar-type-html {
+	-fx-image: url("../images/type-html.png");
+	-fx-background-color: yellowgreen ;
+	-fx-border-color: derive(yellowgreen , -25%);
+}
+
+.bar-type-js {
+	-fx-image: url("../images/type-js.png");
+	-fx-background-color: lightblue ;
+	-fx-border-color: derive(lightblue , -25%);
+}
+
+.bar-type-css {
+	-fx-image: url("../images/type-css.png");
+	-fx-background-color: lightsalmon ;
+	-fx-border-color: derive(lightsalmon , -25%);
+}
+
+.image-type-generic {
+	-fx-image: url("../images/type-generic.png");
+}
+
+.image-type-html {
+	-fx-image: url("../images/type-html.png");
+}
+
+.image-type-js {
+	-fx-image: url("../images/type-js.png");
+}
+
+.image-type-css {
+	-fx-image: url("../images/type-css.png");
+}

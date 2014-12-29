@@ -1,6 +1,4 @@
-package com.redcanari.net;
-
-import sun.net.www.protocol.https.HttpsURLConnectionImpl;
+package com.redcanari.net.http;
 
 import java.io.IOException;
 import java.net.Proxy;

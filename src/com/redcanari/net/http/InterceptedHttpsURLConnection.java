@@ -1,8 +1,12 @@
-package com.redcanari.net;
+package com.redcanari.net.http;
 
 
+import com.dlsc.trafficbrowser.beans.Traffic;
+import com.redcanari.beans.WebRequestObservable;
 import com.redcanari.burp.WebKitBrowserTab;
-import com.redcanari.net.cache.HttpResponseCache;
+import com.redcanari.net.cache.HttpMockResponseCache;
+import com.redcanari.net.http.HttpMockResponse;
+import javafx.collections.ObservableList;
 import sun.net.www.protocol.https.DelegateHttpsURLConnection;
 import sun.net.www.protocol.https.HttpsURLConnectionImpl;
 
@@ -21,46 +25,45 @@ import java.util.Map;
  */
 public class InterceptedHttpsURLConnection extends HttpsURLConnectionImpl {
 
-    private HttpResponseCache httpResponseCache;
+    private HttpMockResponseCache httpMockResponseCache;
     private boolean isIntercepted = false;
-    private CachedHttpResponse cachedHttpResponse = null;
+    private HttpMockResponse httpMockResponse = null;
     private InputStream inputStream;
 
 
     public InterceptedHttpsURLConnection(URL url, HttpsURLConnectionImpl impl) throws IOException {
         super(url);
+
         try {
             Field f = null;
             f = impl.getClass().getDeclaredField("delegate");
             f.setAccessible(true);
             delegate = (DelegateHttpsURLConnection)f.get(impl);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
         setUseCaches(false);
         setDefaultUseCaches(false);
-        httpResponseCache = HttpResponseCache.getInstance();
-
+        httpMockResponseCache = HttpMockResponseCache.getInstance();
     }
 
     @Override
     synchronized public void connect() throws IOException {
-        System.err.println("Processing request: " + url);
-        if (url.getFile().contains(WebKitBrowserTab.REPEATER_PARAM_NAME) && httpResponseCache.containsKey(url)) {
-            System.err.println("Intercepting request: " + url);
+//        System.err.println("Processing request: " + url + ", Request Headers: " + super.getRequestProperties());
+
+        if (url.getFile().contains(WebKitBrowserTab.REPEATER_PARAM_NAME) && httpMockResponseCache.containsKey(url)) {
+//            System.err.println("Intercepting request: " + url);
 
             isIntercepted = true;
-            cachedHttpResponse = httpResponseCache.get(url);
-            responseCode = cachedHttpResponse.getStatusCode();
+            httpMockResponse = httpMockResponseCache.get(url);
+            responseCode = httpMockResponse.getStatusCode();
 
             try {
                 delegate.getCookieHandler().put(getURL().toURI(), getHeaderFields());
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-            inputStream = cachedHttpResponse.getInputStream();
+            inputStream = httpMockResponse.getInputStream();
             setConnected(true);
         } else
             super.connect();
@@ -96,7 +99,7 @@ public class InterceptedHttpsURLConnection extends HttpsURLConnectionImpl {
     @Override
     synchronized public Map<String, List<String>> getHeaderFields() {
         if (isIntercepted)
-            return cachedHttpResponse.getHeaders();
+            return httpMockResponse.getHeaders();
         return super.getHeaderFields();
     }
 
@@ -110,4 +113,13 @@ public class InterceptedHttpsURLConnection extends HttpsURLConnectionImpl {
     }
 
 
+//    @Override
+//    public void addWebRequestListener(URL scope, ObservableList<Traffic> observer) {
+//
+//    }
+//
+//    @Override
+//    public void removeWebRequestListener(URL scope) {
+//
+//    }
 }

@@ -1,10 +1,11 @@
-package com.redcanari.net;
+package com.redcanari.net.http;
 
 
 import com.redcanari.burp.WebKitBrowserTab;
-import com.redcanari.net.cache.HttpResponseCache;
+import com.redcanari.net.cache.HttpMockResponseCache;
 import sun.net.www.protocol.http.HttpURLConnection;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Proxy;
@@ -19,16 +20,17 @@ import java.util.Map;
  */
 public class InterceptedHttpURLConnection extends HttpURLConnection {
 
-    private HttpResponseCache httpResponseCache;
+    private HttpMockResponseCache httpMockResponseCache;
     private boolean isIntercepted = false;
-    private CachedHttpResponse cachedHttpResponse = null;
+    private HttpMockResponse httpMockResponse = null;
     private InputStream inputStream;
+    private ByteArrayOutputStream byteArrayOutputStream;
 
     public InterceptedHttpURLConnection(URL url, Proxy proxy) {
         super(url, proxy);
         setUseCaches(false);
         setDefaultUseCaches(false);
-        httpResponseCache = HttpResponseCache.getInstance();
+        httpMockResponseCache = HttpMockResponseCache.getInstance();
     }
 
     public InterceptedHttpURLConnection(URL url) throws IOException {
@@ -47,21 +49,22 @@ public class InterceptedHttpURLConnection extends HttpURLConnection {
 
     @Override
     synchronized public void connect() throws IOException {
-        System.err.println("Processing request: " + url);
+//        System.err.println("Processing request: " + url + ", Request Headers: " + super.getRequestProperties());
 //        url = fixUrlQuery(url);
-        if (url.getFile().contains(WebKitBrowserTab.REPEATER_PARAM_NAME) && httpResponseCache.containsKey(url)) {
-            System.err.println("Intercepting request: " + url);
+
+        if (url.getFile().contains(WebKitBrowserTab.REPEATER_PARAM_NAME) && httpMockResponseCache.containsKey(url)) {
+//            System.err.println("Intercepting request: " + url);
 
             isIntercepted = true;
-            cachedHttpResponse = httpResponseCache.get(url);
-            responseCode = cachedHttpResponse.getStatusCode();
+            httpMockResponse = httpMockResponseCache.get(url);
+            responseCode = httpMockResponse.getStatusCode();
 
             try {
                 getCookieHandler().put(getURL().toURI(), getHeaderFields());
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-            inputStream = cachedHttpResponse.getInputStream();
+            inputStream = httpMockResponse.getInputStream();
             connected = true;
         } else
             super.connect();
@@ -70,7 +73,7 @@ public class InterceptedHttpURLConnection extends HttpURLConnection {
     @Override
     synchronized public Map<String, List<String>> getHeaderFields() {
         if (isIntercepted)
-            return cachedHttpResponse.getHeaders();
+            return httpMockResponse.getHeaders();
         return super.getHeaderFields();
     }
 
@@ -82,7 +85,5 @@ public class InterceptedHttpURLConnection extends HttpURLConnection {
             return inputStream;
         return super.getInputStream();
     }
-
-
 
 }
