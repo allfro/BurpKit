@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="RealRenderer:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/RealRenderer_jar</output-path>
-    <root id="archive" name="RealRenderer.jar">
-      <element id="module-output" name="RealRenderer" />
-    </root>
-  </artifact>
-</component>

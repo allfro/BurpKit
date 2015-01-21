@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: burp:burpExtender:1.6.09">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/burp/burpExtender/1.6.09/burpExtender-1.6.09.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/burp/burpExtender/1.6.09/burpExtender-1.6.09-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/burp/burpExtender/1.6.09/burpExtender-1.6.09-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

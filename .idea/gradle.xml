@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="WRAPPED" />
+        <option name="externalProjectPath" value="$USER_HOME$/Downloads/controlsfx-controlsfx-866faf7411b9/controlsfx" />
+        <option name="gradleHome" value="$USER_HOME$/Downloads/gradle-1.8" />
+        <option name="modules">
+          <set>
+            <option value="$USER_HOME$/Downloads/controlsfx-controlsfx-866faf7411b9" />
+            <option value="$USER_HOME$/Downloads/controlsfx-controlsfx-866faf7411b9/controlsfx" />
+            <option value="$USER_HOME$/Downloads/controlsfx-controlsfx-866faf7411b9/controlsfx-samples" />
+            <option value="$USER_HOME$/Downloads/controlsfx-controlsfx-866faf7411b9/fxsampler" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
