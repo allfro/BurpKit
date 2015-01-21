@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="controlsfx-8.20.8">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/controlsfx-8.20.8/controlsfx-8.20.8.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ideaLibSources/controlsfx-8.20.8-sources.jar!/" />
+      <root url="file://$USER_HOME$/Downloads/controlsfx-controlsfx-866faf7411b9/controlsfx/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/controlsfx-controlsfx-866faf7411b9/controlsfx/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

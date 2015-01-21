@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="latest">
+    <CLASSES>
+      <root url="jar:///Applications/BurpSuite.app/Contents/Resources/Java/latest.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar:///Applications/BurpSuite.app/Contents/Resources/Java/latest.jar!/burp/Documentation/api" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

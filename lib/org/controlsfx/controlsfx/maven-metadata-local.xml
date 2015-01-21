@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.controlsfx</groupId>
+  <artifactId>controlsfx</artifactId>
+  <versioning>
+    <versions>
+      <version>8.20.9-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20150121185724</lastUpdated>
+  </versioning>
+</metadata>

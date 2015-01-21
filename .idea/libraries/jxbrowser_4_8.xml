@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="jxbrowser-4.8">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/jxbrowser-4.8-cross-desktop-win_mac_linux/lib/jxbrowser-4.8.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/jxbrowser-4.8-cross-desktop-win_mac_linux/lib/jxbrowser-linux32-4.8.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/jxbrowser-4.8-cross-desktop-win_mac_linux/lib/jxbrowser-linux64-4.8.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/jxbrowser-4.8-cross-desktop-win_mac_linux/lib/jxbrowser-mac-4.8.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/jxbrowser-4.8-cross-desktop-win_mac_linux/lib/jxbrowser-win-4.8.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/license.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

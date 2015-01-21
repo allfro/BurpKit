@@ -1,0 +1,11 @@
+.nav-button:hover {
+    -fx-text-fill: black;
+}
+
+.nav-button {
+    -fx-text-fill: darkgray;
+    -fx-padding: 10px;
+    -fx-font-style: none;
+    -fx-font-family: FontAwesome;
+    -fx-font-size: 14px;
+}

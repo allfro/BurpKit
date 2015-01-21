@@ -1,0 +1,46 @@
+.list-cell {
+    -fx-font-family: monospace;
+    -fx-border-width: 0.25px;
+    -fx-border-color: lightgrey;
+}
+
+.list-cell:empty {
+    -fx-background-color: white;
+    -fx-border-width: 0;
+}
+
+.list-cell:filled.jsfunction {
+    -fx-text-fill: green;
+}
+
+.list-cell:filled.jscommand {
+    -fx-text-fill: blue;
+}
+
+.list-cell:filled.jserror {
+    -fx-text-fill: red;
+    -fx-background-color: lightyellow;
+}
+
+.list-cell:filled.jsstring {
+    -fx-text-fill: red;
+}
+
+
+.list-cell:filled.jsundefined {
+    -fx-text-fill: darkslategray;
+}
+
+.list-cell:filled.jsunknown {
+    -fx-text-fill: red;
+}
+
+.list-cell:filled.jsnumber {
+    -fx-text-fill: black;
+}
+
+.list-cell:filled.jsobject {
+    -fx-text-fill: green;
+    -fx-font-weight: bolder;
+}
+
