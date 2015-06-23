@@ -18,21 +18,51 @@
 
 package com.redcanari.js.proxies;
 
-import burp.IInterceptedProxyMessage;
-import burp.IProxyListener;
+import burp.IParameter;
+import burp.IRequestInfo;
 import netscape.javascript.JSObject;
 
-/**
- * Created by ndouba on 14-12-09.
- */
-public class ProxyListenerJSProxy extends JSProxy implements IProxyListener  {
+import java.net.URL;
+import java.util.List;
 
-    public ProxyListenerJSProxy(JSObject jsObject) {
+/**
+ * @author Nadeem Douba
+ * @version 1.0
+ * @since 2015-05-17.
+ */
+public class RequestInfoJSProxy extends JSProxy implements IRequestInfo {
+
+    public RequestInfoJSProxy(JSObject jsObject) {
         super(jsObject);
     }
 
     @Override
-    public void processProxyMessage(boolean isRequest, IInterceptedProxyMessage interceptedProxyMessage) {
-        call("processProxyMessage", isRequest, interceptedProxyMessage);
+    public String getMethod() {
+        return (String)call("getMethod");
+    }
+
+    @Override
+    public URL getUrl() {
+        return (URL)call("getUrl");
+    }
+
+    @Override
+    public List<String> getHeaders() {
+        return (List<String>)call("getHeaders");
+    }
+
+    @Override
+    public List<IParameter> getParameters() {
+        return (List<IParameter>)call("getParameters");
+    }
+
+    @Override
+    public int getBodyOffset() {
+        return (int)call("getBodyOffset");
+    }
+
+    @Override
+    public byte getContentType() {
+        return (byte)call("getContentType");
     }
 }
