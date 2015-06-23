@@ -16,38 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.page-resource-type-hyperlink {
-    -fx-image: url("../images/hyperlink_16x16.png");
-}
-
-.page-resource-type-unknown {
-    -fx-image: url("../images/unknown_16x16.png");
-}
-
-.page-resource-type-script {
-    -fx-image: url("../images/script_16x16.png");
-}
-
-.page-resource-type-object {
-    -fx-image: url("../images/object_16x16.png");
-}
-
-.page-resource-type-frame {
-    -fx-image: url("../images/iframe_16x16.png");
-}
-
-.page-resource-type-form {
-    -fx-image: url("../images/form_16x16.png");
-}
-
-.page-resource-type-image {
-    -fx-image: url("../images/image_16x16.png");
-}
-
-.page-resource-type-iframe {
-    -fx-image: url("../images/iframe_16x16.png");
-}
-
-.page-resource-type-stylesheet {
-    -fx-image: url("../images/script_16x16.png");
+.play-button {
+    -fx-text-fill: green;
+    -fx-font-style: none;
+    -fx-font-family: FontAwesome;
+    -fx-font-size: 14px;
 }
