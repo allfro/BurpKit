@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/RealRenderer.iml" filepath="$PROJECT_DIR$/RealRenderer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BurpKit.iml" filepath="$PROJECT_DIR$/BurpKit.iml" />
     </modules>
   </component>
 </project>

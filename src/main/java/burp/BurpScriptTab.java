@@ -16,34 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redcanari.tainter;
+package burp;
 
-import com.redcanari.util.HttpUtils;
+import com.redcanari.ui.JavaScriptEditorTab;
 
-import java.net.URL;
-import java.util.concurrent.ConcurrentHashMap;
+import java.awt.*;
 
 /**
- * Created by ndouba on 2014-06-03.
+ * Created by ndouba on 15-06-18.
  */
-public class Tainter extends ConcurrentHashMap<String, String> {
-
-    private static Integer lastId = -1;
-    private static Tainter theTainter = new Tainter();
-
-    protected Tainter() {
+public class BurpScriptTab implements ITab {
+    @Override
+    public String getTabCaption() {
+        return "BurpScript IDE";
     }
 
-    public static Tainter getInstance() {
-        return theTainter;
-    }
-
-    public synchronized static String nextId() {
-        Tainter.lastId++;
-        return "tainter-" + Tainter.lastId;
-    }
-
-    public String put(String key, URL url) {
-        return put(key, HttpUtils.normalizeUrl(url));
+    @Override
+    public Component getUiComponent() {
+        return new JavaScriptEditorTab();
     }
 }

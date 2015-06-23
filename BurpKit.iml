@@ -11,10 +11,19 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="burp-latest" level="project" />
     <orderEntry type="library" name="controlsfx-8.20.9-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="burpsuite_pro_v1.6.18" level="project" />
+    <orderEntry type="library" name="org.xerial:sqlite-jdbc:3.8.10.1" level="project" />
+    <orderEntry type="library" name="org.fxmisc.richtext:richtextfx:0.6.4" level="project" />
+    <orderEntry type="library" name="maven:maven-javadoc-plugin:1.9" level="project" />
     <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:8.20.9-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: burp:burpExtender:1.6.09" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.8.7" level="project" />
+    <orderEntry type="library" name="Maven: org.fxmisc.richtext:richtextfx:0.6.4" level="project" />
+    <orderEntry type="library" name="Maven: org.fxmisc.undo:undofx:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.reactfx:reactfx:2.0-M4" level="project" />
+    <orderEntry type="library" name="Maven: org.fxmisc.flowless:flowless:0.4.3" level="project" />
+    <orderEntry type="library" name="Maven: org.fxmisc.wellbehaved:wellbehavedfx:0.1.1" level="project" />
   </component>
 </module>

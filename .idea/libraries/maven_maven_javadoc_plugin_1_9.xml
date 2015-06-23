@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="maven:maven-javadoc-plugin:1.9" type="repository">
+    <properties maven-id="maven:maven-javadoc-plugin:1.9" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/maven/maven-javadoc-plugin/1.9/maven-javadoc-plugin-1.9.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/commons-lang/commons-lang/2.0/commons-lang-2.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/commons-collections/commons-collections/3.0/commons-collections-3.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

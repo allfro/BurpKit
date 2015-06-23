@@ -1,21 +1,39 @@
+/*
+ * BurpKit - WebKit-based penetration testing plugin for BurpSuite
+ * Copyright (C) 2015  Red Canari, Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package burp;
 
 import com.redcanari.burp.WebKitBrowserTab;
 import com.redcanari.net.http.HttpInterceptUrlStreamHandlerFactory;
 import com.redcanari.net.security.TrustManager;
 import com.redcanari.tainter.Tainter;
+import com.redcanari.ui.JavaScriptEditor;
+import com.redcanari.ui.JavaScriptEditorTab;
 import com.redcanari.ui.WebKitBrowser;
 import com.redcanari.ui.font.FontAwesome;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.PrintStream;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -23,18 +41,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IContextMenuFactory, IProxyListener, ITab {
+/**
+ * @author  Nadeem Douba
+ * @version 1.0
+ * @since 2014-01-01
+ */
+public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IContextMenuFactory, ITab {
     private static IBurpExtenderCallbacks callbacks;
     private IExtensionHelpers helpers;
     private Tainter tainter;
     private final WebKitBrowser webKitBrowser = new WebKitBrowser(true);
-//    private WebKitBrowserTab webKitBrowserTab = null;
 
     //
     // implement IBurpExtender
     //
 
 
+    /**
+     * Checks if the version of the JVM is supported by BurpKit.
+     *
+     * @return true if supported, otherwise false
+     */
     public boolean isRunningSupportedJVM() {
         String javaVersion = System.getProperty("java.version");
 
@@ -44,9 +71,14 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         int revision = Integer.valueOf(splitVersion[2]);
         int update = Integer.valueOf(splitVersion[3]);
 
-        return (major >= 1 && minor == 8 && revision >= 0 && update >= 40);
+        return (major >= 1 && minor == 8 && revision >= 0 && update >= 31);
     }
 
+    /**
+     * Returns the instance of {@link burp.IBurpExtenderCallbacks} provided by the BurpSuite framework.
+     *
+     * @return an instance of {@link burp.IBurpExtenderCallbacks}
+     */
     public static IBurpExtenderCallbacks getBurpExtenderCallbacks() {
         return BurpExtender.callbacks;
     }
@@ -55,11 +87,14 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
     public void registerExtenderCallbacks(final IBurpExtenderCallbacks callbacks)
     {
 
+        // Initialize FontAwesome font with size 14 font for JVM.
+        FontAwesome.initialize(14);
+
+        // Make sure we're running the correct version of Java with JavaFX.
         if (!isRunningSupportedJVM()) {
             callbacks.printError(
                     "The current version of Java/JFX you're running is currently not supported\n" +
-                    "by this plugin. Please download at least 1.8.0u40-ea from the Java Early\n" +
-                    "Access Releases site: https://jdk8.java.net/download.html."
+                    "by this plugin. Please download at least 1.8.0u31-b31 from the Oracle website."
             );
             throw new RuntimeException();
         }
@@ -71,45 +106,39 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         helpers = callbacks.getHelpers();
         
         // set our extension name
-        callbacks.setExtensionName("Webkit Renderer");
+        callbacks.setExtensionName("BurpKit 1.0");
         
         // register ourselves as a message editor tab factory
         callbacks.registerMessageEditorTabFactory(this);
 
         callbacks.registerContextMenuFactory(this);
-        callbacks.registerProxyListener(this);
 
+//        callbacks.registerProxyListener(this);
+
+        // Add the courtesy BurpKit browser as a top-level tab in BurpSuite.
         callbacks.addSuiteTab(this);
+        callbacks.addSuiteTab(new BurpScriptTab());
 
+        // Ignore invalid SSL certificates.
         try {
             SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null, new TrustManager[] { new TrustManager() }, new java.security.SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-                public boolean verify(String string, SSLSession ssls) {
-                    return true;
-                }
-            });
+            HttpsURLConnection.setDefaultHostnameVerifier((string, ssls) -> true);
 //            System.setProperty("https.proxyHost", "localhost");
 //            System.setProperty("https.proxyPort", "8080");
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (KeyManagementException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 
 
+        // Setup our request interceptor for the JVM
         try {
             URL.setURLStreamHandlerFactory(new HttpInterceptUrlStreamHandlerFactory());
         }
         catch (Throwable ignored) {
             // Who cares if it's loaded multiple times ;)
         }
-
-
-//        webKitBrowser = new WebKitBrowser();
-
-        FontAwesome.initialize(14);
 
         tainter = Tainter.getInstance();
     }
@@ -124,12 +153,13 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         return new WebKitBrowserTab(this, controller, editable);
     }
 
+    /**
+     * Returns the instance of {@link burp.IExtensionHelpers} provided by the BurpSuite framework.
+     *
+     * @return  an instance of {@link burp.IExtensionHelpers}
+     */
     public IExtensionHelpers getHelpers() {
         return helpers;
-    }
-
-    public IBurpExtenderCallbacks getCallbacks() {
-        return callbacks;
     }
 
     @Override
@@ -140,7 +170,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         if (invocationContext.getInvocationContext() != IContextMenuInvocation.CONTEXT_MESSAGE_EDITOR_REQUEST)
             return null;
 
-        List<JMenuItem> menuItemList = new ArrayList<JMenuItem>();
+        List<JMenuItem> menuItemList = new ArrayList<>();
         JMenuItem menuItem = new JMenuItem("Taint");
         menuItem.addActionListener(e -> {
             int[] bounds = invocationContext.getSelectionBounds();
@@ -166,17 +196,17 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
 
     }
 
-    @Override
-    public void processProxyMessage(boolean isRequest, IInterceptedProxyMessage message) {
+//    @Override
+//    public void processProxyMessage(boolean isRequest, IInterceptedProxyMessage message) {
 //        if (isRequest)
 //            return;
 //        if (helpers.analyzeResponse(message.getMessageInfo().getResponse()).getInferredMimeType().equals("HTML"))
 //            webKitBrowser.loadUrl(message.getMessageInfo().getUrl().toString());
-    }
+//    }
 
     @Override
     public String getTabCaption() {
-        return "WebKit Browser";
+        return "BurpKitty";
     }
 
     @Override

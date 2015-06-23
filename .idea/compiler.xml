@@ -22,10 +22,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="BurpKit" />
         <module name="RealRenderer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="BurpKit" target="1.8" />
       <module name="RealRenderer" target="1.8" />
     </bytecodeTargetLevel>
   </component>
