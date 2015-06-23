@@ -1,17 +1,43 @@
+/*
+ * BurpKit - WebKit-based penetration testing plugin for BurpSuite
+ * Copyright (C) 2015  Red Canari, Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.redcanari.ui;
 
 import burp.BurpExtender;
 import burp.IMessageEditorController;
+import com.dlsc.trafficbrowser.beans.Traffic;
+import com.dlsc.trafficbrowser.scene.control.TrafficBrowser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.redcanari.js.BurpExtenderCallbacksBridge;
+import com.redcanari.js.GlobalJSObject;
+import com.redcanari.js.JavaScriptHelpers;
+import com.redcanari.js.LocalJSObject;
 import com.redcanari.ui.font.FontAwesome;
 import com.redcanari.util.ResourceUtils;
+import com.sun.javafx.scene.web.Debugger;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.embed.swing.JFXPanel;
@@ -30,6 +56,7 @@ import javafx.scene.web.WebErrorEvent;
 import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import netscape.javascript.JSObject;
 import org.controlsfx.control.MasterDetailPane;
 import org.controlsfx.control.StatusBar;
@@ -38,16 +65,22 @@ import org.controlsfx.dialog.Dialogs;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by ndouba on 2014-06-01.
  */
 public class WebKitBrowser extends JFXPanel {
+
+    private LocalJSObject locals;
+    private LocalJSObject globals;
 
     private WebEngine webEngine;
     private WebView webView;
@@ -62,7 +95,9 @@ public class WebKitBrowser extends JFXPanel {
     private AnchorPane webViewAnchorPane;
     private Button screenShotButton;
     private BorderPane masterPane;
+    private String originalUserAgent;
     private WebURLField urlTextField;
+    private TrafficBrowser trafficBrowser;
     private TabPane detailPane;
     private boolean enabled = false;
 
@@ -116,10 +151,10 @@ public class WebKitBrowser extends JFXPanel {
 //    }
 
     private void createScene() {
-        createMasterPane();
-        createDetailPane();
 
         masterDetailPane = new MasterDetailPane();
+        createMasterPane();
+        createDetailPane();
         masterDetailPane.setMasterNode(masterPane);
         masterDetailPane.setDetailNode(detailPane);
         masterDetailPane.setDetailSide(Side.BOTTOM);
@@ -144,10 +179,109 @@ public class WebKitBrowser extends JFXPanel {
 
         pageResourcesTab = new PageResourcesTab(webEngine);
 
+        Tab javaScriptEditorTab = new Tab("BurpScript IDE");
+        javaScriptEditorTab.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue)
+                masterDetailPane.setDividerPosition(0.5);
+        });
+        JavaScriptEditor javaScriptEditor = new JavaScriptEditor(webEngine, controller, false);
+        javaScriptEditor.setJavaScriptConsoleTab(javaScriptConsoleTab);
+        javaScriptEditorTab.setContent(javaScriptEditor);
+
+        Tab trafficBrowserTab = new Tab("Network");
+        trafficBrowser = new TrafficBrowser();
+        trafficBrowserTab.setContent(trafficBrowser);
+
+        Debugger debugger = webEngine.impl_getDebugger();
+        debugger.setEnabled(true);
+        debugger.sendMessage("{\"id\": 1, \"method\":\"Network.enable\"}");
+        debugger.setMessageCallback(new Callback<String, Void>() {
+
+            ConcurrentHashMap<String, Traffic> trafficState = new ConcurrentHashMap<>();
+
+            @Override
+            public Void call(String param) {
+                JsonParser parser = new JsonParser();
+                JsonObject object = parser.parse(param).getAsJsonObject();
+
+                String method = object.get("method").getAsString();
+                JsonObject params = object.getAsJsonObject("params");
+                JsonObject request = params.getAsJsonObject("request");
+                JsonObject response = params.getAsJsonObject("response");
+                String requestId = params.get("requestId").getAsString();
+
+                Instant timeStamp;
+                JsonElement epochObject = params.get("timestamp");
+                if (epochObject != null) {
+                    double epoch = epochObject.getAsDouble();
+                    timeStamp = Instant.ofEpochSecond(
+                            (long)Math.floor(epoch),
+                            (long)(epoch*1000000000%1000000000)
+                    );
+                } else {
+                    timeStamp = Instant.now();
+                }
+
+                Traffic traffic = null;
+
+                switch (method) {
+                    case "Network.requestWillBeSent":
+                        URL url = null;
+                        String urlString = request.get("url").getAsString();
+
+                        try {
+                            url = new URL(urlString);
+                        } catch (MalformedURLException e) {
+//                            e.printStackTrace();
+                        }
+                        trafficState.put(
+                                requestId,
+                                new Traffic(
+                                        (url == null)?urlString:url.getFile(),
+                                        timeStamp,
+                                        (url == null)?"":url.getHost(),
+                                        request.get("method").getAsString(),
+                                        params.get("documentURL").getAsString()
+                                )
+                        );
+                        break;
+                    case "Network.responseReceived":
+                        traffic = trafficState.get(requestId);
+                        JsonObject headers = response.getAsJsonObject("headers");
+                        JsonElement contentType = headers.get("Content-Type");
+                        JsonElement contentLength = headers.get("Content-Length");
+                        traffic.setType((contentType == null) ? "" : contentType.getAsString());
+                        JsonElement requestLine = headers.get("");
+                        if (requestLine != null) {
+                            String[] requestLineParts = requestLine.getAsString().split(" ", 3);
+                            traffic.setStatusCode(new Integer(requestLineParts[1]));
+                            traffic.setStatusText(requestLineParts[2]);
+                            traffic.setSize((contentLength == null) ? "" : contentLength.getAsString());
+                        } else {
+                            traffic.setStatusCode(200);
+                            traffic.setStatusText("OK");
+                            traffic.setSize("");
+                        }
+                        break;
+                    case "Network.loadingFinished":
+                        traffic = trafficState.get(requestId);
+                        traffic.setEndTime(timeStamp);
+                        trafficBrowser.getTraffic().add(traffic);
+                        trafficState.remove(requestId);
+                        if (traffic.getEndTime().isAfter(trafficBrowser.getEndTime())) {
+                            trafficBrowser.setEndTime(traffic.getEndTime());
+                        }
+                }
+                return null;
+            }
+        });
+
         detailPane.getTabs().addAll(
                 javaScriptConsoleTab,
                 crossSiteScriptingTrackerTab,
-                pageResourcesTab
+                pageResourcesTab,
+                trafficBrowserTab,
+                javaScriptEditorTab
 //                new ImagesTab(webEngine)
         );
 
@@ -164,6 +298,10 @@ public class WebKitBrowser extends JFXPanel {
         AnchorPane.setRightAnchor(webView, 0.0);
 
         webEngine = webView.getEngine();
+
+        locals = new LocalJSObject(webEngine);
+        globals = GlobalJSObject.getGlobalJSObject(webEngine);
+        originalUserAgent = webEngine.getUserAgent();
         webEngine.setJavaScriptEnabled(true);
         webEngine.setOnAlert(this::handleAlert);
         webEngine.setOnError(this::handleError);
@@ -180,10 +318,6 @@ public class WebKitBrowser extends JFXPanel {
         masterPane.setTop(toolBar);
         masterPane.setCenter(webViewAnchorPane);
         masterPane.setBottom(statusBar);
-
-    }
-
-    private void handleAlert(Observable observable) {
 
     }
 
@@ -326,28 +460,16 @@ public class WebKitBrowser extends JFXPanel {
 
     }
 
-    /*
-     * Hot patch removeNotify() to set scaleFactor=1 in order to get rid of graphics glitches in Mac OS X and possibly
-     * other systems with high resolution displays. Refer to http://cr.openjdk.java.net/~ant/RT-38915/webrev.0/ for
-     * relevant patch details.
-     */
-//    @Override
-//    public void removeNotify() {
-//
-//        try {
-//
-//            Field scaleFactor = JFXPanel.class.getDeclaredField("scaleFactor");
-//            scaleFactor.setAccessible(true);
-//            scaleFactor.setInt(this, 1);
-//        } catch (NoSuchFieldException | IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//
-//        super.removeNotify();
-//    }
-
     public void loadUrl(final String url) {
         Platform.runLater(() -> webEngine.load(url));
+    }
+
+    public void loadUrl(final String url, final String userAgent) {
+        Platform.runLater(() -> {
+            webEngine.setUserAgent(originalUserAgent + userAgent);
+            webEngine.load(url);
+            webEngine.setUserAgent(originalUserAgent);
+        });
     }
 
     public void loadContent(final String content) {
@@ -356,20 +478,34 @@ public class WebKitBrowser extends JFXPanel {
 
     public void workerStateChanged(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
         if (newValue == Worker.State.READY || newValue == Worker.State.SCHEDULED) {
+            if (trafficBrowser != null) {
+                trafficBrowser.setStartTime(Instant.now());
+                trafficBrowser.getTraffic().clear();
+            }
             numberOfAlerts.setValue("0");
         } else if (newValue == Worker.State.SUCCEEDED) {
             JSObject result = (JSObject) webEngine.executeScript("window");
 
             result.setMember(
-                    "bec",
-//                    "burpExtenderCallbacks",
+                    "burpCallbacks",
                     new BurpExtenderCallbacksBridge(webEngine, BurpExtender.getBurpExtenderCallbacks())
             );
 
             result.setMember(
-                    "burpController",
-                    controller
+                    "burpKit",
+                    new JavaScriptHelpers(webEngine)
             );
+
+            result.setMember("locals", locals);
+
+            result.setMember("globals", globals);
+
+            if (controller != null) {
+                result.setMember(
+                        "burpController",
+                        controller
+                );
+            }
         } else if (newValue == Worker.State.FAILED) {
             Dialogs.create()
                     .lightweight()
@@ -386,8 +522,8 @@ public class WebKitBrowser extends JFXPanel {
                     .showInformation();
         }
 
-    }
 
+    }
 
 //    public void logRequest(final URL url) {
 //        Platform.runLater(new Runnable() {

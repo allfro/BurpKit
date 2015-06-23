@@ -1,19 +1,34 @@
+/*
+ * BurpKit - WebKit-based penetration testing plugin for BurpSuite
+ * Copyright (C) 2015  Red Canari, Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.redcanari.ui;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
-import org.controlsfx.control.textfield.AutoCompletionBinding;
-import org.controlsfx.control.textfield.TextFields;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by ndouba on 14-12-27.
+ * @author  Nadeem Douba
+ * @version 1.0
+ * @since   2014-12-27.
  */
 public class CircularTextField extends BaseTextField {
 
@@ -21,15 +36,32 @@ public class CircularTextField extends BaseTextField {
     private List<String> history = new ArrayList<>();
 
 
-
     public CircularTextField() {
         super();
         setOnKeyPressed(this::handleKeyPressed);
     }
 
-
     public void handleKeyPressed(KeyEvent event) {
-        switch (event.getCode()) {
+        KeyCode keyCode = event.getCode();
+
+        if (event.isControlDown()) {
+            switch(event.getCode()) {
+                case C:
+                    copy();
+                    break;
+                case V:
+                    paste();
+                    break;
+                case X:
+                    cut();
+                    break;
+                case A:
+                    selectAll();
+            }
+            return;
+        }
+
+        switch (keyCode) {
             case ENTER:
                 currentIndex = -1;
                 history.add(0, getText().trim());

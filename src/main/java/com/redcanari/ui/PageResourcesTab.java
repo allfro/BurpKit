@@ -1,5 +1,25 @@
+/*
+ * BurpKit - WebKit-based penetration testing plugin for BurpSuite
+ * Copyright (C) 2015  Red Canari, Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.redcanari.ui;
 
+import burp.BurpExtender;
+import com.redcanari.js.BurpExtenderCallbacksBridge;
 import com.redcanari.util.HttpUtils;
 import com.sun.webkit.dom.*;
 import javafx.application.Platform;
@@ -7,16 +27,18 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import netscape.javascript.JSObject;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,6 +51,7 @@ public class PageResourcesTab extends Tab {
     private final WebEngine webEngine;
     private final TableView<PageResource> pageResourceTableView = new TableView<>();
     private final ObservableList<PageResource> dataSource = FXCollections.observableArrayList();
+    private final BurpExtenderCallbacksBridge callbacks;
 
     private static final String DOCUMENT_GET_ELEMENTS_BY_TAG_NAME_A = "document.getElementsByTagName('a');";
     private static final String DOCUMENT_GET_ELEMENTS_BY_TAG_NAME_IMG = "document.getElementsByTagName('img');";
@@ -43,6 +66,7 @@ public class PageResourcesTab extends Tab {
     public PageResourcesTab(WebEngine webEngine) {
         super("Page Resources");
         this.webEngine = webEngine;
+        this.callbacks = new BurpExtenderCallbacksBridge(webEngine, BurpExtender.getBurpExtenderCallbacks());
         init();
     }
 
@@ -61,19 +85,65 @@ public class PageResourcesTab extends Tab {
         urlColumn.setCellValueFactory(new PropertyValueFactory<>("url"));
         urlColumn.setPrefWidth(800-24);
 
-        pageResourceTableView.getStylesheets().add("/stylesheets/page_resources.css");
+        pageResourceTableView.getStylesheets().add(getClass().getResource("/stylesheets/page_resources.css").toExternalForm());
         pageResourceTableView.setItems(dataSource);
         pageResourceTableView.getColumns().addAll(typeColumn, urlColumn);
         pageResourceTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        MenuItem test = new MenuItem("test");
-        test.setOnAction(event -> {
+        MenuItem sendToSpiderMenuItem = new MenuItem("Send To Spider");
+        sendToSpiderMenuItem.setOnAction(event -> {
             ObservableList<PageResource> selectedItems = pageResourceTableView.getSelectionModel().getSelectedItems();
             for (PageResource selectedItem : selectedItems) {
-                System.out.println(selectedItem.getUrl());
+                try {
+                    callbacks.sendToSpider(selectedItem.getUrl());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         });
-        pageResourceTableView.setContextMenu(new ContextMenu(test));
+
+        MenuItem sendToRepeaterMenuItem = new MenuItem("Send To Repeater");
+        sendToRepeaterMenuItem.setOnAction(event -> {
+            ObservableList<PageResource> selectedItems = pageResourceTableView.getSelectionModel().getSelectedItems();
+            for (PageResource selectedItem : selectedItems) {
+                try {
+                    callbacks.sendUrlToRepeater(selectedItem.getUrl(), null);
+                } catch (URISyntaxException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        MenuItem sendToIntruderMenuItem = new MenuItem("Send To Intruder");
+        sendToIntruderMenuItem.setOnAction(event -> {
+            ObservableList<PageResource> selectedItems = pageResourceTableView.getSelectionModel().getSelectedItems();
+            for (PageResource selectedItem : selectedItems) {
+                try {
+                    callbacks.sendUrlToIntruder(selectedItem.getUrl());
+                } catch (URISyntaxException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        MenuItem doActiveScanMenuItem = new MenuItem("Do Active Scan");
+        doActiveScanMenuItem.setOnAction(event -> {
+            ObservableList<PageResource> selectedItems = pageResourceTableView.getSelectionModel().getSelectedItems();
+            for (PageResource selectedItem : selectedItems) {
+                try {
+                    callbacks.doActiveUrlScan(selectedItem.getUrl(), null);
+                } catch (URISyntaxException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        pageResourceTableView.setContextMenu(new ContextMenu(
+                sendToSpiderMenuItem,
+                sendToRepeaterMenuItem,
+                sendToIntruderMenuItem,
+                doActiveScanMenuItem
+        ));
 
         VBox.setVgrow(pageResourceTableView, Priority.ALWAYS);
 
@@ -113,7 +183,7 @@ public class PageResourcesTab extends Tab {
                 String href = ((HTMLAnchorElementImpl) o).getHref();
                 if (HttpUtils.isHttpURL(href)) {
                     dataSource.add(new PageResource(PageResource.TYPE_ANCHOR, href.trim()));
-                    System.err.println("Anchor(text="+text+")" + " -> " + href.trim());
+//                    System.err.println("Anchor(text="+text+")" + " -> " + href.trim());
                 }
             }
         }
@@ -129,7 +199,7 @@ public class PageResourcesTab extends Tab {
                 String href = ((HTMLLinkElementImpl) o).getHref();
                 if (HttpUtils.isHttpURL(href)) {
                     dataSource.add(new PageResource(PageResource.TYPE_STYLESHEET, href.trim()));
-                    System.err.println("Stylesheet -> " + href.trim());
+//                    System.err.println("Stylesheet -> " + href.trim());
                 }
             }
         }
@@ -145,7 +215,7 @@ public class PageResourcesTab extends Tab {
                 String src = ((HTMLScriptElementImpl) o).getSrc();
                 if (HttpUtils.isHttpURL(src)) {
                     dataSource.add(new PageResource(PageResource.TYPE_SCRIPT, src.trim()));
-                    System.err.println("Script -> " + src.trim());
+//                    System.err.println("Script -> " + src.trim());
                 }
             }
         }
@@ -161,7 +231,7 @@ public class PageResourcesTab extends Tab {
                 String src = ((HTMLImageElementImpl) o).getSrc();
                 if (HttpUtils.isHttpURL(src)) {
                     dataSource.add(new PageResource(PageResource.TYPE_IMAGE, src.trim()));
-                    System.err.println("Image -> " + src.trim());
+//                    System.err.println("Image -> " + src.trim());
                 }
             }
         }
@@ -177,7 +247,7 @@ public class PageResourcesTab extends Tab {
                 String src = ((HTMLFrameElementImpl) o).getSrc();
                 if (HttpUtils.isHttpURL(src)) {
                     dataSource.add(new PageResource(PageResource.TYPE_FRAME, src.trim()));
-                    System.err.println("Frame -> " + src.trim());
+//                    System.err.println("Frame -> " + src.trim());
                 }
             }
         }
@@ -193,7 +263,7 @@ public class PageResourcesTab extends Tab {
                 String src = ((HTMLIFrameElementImpl) o).getSrc();
                 if (HttpUtils.isHttpURL(src)) {
                     dataSource.add(new PageResource(PageResource.TYPE_IFRAME, src.trim()));
-                    System.err.println("IFrame -> " + src.trim());
+//                    System.err.println("IFrame -> " + src.trim());
                 }
             }
         }
@@ -209,7 +279,7 @@ public class PageResourcesTab extends Tab {
                 String data = ((HTMLObjectElementImpl) o).getData();
                 if (HttpUtils.isHttpURL(data)) {
                     dataSource.add(new PageResource(PageResource.TYPE_OBJECT, data.trim()));
-                    System.err.println("Object -> " + data.trim());
+//                    System.err.println("Object -> " + data.trim());
                 }
             }
         }
@@ -225,7 +295,7 @@ public class PageResourcesTab extends Tab {
                 String action = ((HTMLFormElementImpl) o).getAction();
                 if (HttpUtils.isHttpURL(action)) {
                     dataSource.add(new PageResource(PageResource.TYPE_FORM, action.trim()));
-                    System.err.println("Form Action -> " + action.trim());
+//                    System.err.println("Form Action -> " + action.trim());
                 }
             }
         }

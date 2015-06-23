@@ -1,3 +1,21 @@
+/*
+ * BurpKit - WebKit-based penetration testing plugin for BurpSuite
+ * Copyright (C) 2015  Red Canari, Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.redcanari.ui;
 
 import com.redcanari.ui.font.FontAwesome;
@@ -30,8 +48,8 @@ public class WebURLField extends StackPane {
         this.webEngine = webEngine;
 
         Button stopNavigation = new Button();
-//        stopNavigation.getStylesheets().add(getClass().getResource("/stylesheets/web_url_field.css").toExternalForm());
-        stopNavigation.getStyleClass().setAll("nav-button");
+        stopNavigation.getStylesheets().add(getClass().getResource("/stylesheets/web_url_field.css").toExternalForm());
+        stopNavigation.getStyleClass().set(0, "nav-button");
         stopNavigation.textProperty().bind(buttonIcon);
         stopNavigation.setOnMouseClicked(this::handleOnMouseClick);
         stopNavigation.setFont(Font.font("FontAwesome", 14));
@@ -65,17 +83,13 @@ public class WebURLField extends StackPane {
         webEngine.getLoadWorker().cancel();
     }
 
-    public void workerStateChanged(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
+    public void workerStateChanged(ObservableValue<? extends Worker.State> observable,
+                                   Worker.State oldValue, Worker.State newValue) {
         if (newValue == Worker.State.READY || newValue == Worker.State.SCHEDULED || newValue == Worker.State.RUNNING) {
             buttonIcon.set(ICON_CANCEL_PAGE);
         } else {
             buttonIcon.set(ICON_RELOAD_PAGE);
         }
-    }
-
-    @Override
-    public String getUserAgentStylesheet() {
-        return getClass().getResource("/stylesheets/web_url_field.css").toExternalForm();
     }
 
     public void setEditable(boolean enabled) {

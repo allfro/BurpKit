@@ -1,3 +1,21 @@
+/*
+ * BurpKit - WebKit-based penetration testing plugin for BurpSuite
+ * Copyright (C) 2015  Red Canari, Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.redcanari.ui;
 
 import com.redcanari.burp.WebKitBrowserTab;
@@ -9,7 +27,6 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebErrorEvent;
 import javafx.scene.web.WebEvent;
 
 import java.util.HashMap;
@@ -67,22 +84,17 @@ public class CrossSiteScriptingTrackerTab extends Tab {
         });
     }
 
-    private String cleanUrl() {
-        String url = webEngine.getLocation().replaceFirst("&?" + WebKitBrowserTab.REPEATER_PARAM_NAME + "=[^&]+&?", "");
-        return url.replaceFirst("\\?$", "");
-    }
-
     public void handleAlert(WebEvent<String> event) {
         String message = event.getData();
         if (tainter.containsKey(message)) {
             ObservableSet<String> urls;
             if (!dataSource.containsKey(message)) {
                 urls = FXCollections.observableSet(new HashSet<>());
-                urls.add(cleanUrl()); // Avoid triggering another event for adding one item.
+                urls.add(webEngine.getLocation()); // Avoid triggering another event for adding one item.
                 dataSource.put(message, urls);
             } else {
                 urls = dataSource.get(message);
-                urls.add(cleanUrl());
+                urls.add(webEngine.getLocation());
             }
         }
     }
