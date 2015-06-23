@@ -1,11 +1,32 @@
+/*
+ * BurpKit - WebKit-based penetration testing plugin for BurpSuite
+ * Copyright (C) 2015  Red Canari, Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.redcanari.js;
 
 import com.google.gson.Gson;
 import javafx.scene.web.WebEngine;
 import netscape.javascript.JSObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -50,7 +71,7 @@ public class Helpers {
     public static JSObject toJSArray(WebEngine webEngine, List list) {
         JSObject jsObject = (JSObject) webEngine.executeScript("new Array()");
 
-        if (list == null || list.size() == 0)
+        if (list == null || list.isEmpty())
             return jsObject;
 
         Object[] array = list.toArray();
@@ -156,5 +177,61 @@ public class Helpers {
             destination[i] = array[i];
 
         return destination;
+    }
+
+    /**
+     * A private API for wrapping BurpSuite interfaces around instances of {@link netscape.javascript.JSObject} using
+     * proxy classes.
+     *
+     * This function returns a proxy class that wraps around the original {@link netscape.javascript.JSObject} to
+     * enable calls between the BurpSuite framework and the JavaFX JavaScript engine. It achieves this by wrapping
+     * The proxy classes inherit from the BurpSuite framework interfaces.
+     *
+     * Example:
+     *
+     * {@code IScanIssue scanIssue = this.<IScanIssue>wrapInterface(scanIssue, ScanIssueJSProxy.class);}
+     *
+     *
+     * @param object        The {@link netscape.javascript.JSObject} object to be wrapped.
+     * @param proxyClass    One of the proxy classes from {@link com.redcanari.js.proxies}
+     * @param <T>           One of the proxy classes from {@link com.redcanari.js.proxies}
+     * @return  an instance of a proxy class that resides in {@link com.redcanari.js.proxies}.
+     */
+    public static <T> T wrapInterface(Object object, Class<?> proxyClass) {
+        if (object instanceof JSObject) {
+            try {
+                object = proxyClass.getDeclaredConstructor(JSObject.class).newInstance(object);
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return (T) object;
+    }
+
+    public static JSObject toJSArray(WebEngine webEngine, byte[] bytes) {
+        JSObject jsObject = (JSObject) webEngine.executeScript("new Array()");
+
+        if (bytes == null || bytes.length == 0)
+            return jsObject;
+
+        for (int i = 0; i < bytes.length; i++)
+            jsObject.setSlot(i, bytes[i]);
+
+        return jsObject;
+    }
+
+    public static String convertStreamToString(java.io.InputStream inputStream) {
+        java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+
+    public static byte[] convertStreamToBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        byte[] data = new byte[16384];
+
+        while (inputStream.read(data) != -1)
+            buffer.write(data);
+
+        return buffer.toByteArray();
     }
 }
