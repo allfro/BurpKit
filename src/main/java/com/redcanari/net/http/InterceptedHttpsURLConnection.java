@@ -1,8 +1,26 @@
+/*
+ * BurpKit - WebKit-based penetration testing plugin for BurpSuite
+ * Copyright (C) 2015  Red Canari, Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.redcanari.net.http;
 
 
 import com.redcanari.burp.WebKitBrowserTab;
-import com.redcanari.net.cache.HttpMockResponseCache;
+import com.redcanari.db.HttpMockResponseSQLCache;
 import sun.net.www.protocol.https.DelegateHttpsURLConnection;
 import sun.net.www.protocol.https.HttpsURLConnectionImpl;
 
@@ -13,7 +31,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -21,10 +40,13 @@ import java.util.Map;
  */
 public class InterceptedHttpsURLConnection extends HttpsURLConnectionImpl {
 
-    private HttpMockResponseCache httpMockResponseCache;
+    private HttpMockResponseSQLCache httpMockResponseCache;
     private boolean isIntercepted = false;
     private HttpMockResponse httpMockResponse = null;
     private InputStream inputStream;
+
+    private final Pattern pattern = Pattern.compile(WebKitBrowserTab.REPEATER_PARAM_NAME + "([a-zA-Z0-9]+)\\)");
+
 
 
     public InterceptedHttpsURLConnection(URL url, HttpsURLConnectionImpl impl) throws IOException {
@@ -40,18 +62,18 @@ public class InterceptedHttpsURLConnection extends HttpsURLConnectionImpl {
         }
         setUseCaches(false);
         setDefaultUseCaches(false);
-        httpMockResponseCache = HttpMockResponseCache.getInstance();
+        httpMockResponseCache = HttpMockResponseSQLCache.getInstance();
     }
 
     @Override
     synchronized public void connect() throws IOException {
 //        System.err.println("Processing request: " + url + ", Request Headers: " + super.getRequestProperties());
-
-        if (url.getFile().contains(WebKitBrowserTab.REPEATER_PARAM_NAME) && httpMockResponseCache.containsKey(url)) {
+        String digest = getRepeaterDigest();
+        if (digest != null && httpMockResponseCache.containsKey(digest, url)) {
 //            System.err.println("Intercepting request: " + url);
 
             isIntercepted = true;
-            httpMockResponse = httpMockResponseCache.get(url);
+            httpMockResponse = httpMockResponseCache.get(digest, url);
             responseCode = httpMockResponse.getStatusCode();
 
             try {
@@ -63,6 +85,22 @@ public class InterceptedHttpsURLConnection extends HttpsURLConnectionImpl {
             setConnected(true);
         } else
             super.connect();
+    }
+
+    /**
+     * Returns the message digest contained in the User-Agent HTTP header.
+     *
+     * Extracts and returns the message digest contained in the User-Agent HTTP header, if present. Otherwise,
+     * {@value null} is returned, indicating that the request is not a repeated one.
+     *
+     * @return  a string containing the message digest or {@value null} if no message digest exists.
+     */
+    private synchronized String getRepeaterDigest() {
+        String userAgent = getRequestProperty("User-Agent");
+        Matcher matcher = pattern.matcher(userAgent);
+        if (!matcher.find())
+            return null;
+        return matcher.group(1);
     }
 
     @Override
