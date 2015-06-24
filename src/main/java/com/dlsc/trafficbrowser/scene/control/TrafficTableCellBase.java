@@ -28,6 +28,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
+
+/**
+ * @author Dirk Lemmermann
+ * @since 2015-01-24
+ * @version 1.0
+ */
 public abstract class TrafficTableCellBase extends TableCell<Traffic, Traffic> {
 
 	private ImageView imageView;

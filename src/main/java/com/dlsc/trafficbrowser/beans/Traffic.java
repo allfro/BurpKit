@@ -21,6 +21,11 @@ package com.dlsc.trafficbrowser.beans;
 import java.time.Duration;
 import java.time.Instant;
 
+/**
+ * @author Dirk Lemmermann
+ * @since 2015-01-24
+ * @version 1.0
+ */
 public class Traffic {
 
 	private final String name;

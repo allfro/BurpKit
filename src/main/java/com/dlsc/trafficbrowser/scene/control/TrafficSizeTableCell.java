@@ -21,6 +21,12 @@ package com.dlsc.trafficbrowser.scene.control;
 
 import com.dlsc.trafficbrowser.beans.Traffic;
 
+
+/**
+ * @author Dirk Lemmermann
+ * @since 2015-01-24
+ * @version 1.0
+ */
 public class TrafficSizeTableCell extends TrafficTableCellBase {
 		
 	public TrafficSizeTableCell() {

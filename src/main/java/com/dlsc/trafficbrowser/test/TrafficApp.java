@@ -33,6 +33,12 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * @author Dirk Lemmermann
+ * @since 2015-01-24
+ * @version 1.0
+ */
 public class TrafficApp extends Application {
 
 	@Override

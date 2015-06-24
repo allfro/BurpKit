@@ -36,6 +36,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Comparator;
 
+
+/**
+ * @author Dirk Lemmermann
+ * @since 2015-01-24
+ * @version 1.0
+ */
 public class TrafficBrowserSkin extends SkinBase<TrafficBrowser> {
 
 	private TableColumn<Traffic, Traffic> timelineColumn;

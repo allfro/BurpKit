@@ -28,6 +28,12 @@ import javafx.scene.control.Skin;
 
 import java.time.Instant;
 
+
+/**
+ * @author Dirk Lemmermann
+ * @since 2015-01-24
+ * @version 1.0
+ */
 public class TrafficBrowser extends Control {
 
 	public TrafficBrowser() {

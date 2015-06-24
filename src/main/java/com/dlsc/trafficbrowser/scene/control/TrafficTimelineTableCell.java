@@ -23,6 +23,12 @@ import com.dlsc.trafficbrowser.scene.layout.TrafficTimeline;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 
+
+/**
+ * @author Dirk Lemmermann
+ * @since 2015-01-24
+ * @version 1.0
+ */
 public class TrafficTimelineTableCell extends TableCell<Traffic, Traffic> {
 	private TrafficTimeline graphics;
 

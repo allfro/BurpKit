@@ -25,6 +25,12 @@ import javafx.scene.layout.Region;
 
 import java.time.Instant;
 
+
+/**
+ * @author Dirk Lemmermann
+ * @since 2015-01-24
+ * @version 1.0
+ */
 public class TrafficTimeline extends Pane {
 	private Region timebar = new Region();
 	private Traffic traffic;
