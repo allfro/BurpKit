@@ -79,8 +79,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class WebKitBrowser extends JFXPanel {
 
-    private LocalJSObject locals;
-    private LocalJSObject globals;
+//    private LocalJSObject locals;
+//    private LocalJSObject globals;
 
     private WebEngine webEngine;
     private WebView webView;
@@ -100,6 +100,7 @@ public class WebKitBrowser extends JFXPanel {
     private TrafficBrowser trafficBrowser;
     private TabPane detailPane;
     private boolean enabled = false;
+    private JavaScriptHelpers javaScriptHelpers;
 
     private PageResourcesTab pageResourcesTab;
     private JavaScriptConsoleTab javaScriptConsoleTab;
@@ -114,6 +115,7 @@ public class WebKitBrowser extends JFXPanel {
 
     private final String selectionScript;
     private final String firebugScript;
+
 
     public WebKitBrowser() {
         selectionScript = ResourceUtils.getResourceContentsAsString("/scripts/selectHTML.js");
@@ -299,8 +301,9 @@ public class WebKitBrowser extends JFXPanel {
 
         webEngine = webView.getEngine();
 
-        locals = new LocalJSObject(webEngine);
-        globals = GlobalJSObject.getGlobalJSObject(webEngine);
+//        locals = new LocalJSObject(webEngine);
+//        globals = GlobalJSObject.getGlobalJSObject(webEngine);
+        javaScriptHelpers = new JavaScriptHelpers(webEngine);
         originalUserAgent = webEngine.getUserAgent();
         webEngine.setJavaScriptEnabled(true);
         webEngine.setOnAlert(this::handleAlert);
@@ -493,12 +496,12 @@ public class WebKitBrowser extends JFXPanel {
 
             result.setMember(
                     "burpKit",
-                    new JavaScriptHelpers(webEngine)
+                    javaScriptHelpers
             );
 
-            result.setMember("locals", locals);
-
-            result.setMember("globals", globals);
+//            result.setMember("locals", locals);
+//
+//            result.setMember("globals", globals);
 
             if (controller != null) {
                 result.setMember(

@@ -56,8 +56,9 @@ public class JavaScriptEditor extends BorderPane {
     private final IMessageEditorController controller;
     private JavaScriptConsoleTab javaScriptConsoleTab = null;
     private final boolean showConsole;
-    private LocalJSObject locals;
-    private LocalJSObject globals;
+//    private LocalJSObject locals;
+//    private LocalJSObject globals;
+    private JavaScriptHelpers javaScriptHelpers;
     private File scriptFile = null;
     private final AutoCompleteCodeArea codeArea;
 
@@ -84,8 +85,9 @@ public class JavaScriptEditor extends BorderPane {
             this.webEngine = webEngine;
             webView = null;
         }
-        locals = new LocalJSObject(this.webEngine);
-        globals = GlobalJSObject.getGlobalJSObject(this.webEngine);
+//        locals = new LocalJSObject(this.webEngine);
+//        globals = GlobalJSObject.getGlobalJSObject(this.webEngine);
+        javaScriptHelpers = new JavaScriptHelpers(this.webEngine);
         this.codeArea = new AutoCompleteCodeArea(new JSAutoCompletionProvider(this.webEngine));
         this.controller = controller;
         this.showConsole = showConsole;
@@ -239,12 +241,12 @@ public class JavaScriptEditor extends BorderPane {
 
                 result.setMember(
                         "burpKit",
-                        new JavaScriptHelpers(webEngine)
+                        javaScriptHelpers
                 );
 
-                result.setMember("locals", locals);
-
-                result.setMember("globals", globals);
+//                result.setMember("locals", locals);
+//
+//                result.setMember("globals", globals);
 
                 // Sometimes this control will not appear as part of a burp message editor so we don't need to add it to
                 // the JS namespace.
