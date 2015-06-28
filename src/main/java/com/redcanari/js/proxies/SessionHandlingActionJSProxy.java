@@ -33,7 +33,7 @@ public class SessionHandlingActionJSProxy extends JSProxy implements ISessionHan
 
     @Override
     public String getActionName() {
-        return null;
+        return call("getActionName");
     }
 
     @Override

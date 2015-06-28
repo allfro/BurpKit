@@ -20,6 +20,7 @@ package com.redcanari.js.proxies;
 
 import burp.IHttpRequestResponse;
 import burp.IHttpService;
+import com.redcanari.js.Helpers;
 import netscape.javascript.JSObject;
 
 import java.net.URL;
@@ -35,7 +36,7 @@ public class HttpRequestResponseJSProxy extends JSProxy implements IHttpRequestR
 
     @Override
     public byte[] getRequest() {
-        return (byte[])call("getRequest");
+        return call("getRequest");
     }
 
     @Override
@@ -45,7 +46,7 @@ public class HttpRequestResponseJSProxy extends JSProxy implements IHttpRequestR
 
     @Override
     public byte[] getResponse() {
-        return (byte[])call("getResponse");
+        return call("getResponse");
     }
 
     @Override
@@ -55,7 +56,7 @@ public class HttpRequestResponseJSProxy extends JSProxy implements IHttpRequestR
 
     @Override
     public String getComment() {
-        return (String)call("getComment");
+        return call("getComment");
     }
 
     @Override
@@ -65,7 +66,7 @@ public class HttpRequestResponseJSProxy extends JSProxy implements IHttpRequestR
 
     @Override
     public String getHighlight() {
-        return (String)call("getHighlight");
+        return call("getHighlight");
     }
 
     @Override
@@ -75,27 +76,27 @@ public class HttpRequestResponseJSProxy extends JSProxy implements IHttpRequestR
 
     @Override
     public IHttpService getHttpService() {
-        return (IHttpService)call("getHttpService");
+        return call("getHttpService");
     }
 
     @Override
-    public void setHttpService(IHttpService iHttpService) {
-        call("setHttpService", iHttpService);
+    public void setHttpService(IHttpService httpService) {
+        call("setHttpService", httpService);
     }
 
     @Override
     public String getHost() {
-        return (String)call("getHost");
+        return call("getHost");
     }
 
     @Override
     public int getPort() {
-        return (int)call("getPort");
+        return call("getPort");
     }
 
     @Override
     public String getProtocol() {
-        return (String)call("getProtocol");
+        return call("getProtocol");
     }
 
     @Override
@@ -115,11 +116,11 @@ public class HttpRequestResponseJSProxy extends JSProxy implements IHttpRequestR
 
     @Override
     public URL getUrl() {
-        return (URL)call("getUrl");
+        return call("getUrl");
     }
 
     @Override
     public short getStatusCode() {
-        return (short)call("getShortCode");
+        return call("getShortCode");
     }
 }

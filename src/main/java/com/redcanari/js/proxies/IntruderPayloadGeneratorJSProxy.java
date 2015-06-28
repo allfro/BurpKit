@@ -18,26 +18,31 @@
 
 package com.redcanari.js.proxies;
 
-import burp.IContextMenuFactory;
-import burp.IContextMenuInvocation;
+import burp.IIntruderPayloadGenerator;
 import com.redcanari.js.Helpers;
 import netscape.javascript.JSObject;
 
-import javax.swing.*;
-import java.util.List;
-
 /**
- * Created by ndouba on 14-12-09.
+ * Created by ndouba on 15-06-24.
  */
-public class ContextMenuFactoryJSProxy extends JSProxy implements IContextMenuFactory {
+public class IntruderPayloadGeneratorJSProxy extends JSProxy implements IIntruderPayloadGenerator {
 
-    public ContextMenuFactoryJSProxy(JSObject jsObject) {
+    public IntruderPayloadGeneratorJSProxy(JSObject jsObject) {
         super(jsObject);
     }
 
     @Override
-    public List<JMenuItem> createMenuItems(IContextMenuInvocation invocation) {
-        return Helpers.toJavaProxyList(call("createMenuItems", invocation), JMenuItem.class);
+    public boolean hasMorePayloads() {
+        return call("hasMorePayloads");
     }
 
+    @Override
+    public byte[] getNextPayload(byte[] bytes) {
+        return Helpers.getBytes(call("getNextPayload", bytes, null));
+    }
+
+    @Override
+    public void reset() {
+        call("reset");
+    }
 }

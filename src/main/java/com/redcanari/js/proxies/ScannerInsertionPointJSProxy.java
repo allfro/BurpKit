@@ -18,28 +18,40 @@
 
 package com.redcanari.js.proxies;
 
-import burp.IIntruderAttack;
-import burp.IIntruderPayloadGenerator;
-import burp.IIntruderPayloadGeneratorFactory;
+import burp.IScannerInsertionPoint;
+import com.redcanari.js.Helpers;
 import netscape.javascript.JSObject;
 
 /**
- * Created by ndouba on 14-12-09.
+ * Created by ndouba on 15-06-24.
  */
-public class IntruderPayloadGeneratorFactory extends JSProxy implements IIntruderPayloadGeneratorFactory {
-
-    public IntruderPayloadGeneratorFactory(JSObject jsObject) {
+public class ScannerInsertionPointJSProxy extends JSProxy implements IScannerInsertionPoint {
+    public ScannerInsertionPointJSProxy(JSObject jsObject) {
         super(jsObject);
     }
 
     @Override
-    public String getGeneratorName() {
-        return null;
+    public String getInsertionPointName() {
+        return call("getInsertionPointName");
     }
 
     @Override
-    public IIntruderPayloadGenerator createNewInstance(IIntruderAttack attack) {
-        return null;
+    public String getBaseValue() {
+        return call("getBaseValue");
     }
 
+    @Override
+    public byte[] buildRequest(byte[] bytes) {
+        return Helpers.getBytes(call("buildRequest", bytes, null));
+    }
+
+    @Override
+    public int[] getPayloadOffsets(byte[] bytes) {
+        return Helpers.toPrimitiveIntArray(call("getPayloadOffsets", bytes, null));
+    }
+
+    @Override
+    public byte getInsertionPointType() {
+        return call("getInsertionPointType");
+    }
 }

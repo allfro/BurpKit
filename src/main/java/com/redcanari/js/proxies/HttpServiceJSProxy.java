@@ -32,16 +32,16 @@ public class HttpServiceJSProxy extends JSProxy implements IHttpService{
 
     @Override
     public String getHost() {
-        return (String) call("getHost");
+        return call("getHost");
     }
 
     @Override
     public int getPort() {
-        return (int) call("getPort");
+        return call("getPort");
     }
 
     @Override
     public String getProtocol() {
-        return (String) call("getProtocol");
+        return call("getProtocol");
     }
 }

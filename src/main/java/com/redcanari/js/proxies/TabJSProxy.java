@@ -34,12 +34,12 @@ public class TabJSProxy extends JSProxy implements ITab {
 
     @Override
     public String getTabCaption() {
-        return (String) call("getTabCaption");
+        return call("getTabCaption");
     }
 
     @Override
     public Component getUiComponent() {
-        return (Component) call("getUiComponent");
+        return call("getUiComponent");
     }
 
 }

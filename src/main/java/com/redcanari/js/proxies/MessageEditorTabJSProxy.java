@@ -18,33 +18,53 @@
 
 package com.redcanari.js.proxies;
 
-import burp.BurpExtender;
-import burp.IMessageEditorController;
 import burp.IMessageEditorTab;
-import burp.IMessageEditorTabFactory;
 import com.redcanari.js.Helpers;
-import com.redcanari.js.wrappers.TextEditorWrapper;
 import netscape.javascript.JSObject;
 
-/**
- * Created by ndouba on 14-12-09.
- */
-public class MessageEditorTabFactoryJSProxy extends JSProxy implements IMessageEditorTabFactory{
+import java.awt.*;
 
-    public MessageEditorTabFactoryJSProxy(JSObject jsObject) {
+/**
+ * Created by ndouba on 15-06-24.
+ */
+public class MessageEditorTabJSProxy extends JSProxy implements IMessageEditorTab {
+
+    public MessageEditorTabJSProxy(JSObject jsObject) {
         super(jsObject);
     }
 
     @Override
-    public IMessageEditorTab createNewInstance(IMessageEditorController controller, boolean editable) {
-        return Helpers.<IMessageEditorTab>wrapInterface(
-                call(
-                        "createNewInstance",
-                        controller,
-                        editable,
-                        new TextEditorWrapper(BurpExtender.getBurpExtenderCallbacks().createTextEditor())
-                ),
-                MessageEditorTabJSProxy.class
-        );
+    public String getTabCaption() {
+        return call("getTabCaption");
+    }
+
+    @Override
+    public Component getUiComponent() {
+        return call("getUiComponent");
+    }
+
+    @Override
+    public boolean isEnabled(byte[] bytes, boolean b) {
+        return call("isEnabled", bytes, b);
+    }
+
+    @Override
+    public void setMessage(byte[] bytes, boolean b) {
+        call("setMessage", bytes, b);
+    }
+
+    @Override
+    public byte[] getMessage() {
+        return Helpers.getBytes(call("getMessage"));
+    }
+
+    @Override
+    public boolean isModified() {
+        return call("isModified");
+    }
+
+    @Override
+    public byte[] getSelectedData() {
+        return Helpers.getBytes(call("getSelectedData"));
     }
 }

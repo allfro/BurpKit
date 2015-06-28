@@ -29,15 +29,15 @@ import java.util.List;
 /**
  * Created by ndouba on 14-12-09.
  */
-public class ContextMenuFactoryJSProxy extends JSProxy implements IContextMenuFactory {
+public class ContextMenuFactoryJSLambdaProxy extends JSProxy implements IContextMenuFactory {
 
-    public ContextMenuFactoryJSProxy(JSObject jsObject) {
+    public ContextMenuFactoryJSLambdaProxy(JSObject jsObject) {
         super(jsObject);
     }
 
     @Override
     public List<JMenuItem> createMenuItems(IContextMenuInvocation invocation) {
-        return Helpers.toJavaProxyList(call("createMenuItems", invocation), JMenuItem.class);
+        return Helpers.toJavaProxyList(call("call", null, invocation), JMenuItem.class);
     }
 
 }

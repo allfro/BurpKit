@@ -39,7 +39,8 @@ public class ScanIssueJSProxy extends JSProxy implements IScanIssue {
     @Override
     public URL getUrl() {
         try {
-            return new URL((String)call("getURL"));
+            Object result = call("getUrl");
+            return (result instanceof String)?new URL((String)result):(URL)result;
         } catch (MalformedURLException e) {
             return null;
         }
@@ -47,69 +48,66 @@ public class ScanIssueJSProxy extends JSProxy implements IScanIssue {
 
     @Override
     public String getIssueName() {
-        return (String) call("getIssueName");
+        return call("getIssueName");
     }
 
     @Override
     public int getIssueType() {
-        return (int) call("getIssueType");
+        return call("getIssueType");
     }
 
     @Override
     public String getSeverity() {
-        return (String) call("getSeverity");
+        return call("getSeverity");
     }
 
     @Override
     public String getConfidence() {
-        return (String) call("getConfidence");
+        return call("getConfidence");
     }
 
     @Override
     public String getIssueBackground() {
-        return (String) call("getIssueBackground");
+        return call("getIssueBackground");
     }
 
     @Override
     public String getRemediationBackground() {
-        return (String) call("getRemediationBackground");
+        return call("getRemediationBackground");
     }
 
     @Override
     public String getIssueDetail() {
-        return (String) call("getIssueDetail");
+        return call("getIssueDetail");
     }
 
     @Override
     public String getRemediationDetail() {
-        return (String) call("getRemediationDetail");
+        return call("getRemediationDetail");
     }
 
     @Override
     public IHttpRequestResponse[] getHttpMessages() {
-        return (IHttpRequestResponse[]) Helpers.toJavaArray((JSObject) call("getHttpMessages"), IHttpRequestResponse.class);
+        return (IHttpRequestResponse[]) Helpers.toJavaArray(call("getHttpMessages"), IHttpRequestResponse.class);
     }
 
     @Override
     public IHttpService getHttpService() {
-        Object httpService = call("getHttpService");
-        if (httpService instanceof JSObject)
-            httpService = new HttpServiceJSProxy((JSObject) httpService);
-        return (IHttpService) httpService;
+        return Helpers.<IHttpService>wrapInterface(call("getHttpService"), HttpServiceJSProxy.class);
     }
 
     @Override
     public String getHost() {
-        return (String) call("getHost");
+        return call("getHost");
     }
 
     @Override
     public int getPort() {
-        return (int) call("getPort");
+        return call("getPort");
     }
 
     @Override
     public String getProtocol() {
-        return (String) call("getProtocol");
+        return call("getProtocol");
     }
 }

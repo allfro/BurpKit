@@ -19,6 +19,7 @@
 package com.redcanari.js.proxies;
 
 import burp.IIntruderPayloadProcessor;
+import com.redcanari.js.Helpers;
 import netscape.javascript.JSObject;
 
 /**
@@ -32,11 +33,11 @@ public class IntruderPayloadProcessorJSProxy extends JSProxy implements IIntrude
 
     @Override
     public String getProcessorName() {
-        return (String)call("getProcessorName");
+        return call("getProcessorName");
     }
 
     @Override
     public byte[] processPayload(byte[] currentPayload, byte[] originalPayload, byte[] baseValue) {
-        return (byte[])call("processPayload", currentPayload, originalPayload, baseValue);
+        return Helpers.getBytes(call("processPayload", currentPayload, originalPayload, baseValue));
     }
 }

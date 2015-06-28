@@ -20,6 +20,7 @@ package com.redcanari.js.proxies;
 
 import burp.IParameter;
 import burp.IRequestInfo;
+import com.redcanari.js.Helpers;
 import netscape.javascript.JSObject;
 
 import java.net.URL;
@@ -38,31 +39,31 @@ public class RequestInfoJSProxy extends JSProxy implements IRequestInfo {
 
     @Override
     public String getMethod() {
-        return (String)call("getMethod");
+        return call("getMethod");
     }
 
     @Override
     public URL getUrl() {
-        return (URL)call("getUrl");
+        return call("getUrl");
     }
 
     @Override
     public List<String> getHeaders() {
-        return (List<String>)call("getHeaders");
+        return Helpers.toJavaList(call("getHeaders"));
     }
 
     @Override
     public List<IParameter> getParameters() {
-        return (List<IParameter>)call("getParameters");
+        return Helpers.toJavaProxyList(call("getParameters"), ParameterJSProxy.class);
     }
 
     @Override
     public int getBodyOffset() {
-        return (int)call("getBodyOffset");
+        return call("getBodyOffset");
     }
 
     @Override
     public byte getContentType() {
-        return (byte)call("getContentType");
+        return call("getContentType");
     }
 }

@@ -18,20 +18,21 @@
 
 package com.redcanari.js.proxies;
 
-import burp.BurpExtender;
-import burp.IMessageEditorController;
-import burp.IMessageEditorTab;
-import burp.IMessageEditorTabFactory;
+import burp.*;
 import com.redcanari.js.Helpers;
+import com.redcanari.js.wrappers.MessageEditorWrapper;
 import com.redcanari.js.wrappers.TextEditorWrapper;
+import javafx.application.Platform;
 import netscape.javascript.JSObject;
+
+import java.awt.*;
 
 /**
  * Created by ndouba on 14-12-09.
  */
-public class MessageEditorTabFactoryJSProxy extends JSProxy implements IMessageEditorTabFactory{
+public class MessageEditorTabFactoryJSLambdaProxy extends JSProxy implements IMessageEditorTabFactory {
 
-    public MessageEditorTabFactoryJSProxy(JSObject jsObject) {
+    public MessageEditorTabFactoryJSLambdaProxy(JSObject jsObject) {
         super(jsObject);
     }
 
@@ -39,7 +40,8 @@ public class MessageEditorTabFactoryJSProxy extends JSProxy implements IMessageE
     public IMessageEditorTab createNewInstance(IMessageEditorController controller, boolean editable) {
         return Helpers.<IMessageEditorTab>wrapInterface(
                 call(
-                        "createNewInstance",
+                        "call",
+                        null,
                         controller,
                         editable,
                         new TextEditorWrapper(BurpExtender.getBurpExtenderCallbacks().createTextEditor())
@@ -47,4 +49,24 @@ public class MessageEditorTabFactoryJSProxy extends JSProxy implements IMessageE
                 MessageEditorTabJSProxy.class
         );
     }
+
+    /*public class EditorFactory {
+
+        private final ITextEditor textEditor;
+        private final IMessageEditor messageEditor;
+
+        public ITextEditor getTextEditor() {
+            return textEditor;
+        }
+
+        public IMessageEditor getMessageEditor() {
+            return messageEditor;
+        }
+
+        public EditorFactory(IMessageEditorController controller, boolean editable) {
+            textEditor = new TextEditorWrapper(BurpExtender.getBurpExtenderCallbacks().createTextEditor());
+            messageEditor = new MessageEditorWrapper(BurpExtender.getBurpExtenderCallbacks().createMessageEditor(controller, editable));
+        }
+
+    }*/
 }

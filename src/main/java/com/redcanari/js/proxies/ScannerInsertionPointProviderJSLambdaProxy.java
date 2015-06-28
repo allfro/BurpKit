@@ -18,26 +18,25 @@
 
 package com.redcanari.js.proxies;
 
-import burp.IContextMenuFactory;
-import burp.IContextMenuInvocation;
+import burp.IHttpRequestResponse;
+import burp.IScannerInsertionPoint;
+import burp.IScannerInsertionPointProvider;
 import com.redcanari.js.Helpers;
 import netscape.javascript.JSObject;
 
-import javax.swing.*;
 import java.util.List;
 
 /**
  * Created by ndouba on 14-12-09.
  */
-public class ContextMenuFactoryJSProxy extends JSProxy implements IContextMenuFactory {
+public class ScannerInsertionPointProviderJSLambdaProxy extends JSProxy implements IScannerInsertionPointProvider{
 
-    public ContextMenuFactoryJSProxy(JSObject jsObject) {
+    public ScannerInsertionPointProviderJSLambdaProxy(JSObject jsObject) {
         super(jsObject);
     }
 
     @Override
-    public List<JMenuItem> createMenuItems(IContextMenuInvocation invocation) {
-        return Helpers.toJavaProxyList(call("createMenuItems", invocation), JMenuItem.class);
+    public List<IScannerInsertionPoint> getInsertionPoints(IHttpRequestResponse baseRequestResponse) {
+        return Helpers.toJavaProxyList(call("call", null, baseRequestResponse), ScannerInsertionPointJSProxy.class);
     }
-
 }

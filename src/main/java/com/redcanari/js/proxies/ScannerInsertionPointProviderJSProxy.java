@@ -21,6 +21,8 @@ package com.redcanari.js.proxies;
 import burp.IHttpRequestResponse;
 import burp.IScannerInsertionPoint;
 import burp.IScannerInsertionPointProvider;
+import com.redcanari.js.Helpers;
+import com.sun.tools.corba.se.idl.toJavaPortable.Helper;
 import netscape.javascript.JSObject;
 
 import java.util.List;
@@ -36,6 +38,6 @@ public class ScannerInsertionPointProviderJSProxy extends JSProxy implements ISc
 
     @Override
     public List<IScannerInsertionPoint> getInsertionPoints(IHttpRequestResponse baseRequestResponse) {
-        return null;
+        return Helpers.toJavaProxyList(call("getInsertionPoints", baseRequestResponse), ScannerInsertionPointJSProxy.class);
     }
 }

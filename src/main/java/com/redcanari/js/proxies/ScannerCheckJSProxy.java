@@ -22,6 +22,7 @@ import burp.IHttpRequestResponse;
 import burp.IScanIssue;
 import burp.IScannerCheck;
 import burp.IScannerInsertionPoint;
+import com.redcanari.js.Helpers;
 import netscape.javascript.JSObject;
 
 import java.util.List;
@@ -37,16 +38,16 @@ public class ScannerCheckJSProxy extends JSProxy implements IScannerCheck {
 
     @Override
     public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse) {
-        return null;
+        return Helpers.toJavaProxyList(call("doPassiveScan", baseRequestResponse), ScanIssueJSProxy.class);
     }
 
     @Override
     public List<IScanIssue> doActiveScan(IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint) {
-        return null;
+        return Helpers.toJavaProxyList(call("doActiveScan", baseRequestResponse, insertionPoint), ScanIssueJSProxy.class);
     }
 
     @Override
     public int consolidateDuplicateIssues(IScanIssue existingIssue, IScanIssue newIssue) {
-        return 0;
+        return call("consolidateDuplicateIssues", existingIssue, newIssue);
     }
 }

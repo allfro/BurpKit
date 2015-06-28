@@ -18,26 +18,49 @@
 
 package com.redcanari.js.proxies;
 
-import burp.IContextMenuFactory;
-import burp.IContextMenuInvocation;
-import com.redcanari.js.Helpers;
+import burp.IParameter;
 import netscape.javascript.JSObject;
 
-import javax.swing.*;
-import java.util.List;
-
 /**
- * Created by ndouba on 14-12-09.
+ * Created by ndouba on 15-06-24.
  */
-public class ContextMenuFactoryJSProxy extends JSProxy implements IContextMenuFactory {
-
-    public ContextMenuFactoryJSProxy(JSObject jsObject) {
+public class ParameterJSProxy extends JSProxy implements IParameter {
+    public ParameterJSProxy(JSObject jsObject) {
         super(jsObject);
     }
 
     @Override
-    public List<JMenuItem> createMenuItems(IContextMenuInvocation invocation) {
-        return Helpers.toJavaProxyList(call("createMenuItems", invocation), JMenuItem.class);
+    public byte getType() {
+        return call("getType");
     }
 
+    @Override
+    public String getName() {
+        return call("getName");
+    }
+
+    @Override
+    public String getValue() {
+        return call("getValue");
+    }
+
+    @Override
+    public int getNameStart() {
+        return call("getNameStart");
+    }
+
+    @Override
+    public int getNameEnd() {
+        return call("getNameEnd");
+    }
+
+    @Override
+    public int getValueStart() {
+        return call("getValueStart");
+    }
+
+    @Override
+    public int getValueEnd() {
+        return call("getValueEnd");
+    }
 }
