@@ -57,7 +57,7 @@ public class JSAutoCompletionProvider implements AutoCompletionProvider {
 
         for (start = end; start >= 0; start--) {
             char c = text.charAt(start);
-            if ("~!@#%^&*()+`-={}|[]\\;':\"<>?,/".indexOf(c) == -1)
+            if ("~!@#%^&*()+`-={}|[]\\;':\"<>?,/ \t".indexOf(c) == -1)
                 continue;
             break;
         }
@@ -76,7 +76,7 @@ public class JSAutoCompletionProvider implements AutoCompletionProvider {
 
         for (start = end; start >= 0; start--) {
             char c = text.charAt(start);
-            if ("~!@#%^&*()+`-={}|[]\\;':\"<>?,/".indexOf(c) == -1)
+            if ("~!@#%^&*()+`-={}|[]\\;':\"<>?,/ \t".indexOf(c) == -1)
                 continue;
             break;
         }
@@ -89,8 +89,8 @@ public class JSAutoCompletionProvider implements AutoCompletionProvider {
 
         Object o = webEngine.executeScript(text);
 
-        if (o instanceof JSObject) {
-            JSObject object = (JSObject) webEngine.executeScript(String.format(introspectionScript, text));
+        if (o instanceof JSObject || o instanceof String) {
+            JSObject object = (JSObject) webEngine.executeScript(String.format(introspectionScript, (o instanceof String)?"String":text));
             return Helpers.toJavaList(object);
         }
 
