@@ -18,11 +18,17 @@
 
 package com.redcanari.js;
 
+import com.redcanari.util.ResourceUtils;
+import javafx.application.Platform;
 import javafx.scene.web.WebEngine;
+import javafx.stage.FileChooser;
 import javafx.util.Pair;
 import netscape.javascript.JSObject;
 import org.controlsfx.dialog.Dialogs;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -30,16 +36,25 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 
 /**
  * Created by ndouba on 15-05-16.
  */
 public class JavaScriptHelpers {
+
+
+    private final LocalJSObject locals;
+    private final LocalJSObject globals;
+
     private final WebEngine webEngine;
 
     public JavaScriptHelpers(WebEngine webEngine) {
         this.webEngine = webEngine;
+        globals = GlobalJSObject.getGlobalJSObject(webEngine);
+        locals = new LocalJSObject(webEngine);
     }
 
     public byte[] httpGetBytes(String url) throws IOException {
@@ -60,8 +75,29 @@ public class JavaScriptHelpers {
 
     public void requireLib(String library) throws IOException {
         webEngine.executeScript(
-                Helpers.convertStreamToString(JavaScriptHelpers.class.getResourceAsStream("/scripts/" + library + ".js"))
+                ResourceUtils.getResourceContentsAsString("/scripts/" + library + ".js")
         );
+    }
+
+    public String saveFileDialog(String title) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        File file = fileChooser.showSaveDialog(null);
+        return (file == null)?null:file.toString();
+    }
+
+    public String openFileDialog(String title) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        File file = fileChooser.showOpenDialog(null);
+        return (file == null)?null:file.toString();
+    }
+
+    public JSObject openMultipleDialog(String title) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        List<File> files = fileChooser.showOpenMultipleDialog(null);
+        return (files == null)? (JSObject) webEngine.executeScript("new Array") :Helpers.toJSArray(webEngine, files);
     }
 
     public void writeToFile(String file, String data) throws IOException {
@@ -83,6 +119,14 @@ public class JavaScriptHelpers {
         });
     }
 
+    public LocalJSObject locals() {
+        return locals;
+    }
+
+    public LocalJSObject globals() {
+        return globals;
+    }
+
     public String prompt(String question) {
         Optional<String> result = Dialogs.create()
                 .masthead(question)
@@ -91,11 +135,44 @@ public class JavaScriptHelpers {
         return result.get();
     }
 
+    protected boolean isFunction(Object object) {
+        if (!(object instanceof JSObject))
+            return false;
+        JSObject checker = (JSObject) webEngine.executeScript("(function(obj){ return typeof obj === 'function' })");
+        return (boolean) checker.call("call", null, object);
+    }
+
+    public JMenuItem createJMenuItem(String caption, JSObject handler) {
+        JMenuItem menuItem = new JMenuItem();
+        menuItem.setText(caption);
+        if (isFunction(handler))
+            menuItem.addActionListener(e -> Platform.runLater(() -> handler.call("call", null, e)));
+        else
+            menuItem.addActionListener(e -> Platform.runLater(() -> handler.call("actionPerformed", e)));
+        return menuItem;
+    }
+
+//    public JMenuItem createJCheckBoxMenuItem(String caption, JSObject handler) {
+//        JMenuItem menuItem = new JCheckBoxMenuItem();
+//        menuItem.setText(caption);
+//        menuItem.addActionListener(e -> Platform.runLater(() -> handler.call("actionPerformed", e)));
+//        return menuItem;
+//    }
+//
+//    public JMenuItem createJRadioButtonMenuItem(String caption, JSObject handler) {
+//        JMenuItem menuItem = new JRadioButtonMenuItem();
+//        menuItem.setText(caption);
+//        menuItem.addActionListener(e -> Platform.runLater(() -> handler.call("actionPerformed", e)));
+//        return menuItem;
+//    }
+
+
     public String homeDirectory() {
         return System.getProperty("user.home");
     }
 
-    public String pathJoin(String first, String... paths) {
+    public String pathJoin(String first, JSObject pathList) {
+        String[] paths = Helpers.toJavaArray(pathList, String.class);
         return Paths.get(first, paths).toAbsolutePath().toString();
     }
 

@@ -44,21 +44,6 @@ public class JavaScriptBridge {
         this.webEngine = webEngine;
     }
 
-    /**
-     * A private API used to convert regular {@link netscape.javascript.JSObject} or {@link java.lang.String} objects
-     * into {@code byte[]}.
-     *
-     * @param data the object that will be converted into bytes.
-     * @return  the data in {@code byte[]}.
-     */
-    protected byte[] getBytes(Object data) {
-        if (data instanceof String)
-            data = ((String) data).getBytes();
-        else if (data instanceof JSObject)
-            data = Helpers.toPrimitiveByteArray(Helpers.<Integer>toJavaArray((JSObject) data, Integer.class));
-        return (byte[]) data;
-    }
-
 
     /**
      * A private API used to convert any URL string into a well-formed URL that includes scheme, port, and path/file
@@ -84,6 +69,13 @@ public class JavaScriptBridge {
             file = "/";
 
         return new URL(urlObject.getProtocol(), host, port, file);
+    }
+
+    protected boolean isFunction(Object object) {
+        if (!(object instanceof JSObject))
+            return false;
+        JSObject checker = (JSObject) webEngine.executeScript("(function(obj){ return typeof obj === 'function' })");
+        return (boolean) checker.call("call", null, object);
     }
 
 

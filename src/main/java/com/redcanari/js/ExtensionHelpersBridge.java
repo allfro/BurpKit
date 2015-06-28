@@ -41,25 +41,25 @@ public class ExtensionHelpersBridge extends JavaScriptBridge {
         if (request instanceof byte[])
             requestInfo = helpers.analyzeRequest((byte[]) request);
         else if (request instanceof String)
-            requestInfo = helpers.analyzeRequest(getBytes(request));
+            requestInfo = helpers.analyzeRequest(Helpers.getBytes(request));
         else if (request instanceof IHttpRequestResponse)
             requestInfo = helpers.analyzeRequest((IHttpRequestResponse)request);
         return requestInfo;
     }
 
     
-    public IRequestInfo analyzeRequest(IHttpService httpService, Object request) {
-        return helpers.analyzeRequest(httpService, getBytes(request));
+    public IRequestInfo analyzeRequest2(IHttpService httpService, Object request) {
+        return helpers.analyzeRequest(httpService, Helpers.getBytes(request));
     }
 
     
     public IResponseInfo analyzeResponse(Object response) {
-        return helpers.analyzeResponse(getBytes(response));
+        return helpers.analyzeResponse(Helpers.getBytes(response));
     }
 
     
     public IParameter getRequestParameter(Object request, String parameterName) {
-        return helpers.getRequestParameter(getBytes(request), parameterName);
+        return helpers.getRequestParameter(Helpers.getBytes(request), parameterName);
     }
 
     
@@ -74,17 +74,17 @@ public class ExtensionHelpersBridge extends JavaScriptBridge {
 
     
     public byte[] urlDecode2(Object data) {
-        return helpers.urlDecode(getBytes(data));
+        return helpers.urlDecode(Helpers.getBytes(data));
     }
 
     
     public byte[] urlEncode2(Object data) {
-        return helpers.urlEncode(getBytes(data));
+        return helpers.urlEncode(Helpers.getBytes(data));
     }
 
     
     public byte[] base64Decode(Object data) {
-        return helpers.base64Decode(getBytes(data));
+        return helpers.base64Decode(Helpers.getBytes(data));
     }
 
 
@@ -93,16 +93,11 @@ public class ExtensionHelpersBridge extends JavaScriptBridge {
     }
 
     
-    public String base64Encode(String data) {
-        return helpers.base64Encode(data);
+    public String base64Encode(Object data) {
+        return helpers.base64Encode(Helpers.getBytes(data));
     }
 
-    
-    public String base64Encode2(Object data) {
-        return helpers.base64Encode(getBytes(data));
-    }
 
-    
     public byte[] stringToBytes(String data) {
         return helpers.stringToBytes(data);
     }
@@ -114,12 +109,12 @@ public class ExtensionHelpersBridge extends JavaScriptBridge {
 
     
     public int indexOf(Object data, Object pattern, boolean caseSensitive, int from, int to) {
-        return helpers.indexOf(getBytes(data), getBytes(pattern), caseSensitive, from, to);
+        return helpers.indexOf(Helpers.getBytes(data), Helpers.getBytes(pattern), caseSensitive, from, to);
     }
 
     
     public byte[] buildHttpMessage(JSObject headers, Object body) {
-        return helpers.buildHttpMessage(Helpers.<String>toJavaList(headers), getBytes(body));
+        return helpers.buildHttpMessage(Helpers.<String>toJavaList(headers), Helpers.getBytes(body));
     }
 
     
@@ -129,22 +124,22 @@ public class ExtensionHelpersBridge extends JavaScriptBridge {
 
     
     public byte[] addParameter(Object request, IParameter parameter) {
-        return helpers.addParameter(getBytes(request), parameter);
+        return helpers.addParameter(Helpers.getBytes(request), parameter);
     }
 
     
     public byte[] removeParameter(Object request, IParameter parameter) {
-        return helpers.removeParameter(getBytes(request), parameter);
+        return helpers.removeParameter(Helpers.getBytes(request), parameter);
     }
 
     
     public byte[] updateParameter(Object request, IParameter parameter) {
-        return helpers.updateParameter(getBytes(request), parameter);
+        return helpers.updateParameter(Helpers.getBytes(request), parameter);
     }
 
     
     public byte[] toggleRequestMethod(Object request) {
-        return helpers.toggleRequestMethod(getBytes(request));
+        return helpers.toggleRequestMethod(Helpers.getBytes(request));
     }
 
     
@@ -164,7 +159,7 @@ public class ExtensionHelpersBridge extends JavaScriptBridge {
 
     
     public IScannerInsertionPoint makeScannerInsertionPoint(String insertionPointName, Object baseRequest, int from, int to) {
-        return helpers.makeScannerInsertionPoint(insertionPointName, getBytes(baseRequest), from, to);
+        return helpers.makeScannerInsertionPoint(insertionPointName, Helpers.getBytes(baseRequest), from, to);
     }
 
     public String toString() {

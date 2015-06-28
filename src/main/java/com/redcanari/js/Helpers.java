@@ -119,8 +119,18 @@ public class Helpers {
         return listArray;
     }
 
+    public static <T> List<T> toJavaProxyList(JSObject jsObject, Class cls) {
+        ArrayList<T> listArray = new ArrayList<T>();
+        int length = getJSArrayLength(jsObject);
+
+        for (int i = 0; i < length; i++)
+            listArray.add(Helpers.<T>wrapInterface(jsObject.getSlot(i), cls));
+
+        return listArray;
+    }
+
     public static <T> List<T[]> toTwoDimenionalJavaListArray(JSObject jsObject) {
-        ArrayList<T[]> arrayList = new ArrayList<T[]>();
+        ArrayList<T[]> arrayList = new ArrayList<>();
         int length = getJSArrayLength(jsObject);
 
         for (int i = 0; i < length; i++) {
@@ -233,5 +243,20 @@ public class Helpers {
             buffer.write(data);
 
         return buffer.toByteArray();
+    }
+
+    /**
+     * A private API used to convert regular {@link JSObject} or {@link String} objects
+     * into {@code byte[]}.
+     *
+     * @param data the object that will be converted into bytes.
+     * @return  the data in {@code byte[]}.
+     */
+    public static byte[] getBytes(Object data) {
+        if (data instanceof String)
+            data = ((String) data).getBytes();
+        else if (data instanceof JSObject)
+            data = toPrimitiveByteArray(Helpers.<Integer>toJavaArray((JSObject) data, Integer.class));
+        return (byte[]) data;
     }
 }

@@ -20,7 +20,9 @@ package com.redcanari.js;
 
 import burp.*;
 import com.redcanari.js.proxies.*;
+import com.redcanari.js.wrappers.TextEditorWrapper;
 import com.redcanari.swing.SwingFXUtilities;
+import javafx.application.Platform;
 import javafx.scene.web.WebEngine;
 import netscape.javascript.JSObject;
 
@@ -38,6 +40,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author  Nadeem Douba
@@ -47,17 +51,69 @@ import java.util.Map;
 @SuppressWarnings({"UnusedDeclaration", "unchecked"})
 public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
 
-    public static final int TOOL_SUITE = 1;
-    public static final int TOOL_TARGET = 2;
-    public static final int TOOL_PROXY = 4;
-    public static final int TOOL_SPIDER = 8;
-    public static final int TOOL_SCANNER = 16;
-    public static final int TOOL_INTRUDER = 32;
-    public static final int TOOL_REPEATER = 64;
-    public static final int TOOL_SEQUENCER = 128;
-    public static final int TOOL_DECODER = 256;
-    public static final int TOOL_COMPARER = 512;
-    public static final int TOOL_EXTENDER = 1024;
+    public static final int TOOL_SUITE = IBurpExtenderCallbacks.TOOL_SUITE;
+    public static final int TOOL_TARGET = IBurpExtenderCallbacks.TOOL_TARGET;
+    public static final int TOOL_PROXY = IBurpExtenderCallbacks.TOOL_PROXY;
+    public static final int TOOL_SPIDER = IBurpExtenderCallbacks.TOOL_SPIDER;
+    public static final int TOOL_SCANNER = IBurpExtenderCallbacks.TOOL_SCANNER;
+    public static final int TOOL_INTRUDER = IBurpExtenderCallbacks.TOOL_INTRUDER;
+    public static final int TOOL_REPEATER = IBurpExtenderCallbacks.TOOL_REPEATER;
+    public static final int TOOL_SEQUENCER = IBurpExtenderCallbacks.TOOL_SEQUENCER;
+    public static final int TOOL_DECODER = IBurpExtenderCallbacks.TOOL_DECODER;
+    public static final int TOOL_COMPARER = IBurpExtenderCallbacks.TOOL_COMPARER;
+    public static final int TOOL_EXTENDER = IBurpExtenderCallbacks.TOOL_EXTENDER;
+    
+    public static final byte CONTEXT_MESSAGE_EDITOR_REQUEST = IContextMenuInvocation.CONTEXT_MESSAGE_EDITOR_REQUEST;
+    public static final byte CONTEXT_MESSAGE_EDITOR_RESPONSE = IContextMenuInvocation.CONTEXT_MESSAGE_EDITOR_RESPONSE;
+    public static final byte CONTEXT_MESSAGE_VIEWER_REQUEST = IContextMenuInvocation.CONTEXT_MESSAGE_VIEWER_REQUEST;
+    public static final byte CONTEXT_MESSAGE_VIEWER_RESPONSE = IContextMenuInvocation.CONTEXT_MESSAGE_VIEWER_RESPONSE;
+    public static final byte CONTEXT_TARGET_SITE_MAP_TREE = IContextMenuInvocation.CONTEXT_TARGET_SITE_MAP_TREE;
+    public static final byte CONTEXT_TARGET_SITE_MAP_TABLE = IContextMenuInvocation.CONTEXT_TARGET_SITE_MAP_TABLE;
+    public static final byte CONTEXT_PROXY_HISTORY = IContextMenuInvocation.CONTEXT_PROXY_HISTORY;
+    public static final byte CONTEXT_SCANNER_RESULTS = IContextMenuInvocation.CONTEXT_SCANNER_RESULTS;
+    public static final byte CONTEXT_INTRUDER_PAYLOAD_POSITIONS = IContextMenuInvocation.CONTEXT_INTRUDER_PAYLOAD_POSITIONS;
+    public static final byte CONTEXT_INTRUDER_ATTACK_RESULTS = IContextMenuInvocation.CONTEXT_INTRUDER_ATTACK_RESULTS;
+    public static final byte CONTEXT_SEARCH_RESULTS = IContextMenuInvocation.CONTEXT_SEARCH_RESULTS;
+    
+    public static final int ACTION_FOLLOW_RULES = IInterceptedProxyMessage.ACTION_FOLLOW_RULES;
+    public static final int ACTION_DO_INTERCEPT = IInterceptedProxyMessage.ACTION_DO_INTERCEPT;
+    public static final int ACTION_DONT_INTERCEPT = IInterceptedProxyMessage.ACTION_DONT_INTERCEPT;
+    public static final int ACTION_DROP = IInterceptedProxyMessage.ACTION_DROP;
+    public static final int ACTION_FOLLOW_RULES_AND_REHOOK = IInterceptedProxyMessage.ACTION_FOLLOW_RULES_AND_REHOOK;
+    public static final int ACTION_DO_INTERCEPT_AND_REHOOK = IInterceptedProxyMessage.ACTION_DO_INTERCEPT_AND_REHOOK;
+    public static final int ACTION_DONT_INTERCEPT_AND_REHOOK = IInterceptedProxyMessage.ACTION_DONT_INTERCEPT_AND_REHOOK;
+
+    public static final byte PARAM_URL = IParameter.PARAM_URL;
+    public static final byte PARAM_BODY = IParameter.PARAM_BODY;
+    public static final byte PARAM_COOKIE = IParameter.PARAM_COOKIE;
+    public static final byte PARAM_XML = IParameter.PARAM_XML;
+    public static final byte PARAM_XML_ATTR = IParameter.PARAM_XML_ATTR;
+    public static final byte PARAM_MULTIPART_ATTR = IParameter.PARAM_MULTIPART_ATTR;
+    public static final byte PARAM_JSON = IParameter.PARAM_JSON;
+    
+    public static final byte CONTENT_TYPE_NONE = IRequestInfo.CONTENT_TYPE_NONE;
+    public static final byte CONTENT_TYPE_UNKNOWN = IRequestInfo.CONTENT_TYPE_UNKNOWN;
+    public static final byte CONTENT_TYPE_URL_ENCODED = IRequestInfo.CONTENT_TYPE_URL_ENCODED;
+    public static final byte CONTENT_TYPE_MULTIPART = IRequestInfo.CONTENT_TYPE_MULTIPART;
+    public static final byte CONTENT_TYPE_XML = IRequestInfo.CONTENT_TYPE_XML;
+    public static final byte CONTENT_TYPE_JSON = IRequestInfo.CONTENT_TYPE_JSON;
+    public static final byte CONTENT_TYPE_AMF = IRequestInfo.CONTENT_TYPE_AMF;
+    
+    public static final byte INS_PARAM_URL = IScannerInsertionPoint.INS_PARAM_URL;
+    public static final byte INS_PARAM_BODY = IScannerInsertionPoint.INS_PARAM_BODY;
+    public static final byte INS_PARAM_COOKIE = IScannerInsertionPoint.INS_PARAM_COOKIE;
+    public static final byte INS_PARAM_XML = IScannerInsertionPoint.INS_PARAM_XML;
+    public static final byte INS_PARAM_XML_ATTR = IScannerInsertionPoint.INS_PARAM_XML_ATTR;
+    public static final byte INS_PARAM_MULTIPART_ATTR = IScannerInsertionPoint.INS_PARAM_MULTIPART_ATTR;
+    public static final byte INS_PARAM_JSON = IScannerInsertionPoint.INS_PARAM_JSON;
+    public static final byte INS_PARAM_AMF = IScannerInsertionPoint.INS_PARAM_AMF;
+    public static final byte INS_HEADER = IScannerInsertionPoint.INS_HEADER;
+    public static final byte INS_URL_REST = IScannerInsertionPoint.INS_URL_REST;
+    public static final byte INS_PARAM_NAME_URL = IScannerInsertionPoint.INS_PARAM_NAME_URL;
+    public static final byte INS_PARAM_NAME_BODY = IScannerInsertionPoint.INS_PARAM_NAME_BODY;
+    public static final byte INS_USER_PROVIDED = IScannerInsertionPoint.INS_USER_PROVIDED;
+    public static final byte INS_EXTENSION_PROVIDED = IScannerInsertionPoint.INS_EXTENSION_PROVIDED;
+    public static final byte INS_UNKNOWN = IScannerInsertionPoint.INS_UNKNOWN;
 
     private final ExtensionHelpersBridge extensionHelpersBridge;
 
@@ -184,7 +240,9 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return The instance of {@link burp.IExtensionStateListener} that was registered.
      */
     public IExtensionStateListener registerExtensionStateListener(Object listener) {
-        final IExtensionStateListener l = Helpers.<IExtensionStateListener>wrapInterface(listener, ExtensionStateListenerJSProxy.class);
+        final IExtensionStateListener l = (isFunction(listener))?
+                new ExtensionStateListenerJSLambdaProxy((JSObject) listener):
+                Helpers.<IExtensionStateListener>wrapInterface(listener, ExtensionStateListenerJSProxy.class);
         SwingUtilities.invokeLater(
                 () -> burpExtenderCallbacks.registerExtensionStateListener(l)
         );
@@ -227,7 +285,9 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return The instance of {@link burp.IHttpListener} that was registered.
      */
     public IHttpListener registerHttpListener(Object listener) {
-        final IHttpListener l = Helpers.<IHttpListener>wrapInterface(listener, HttpListenerJSProxy.class);
+        final IHttpListener l = (isFunction(listener))?
+                new HttpListenerJSLambdaProxy((JSObject) listener):
+                Helpers.<IHttpListener>wrapInterface(listener, HttpListenerJSProxy.class);
         SwingUtilities.invokeLater(() -> burpExtenderCallbacks.registerHttpListener(l));
         return l;
     }
@@ -270,7 +330,9 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return The instance of {@link burp.IProxyListener} that was created.
      */
     public IProxyListener registerProxyListener(Object listener) {
-        final IProxyListener l = Helpers.<IProxyListener>wrapInterface(listener, ProxyListenerJSProxy.class);
+        final IProxyListener l = (isFunction(listener))?
+                new ProxyListenerJSLambdaProxy((JSObject) listener):
+                Helpers.<IProxyListener>wrapInterface(listener, ProxyListenerJSProxy.class);
         SwingUtilities.invokeLater(() -> burpExtenderCallbacks.registerProxyListener(l));
         return l;
     }
@@ -311,7 +373,9 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return The instance of {@link burp.IScannerListener} that was created.
      */
     public IScannerListener registerScannerListener(Object listener) {
-        final IScannerListener l = Helpers.<IScannerListener>wrapInterface(listener, ScannerListenerJSProxy.class);
+        final IScannerListener l = (isFunction(listener))?
+                new ScannerListenerJSLambdaProxy((JSObject) listener):
+                Helpers.<IScannerListener>wrapInterface(listener, ScannerListenerJSProxy.class);
         SwingUtilities.invokeLater(() -> burpExtenderCallbacks.registerScannerListener(l));
         return l;
     }
@@ -353,7 +417,9 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return The instance of {@link burp.IScopeChangeListener} that was created.
      */
     public IScopeChangeListener registerScopeChangeListener(Object listener) {
-        final IScopeChangeListener l = Helpers.<IScopeChangeListener>wrapInterface(listener, ScopeChangeListenerJSProxy.class);
+        final IScopeChangeListener l = (isFunction(listener))?
+                new ScopeChangeListenerJSLambdaProxy((JSObject) listener):
+                Helpers.<IScopeChangeListener>wrapInterface(listener, ScopeChangeListenerJSProxy.class);
         SwingUtilities.invokeLater(() -> burpExtenderCallbacks.registerScopeChangeListener(l));
         return l;
     }
@@ -395,7 +461,9 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return The instance of {@link burp.IContextMenuFactory} that was created.
      */
     public IContextMenuFactory registerContextMenuFactory(Object factory) {
-        final IContextMenuFactory f = Helpers.<IContextMenuFactory>wrapInterface(factory, ContextMenuFactoryJSProxy.class);
+        final IContextMenuFactory f = (isFunction(factory))?
+                new ContextMenuFactoryJSLambdaProxy((JSObject) factory):
+                Helpers.<IContextMenuFactory>wrapInterface(factory, ContextMenuFactoryJSProxy.class);
         SwingUtilities.invokeLater(() -> burpExtenderCallbacks.registerContextMenuFactory(f));
         return f;
     }
@@ -439,7 +507,9 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return The instance of the {@link burp.IMessageEditorTabFactory} that was created.
      */
     public IMessageEditorTabFactory registerMessageEditorTabFactory(Object factory) {
-        final IMessageEditorTabFactory f = Helpers.<IMessageEditorTabFactory>wrapInterface(factory, MessageEditorTabFactoryJSProxy.class);
+        final IMessageEditorTabFactory f = (isFunction(factory))?
+                new MessageEditorTabFactoryJSLambdaProxy((JSObject) factory):
+                Helpers.<IMessageEditorTabFactory>wrapInterface(factory, MessageEditorTabFactoryJSProxy.class);
         SwingUtilities.invokeLater(() -> burpExtenderCallbacks.registerMessageEditorTabFactory(f));
         return f;
     }
@@ -483,7 +553,9 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return The instance of {@link burp.IScannerInsertionPointProvider} that was created.
      */
     public IScannerInsertionPointProvider registerScannerInsertionPointProvider(Object provider) {
-        final IScannerInsertionPointProvider p = Helpers.<IScannerInsertionPointProvider>wrapInterface(provider, ScannerInsertionPointProviderJSProxy.class);
+        final IScannerInsertionPointProvider p = (isFunction(provider))?
+                new ScannerInsertionPointProviderJSLambdaProxy((JSObject) provider):
+                Helpers.<IScannerInsertionPointProvider>wrapInterface(provider, ScannerInsertionPointProviderJSProxy.class);
         SwingUtilities.invokeLater(() -> burpExtenderCallbacks.registerScannerInsertionPointProvider(p));
         return p;
     }
@@ -748,9 +820,10 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      *                   instance is created. The instance of {@link burp.IMessageEditor} will be passed to the callback
      *                   function as the first parameter.
      */
-    public void createMessageEditor(IMessageEditorController controller, boolean editable, JSObject callback) {
+    public void createMessageEditor(Object controller, boolean editable, JSObject callback) {
+        final IMessageEditorController c = Helpers.<IMessageEditorController>wrapInterface(controller, MessageEditorControllerJSProxy.class);
         SwingFXUtilities.invokeLater(
-                () -> burpExtenderCallbacks.createMessageEditor(controller, editable),
+                () -> burpExtenderCallbacks.createMessageEditor(c, editable),
                 callback
         );
     }
@@ -795,31 +868,26 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @param name The name of the setting.
      * @return The value of the setting, or {@code null} if no value is set.
      */
-    public synchronized String loadExtensionSetting(String name) {
-        final String string;
-        try {
-            string = SwingFXUtilities.invokeAndWait(() -> burpExtenderCallbacks.loadExtensionSetting(name));
-        } catch (InterruptedException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return string;
+    public String loadExtensionSetting(String name) throws InterruptedException, ExecutionException, TimeoutException {
+        return SwingFXUtilities.invokeAndWait(() -> burpExtenderCallbacks.loadExtensionSetting(name));
     }
 
 
     /**
      * This method is used to create a new instance of Burp's plain text editor, for the extension to use in its own UI.
      *
-     * @param callback a JavaScript callback function that is called with an instance of {@link burp.ITextEditor} as its
-     *                 first argument once the {@link burp.ITextEditor} instance has been successfully created.
+     * @param callback a JavaScript callback function that is called with an instance of {@link ITextEditor} as its
+     *                 first argument once the {@link ITextEditor} instance has been successfully created.
      */
-    public void createTextEditor(JSObject callback) {
-        SwingFXUtilities.invokeLater(
-                burpExtenderCallbacks::createTextEditor,
-                callback
-        );
+//    public void createTextEditor(JSObject callback) {
+//        SwingFXUtilities.invokeLater(
+//                burpExtenderCallbacks::createTextEditor,
+//                callback
+//        );
+//    }
+    public ITextEditor createTextEditor() {
+        return new TextEditorWrapper(burpExtenderCallbacks.createTextEditor());
     }
-
 
     /**
      * This method can be used to send an HTTP request to the Burp Repeater tool. The request will be displayed in the
@@ -837,7 +905,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
                         host,
                         port,
                         useHttps,
-                        getBytes(request),
+                        Helpers.getBytes(request),
                         tabCaption
                 )
         );
@@ -880,7 +948,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @param request   The full HTTP request.
      */
     public void sendToIntruder(String host, int port, boolean useHttps, Object request) {
-        SwingUtilities.invokeLater(() -> burpExtenderCallbacks.sendToIntruder(host, port, useHttps, getBytes(request)));
+        SwingUtilities.invokeLater(() -> burpExtenderCallbacks.sendToIntruder(host, port, useHttps, Helpers.getBytes(request)));
     }
 
 
@@ -921,7 +989,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      */
     public void sendToIntruder2(String host, int port, boolean useHttps, Object request, Object payloadPositionOffsets) {
         final List<int[]> payloadPositions = (payloadPositionOffsets instanceof JSObject)?Helpers.toTwoDimensionalJavaListIntArray((JSObject) payloadPositionOffsets):(List<int[]>)payloadPositionOffsets;
-        SwingUtilities.invokeLater(() -> burpExtenderCallbacks.sendToIntruder(host, port, useHttps, getBytes(request), payloadPositions));
+        SwingUtilities.invokeLater(() -> burpExtenderCallbacks.sendToIntruder(host, port, useHttps, Helpers.getBytes(request), payloadPositions));
     }
 
 
@@ -931,7 +999,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @param data The data to be sent to Comparer.
      */
     public void sendToComparer(Object data) {
-        SwingUtilities.invokeLater(() -> burpExtenderCallbacks.sendToComparer(getBytes(data)));
+        SwingUtilities.invokeLater(() -> burpExtenderCallbacks.sendToComparer(Helpers.getBytes(data)));
     }
 
 
@@ -964,7 +1032,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      */
     public void doActiveScan(String host, int port, boolean useHttps, Object request, JSObject callback) {
         SwingFXUtilities.invokeLater(
-                () -> burpExtenderCallbacks.doActiveScan(host, port, useHttps, getBytes(request)),
+                () -> burpExtenderCallbacks.doActiveScan(host, port, useHttps, Helpers.getBytes(request)),
                 callback
         );
     }
@@ -986,7 +1054,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
         final List<int[]> insertionPoints = (insertionPointOffsets instanceof JSObject)?
                 Helpers.toTwoDimensionalJavaListIntArray((JSObject) insertionPointOffsets):(List<int[]>)insertionPointOffsets;
         SwingFXUtilities.invokeLater(
-                () -> burpExtenderCallbacks.doActiveScan(host, port, useHttps, getBytes(request), insertionPoints),
+                () -> burpExtenderCallbacks.doActiveScan(host, port, useHttps, Helpers.getBytes(request), insertionPoints),
                 callback
         );
     }
@@ -1024,7 +1092,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @param response  The full HTTP response.
      */
     public void doPassiveScan(String host, int port, boolean useHttps, Object request, Object response) {
-        SwingUtilities.invokeLater(() -> burpExtenderCallbacks.doPassiveScan(host, port, useHttps, getBytes(request), getBytes(response)));
+        SwingUtilities.invokeLater(() -> burpExtenderCallbacks.doPassiveScan(host, port, useHttps, Helpers.getBytes(request), Helpers.getBytes(response)));
     }
 
 
@@ -1036,7 +1104,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return an instance of {@link burp.IHttpRequestResponse}.
      */
     public IHttpRequestResponse makeHttpRequest(IHttpService httpService, Object request) {
-        return burpExtenderCallbacks.makeHttpRequest(httpService, getBytes(request));
+        return burpExtenderCallbacks.makeHttpRequest(httpService, Helpers.getBytes(request));
     }
 
 
@@ -1066,7 +1134,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return a byte array containing the response data.
      */
     public byte[] makeHttpRequest2(String host, int port, boolean useHttps, Object request) {
-        return burpExtenderCallbacks.makeHttpRequest(host, port, useHttps, getBytes(request));
+        return burpExtenderCallbacks.makeHttpRequest(host, port, useHttps, Helpers.getBytes(request));
     }
 
 
@@ -1296,15 +1364,8 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return A Map of name/value Strings reflecting Burp's current configuration.
      * @throws IOException
      */
-    public synchronized JSObject saveConfig() throws IOException {
-        Map<String, String> config;
-        try {
-            config = SwingFXUtilities.invokeAndWait(burpExtenderCallbacks::saveConfig);
-        } catch (InterruptedException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return Helpers.toJSMap(webEngine, config);
+    public JSObject saveConfig() throws InterruptedException, ExecutionException, TimeoutException, IOException {
+        return Helpers.toJSMap(webEngine, SwingFXUtilities.invokeAndWait(burpExtenderCallbacks::saveConfig));
     }
 
 
@@ -1375,16 +1436,9 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @param buffer The data to be saved to a temporary file.
      * @return An object that implements the {@link burp.ITempFile} interface.
      */
-    public ITempFile saveToTempFile(Object buffer) {
-        byte[] bufferObject = getBytes(buffer);
-        ITempFile tempFile;
-        try {
-            tempFile = SwingFXUtilities.invokeAndWait(() -> burpExtenderCallbacks.saveToTempFile(bufferObject));
-        } catch (InterruptedException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return tempFile;
+    public ITempFile saveToTempFile(Object buffer) throws InterruptedException, ExecutionException, TimeoutException {
+        byte[] bufferObject = Helpers.getBytes(buffer);
+        return SwingFXUtilities.invokeAndWait(() -> burpExtenderCallbacks.saveToTempFile(bufferObject));
     }
 
 
@@ -1397,15 +1451,8 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      *                            to be saved to temporary files.
      * @return An object that implements the {@link burp.IHttpRequestResponsePersisted} interface.
      */
-    public synchronized IHttpRequestResponsePersisted saveBuffersToTempFiles(IHttpRequestResponse httpRequestResponse) {
-        IHttpRequestResponsePersisted requestResponsePersisted;
-        try {
-            requestResponsePersisted = SwingFXUtilities.invokeAndWait(() -> burpExtenderCallbacks.saveBuffersToTempFiles(httpRequestResponse));
-        } catch (InterruptedException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return requestResponsePersisted;
+    public IHttpRequestResponsePersisted saveBuffersToTempFiles(IHttpRequestResponse httpRequestResponse) throws InterruptedException, ExecutionException, TimeoutException {
+        return SwingFXUtilities.invokeAndWait(() -> burpExtenderCallbacks.saveBuffersToTempFiles(httpRequestResponse));
     }
 
 
@@ -1427,17 +1474,10 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      *                              response markers are required.
      * @return An object that implements the {@link burp.IHttpRequestResponseWithMarkers} interface.
      */
-    public synchronized IHttpRequestResponseWithMarkers applyMarkers(IHttpRequestResponse httpRequestResponse, Object requestMarkers, Object responseMarkers) {
+    public IHttpRequestResponseWithMarkers applyMarkers(IHttpRequestResponse httpRequestResponse, Object requestMarkers, Object responseMarkers) throws InterruptedException, ExecutionException, TimeoutException {
         List<int[]>reqMarkers = (requestMarkers instanceof JSObject)?Helpers.toTwoDimensionalJavaListIntArray((JSObject) requestMarkers):(List<int[]>) requestMarkers;
         List<int[]>resMarkers = (responseMarkers instanceof JSObject)?Helpers.toTwoDimensionalJavaListIntArray((JSObject) responseMarkers):(List<int[]>) responseMarkers;
-        IHttpRequestResponseWithMarkers requestResponseWithMarkers;
-        try {
-            requestResponseWithMarkers = SwingFXUtilities.invokeAndWait(() -> burpExtenderCallbacks.applyMarkers(httpRequestResponse, reqMarkers, resMarkers));
-        } catch (InterruptedException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return requestResponseWithMarkers;
+        return SwingFXUtilities.invokeAndWait(() -> burpExtenderCallbacks.applyMarkers(httpRequestResponse, reqMarkers, resMarkers));
     }
 
 
@@ -1494,7 +1534,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
 //            return null;
 //        }
 //        return Helpers.toTwoDimensionalJSArray(webEngine, parameters);
-        return Helpers.toTwoDimensionalJSArray(webEngine, burpExtenderCallbacks.getParameters(getBytes(request)));
+        return Helpers.toTwoDimensionalJSArray(webEngine, burpExtenderCallbacks.getParameters(Helpers.getBytes(request)));
     }
 
 
@@ -1515,7 +1555,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
 //            return null;
 //        }
 //        return Helpers.toJSArray(webEngine, headers);
-        return Helpers.toJSArray(webEngine, burpExtenderCallbacks.getHeaders(getBytes(request)));
+        return Helpers.toJSArray(webEngine, burpExtenderCallbacks.getHeaders(Helpers.getBytes(request)));
     }
 
 
@@ -1528,7 +1568,9 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * @return The instance of {@link burp.IMenuItemHandler} that was created.
      */
     public IMenuItemHandler registerMenuItem(String menuItemCaption, Object menuItemHandler) {
-        final IMenuItemHandler menuItem = Helpers.<IMenuItemHandler>wrapInterface(menuItemHandler, MenuItemHandlerJSProxy.class);
+        final IMenuItemHandler menuItem = (isFunction(menuItemCaption))?
+                new MenuItemHandlerJSLambdaProxy((JSObject) menuItemHandler):
+                Helpers.<IMenuItemHandler>wrapInterface(menuItemHandler, MenuItemHandlerJSProxy.class);
         SwingUtilities.invokeLater(() -> burpExtenderCallbacks.registerMenuItem(menuItemCaption, menuItem));
         return menuItem;
     }
