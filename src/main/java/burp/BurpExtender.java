@@ -22,13 +22,8 @@ import com.redcanari.burp.WebKitBrowserTab;
 import com.redcanari.net.http.HttpInterceptUrlStreamHandlerFactory;
 import com.redcanari.net.security.TrustManager;
 import com.redcanari.tainter.Tainter;
-import com.redcanari.ui.JavaScriptEditor;
-import com.redcanari.ui.JavaScriptEditorTab;
 import com.redcanari.ui.WebKitBrowser;
 import com.redcanari.ui.font.FontAwesome;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
