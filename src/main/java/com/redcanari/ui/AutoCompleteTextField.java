@@ -113,13 +113,13 @@ public class AutoCompleteTextField extends CircularTextField implements EventHan
                 listView.getSelectionModel().selectFirst();
                 listView.requestFocus();
             }
-        } else if (keyCode == KeyCode.ENTER && popup.isShowing()) {
+        } else if ((keyCode == KeyCode.ENTER || keyCode == KeyCode.TAB) && popup.isShowing()) {
             String item = listView.getSelectionModel().getSelectedItem();
             if (item == null)
                 item = listView.getItems().get(0);
             autoCompletionProvider.applySuggestion(this, item);
             reset();
-        } else if ((keyCode.isLetterKey() || keyCode.isDigitKey() || keyCode == KeyCode.BACK_SPACE) && (popup.isShowing() || tracking)) {
+        } else if ((event.getText().matches("[ -~]") || keyCode == KeyCode.BACK_SPACE) && (popup.isShowing() || tracking)) {
             if (!tracking) {
                 tracking = true;
             } else if (caret < suggestionStart) {

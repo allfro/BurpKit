@@ -53,15 +53,18 @@ public class JSAutoCompletionProvider implements AutoCompletionProvider {
     private String getLastToken(AutoCompleteTextField textField) {
         String text = textField.getText();
         int end = textField.getCaretPosition() - 1;
-        int start;
+        int start = end;
+
+        if (start == -1)
+            return "window";
 
         for (start = end; start >= 0; start--) {
             char c = text.charAt(start);
-            if ("~!@#%^&*()+`-={}|[]\\;':\"<>?,/ \t".indexOf(c) == -1)
+            if ("~!@#%^&*()+`-={}|[]\\;':\"<>?,/ \t\n\r".indexOf(c) == -1)
                 continue;
             break;
         }
-        return text.substring(start + 1, end);
+        return (start == end)?"window":text.substring(start + 1, end);
     }
 
     /**
@@ -72,15 +75,18 @@ public class JSAutoCompletionProvider implements AutoCompletionProvider {
     private String getLastToken(AutoCompleteCodeArea codeArea) {
         String text = codeArea.getText();
         int end = codeArea.getCaretPosition() - 1;
-        int start;
+        int start = end;
+
+        if (start == -1)
+            return "window";
 
         for (start = end; start >= 0; start--) {
             char c = text.charAt(start);
-            if ("~!@#%^&*()+`-={}|[]\\;':\"<>?,/ \t".indexOf(c) == -1)
+            if ("~!@#%^&*()+`-={}|[]\\;':\"<>?,/ \t\n\r".indexOf(c) == -1)
                 continue;
             break;
         }
-        return text.substring(start + 1, end);
+        return (start == end)?"window":text.substring(start + 1, end);
     }
 
     private List<String> enumerateJSObject(String text) {
@@ -89,7 +95,7 @@ public class JSAutoCompletionProvider implements AutoCompletionProvider {
 
         Object o = webEngine.executeScript(text);
 
-        if (o instanceof JSObject || o instanceof String) {
+        if (o instanceof JSObject || o instanceof String || o instanceof Integer || o instanceof Boolean) {
             JSObject object = (JSObject) webEngine.executeScript(String.format(introspectionScript, (o instanceof String)?"String":text));
             return Helpers.toJavaList(object);
         }

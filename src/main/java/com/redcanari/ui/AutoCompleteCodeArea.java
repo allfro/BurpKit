@@ -166,6 +166,19 @@ public class AutoCompleteCodeArea extends CodeArea implements EventHandler<KeyEv
         setOnKeyReleased(this);
     }
 
+    private void correctSuggestedStart() {
+        String text = getText();
+        int start = getCaretPosition() - 1;
+
+        for (; start >= 0; start--) {
+            char c = text.charAt(start);
+            if ("~!@#%^&*()+`-={}|[]\\;':\"<>?,/ \t\n\r".indexOf(c) == -1)
+                continue;
+            break;
+        }
+        suggestionStart = start + 1;
+    }
+
     @Override
     public void handle(KeyEvent event) {
         KeyCode keyCode = event.getCode();
@@ -198,7 +211,9 @@ public class AutoCompleteCodeArea extends CodeArea implements EventHandler<KeyEv
         if (popup.isShowing()) {
             popup.show(getScene().getWindow());
         }
-        if (autoCompletionProvider.shouldShowPopup(keyCode)) {
+        if (autoCompletionProvider.shouldShowPopup(keyCode) || (event.isAltDown() && keyCode == KeyCode.SPACE)) {
+            if (event.isAltDown() && keyCode == KeyCode.SPACE)
+                correctSuggestedStart();
             completions = FXCollections.observableArrayList();
             completions.addAll(autoCompletionProvider.getCompletions(this));
             FXCollections.sort(completions);
@@ -216,7 +231,7 @@ public class AutoCompleteCodeArea extends CodeArea implements EventHandler<KeyEv
                 item = listView.getItems().get(0);
             autoCompletionProvider.applySuggestion(this, item);
             reset();
-        } else if ((keyCode.isLetterKey() || keyCode.isDigitKey() || keyCode == KeyCode.BACK_SPACE) && (popup.isShowing() || tracking)) {
+        } else if ((event.getText().matches("[ -~]") || keyCode == KeyCode.BACK_SPACE) && (popup.isShowing() || tracking)) {
             if (!tracking) {
                 tracking = true;
             } else if (caret < suggestionStart) {
