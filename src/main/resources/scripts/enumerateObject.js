@@ -35,7 +35,7 @@
     );
 
     try {
-        Object.getOwnPropertyNames(__burpKitIntroSpectionVariable).forEach(
+        Object.getOwnPropertyNames(__burpKitIntroSpectionVariable.prototype).forEach(
             function(__burpKitKeyNameVariable) {__burpKitResultVariable[__burpKitKeyNameVariable] = true;}
         );
     } catch (__burpKitIgnoredExceptionVariable) {
