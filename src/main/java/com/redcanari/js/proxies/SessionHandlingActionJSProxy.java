@@ -38,6 +38,6 @@ public class SessionHandlingActionJSProxy extends JSProxy implements ISessionHan
 
     @Override
     public void performAction(IHttpRequestResponse currentRequest, IHttpRequestResponse[] macroItems) {
-        call("performAction", currentRequest, macroItems);
+        callVoid("performAction", currentRequest, macroItems);
     }
 }

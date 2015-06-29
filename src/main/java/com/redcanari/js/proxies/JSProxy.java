@@ -50,6 +50,22 @@ public class JSProxy {
         }
     }
 
+
+    protected void callVoid(String methodName, Object... args) {
+        if (Platform.isFxApplicationThread())
+            jsObject.call(methodName, args);
+        FutureTask<Void> task = new FutureTask<>(() -> {
+            jsObject.call(methodName, args);
+            return null;
+        });
+        Platform.runLater(task);
+        try {
+            task.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
     protected <T> void callAsync(String methodName, Object... args) {
         if (Platform.isFxApplicationThread())
             jsObject.call(methodName, args);
