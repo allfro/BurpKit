@@ -19,10 +19,12 @@
 package com.redcanari.js;
 
 import burp.*;
+import com.redcanari.js.wrappers.RequestInfoWrapper;
 import javafx.scene.web.WebEngine;
 import netscape.javascript.JSObject;
 
 import java.net.MalformedURLException;
+import java.util.List;
 
 /**
  * @author Nadeem Douba
@@ -44,12 +46,12 @@ public class ExtensionHelpersBridge extends JavaScriptBridge {
             requestInfo = helpers.analyzeRequest(Helpers.getBytes(request));
         else if (request instanceof IHttpRequestResponse)
             requestInfo = helpers.analyzeRequest((IHttpRequestResponse)request);
-        return requestInfo;
+        return new RequestInfoWrapper(requestInfo);
     }
 
     
     public IRequestInfo analyzeRequest2(IHttpService httpService, Object request) {
-        return helpers.analyzeRequest(httpService, Helpers.getBytes(request));
+        return new RequestInfoWrapper(helpers.analyzeRequest(httpService, Helpers.getBytes(request)));
     }
 
     
@@ -113,8 +115,11 @@ public class ExtensionHelpersBridge extends JavaScriptBridge {
     }
 
     
-    public byte[] buildHttpMessage(JSObject headers, Object body) {
-        return helpers.buildHttpMessage(Helpers.<String>toJavaList(headers), Helpers.getBytes(body));
+    public byte[] buildHttpMessage(Object headers, Object body) {
+        return helpers.buildHttpMessage(
+                (headers instanceof JSObject)?Helpers.<String>toJavaList((JSObject)headers):(List<String>)headers,
+                Helpers.getBytes(body)
+        );
     }
 
     
