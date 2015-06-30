@@ -21,7 +21,7 @@ package com.redcanari.ui;
 import burp.BurpExtender;
 import burp.IMessageEditorController;
 import com.redcanari.js.BurpExtenderCallbacksBridge;
-import com.redcanari.js.JavaScriptHelpers;
+import com.redcanari.js.BurpKitBridge;
 import com.redcanari.ui.font.FontAwesome;
 import com.redcanari.ui.providers.JSAutoCompletionProvider;
 import javafx.beans.value.ObservableValue;
@@ -56,7 +56,7 @@ public class JavaScriptEditor extends BorderPane {
     private final boolean showConsole;
 //    private LocalJSObject locals;
 //    private LocalJSObject globals;
-    private JavaScriptHelpers javaScriptHelpers;
+    private BurpKitBridge javaScriptHelpers;
     private File scriptFile = null;
     private final AutoCompleteCodeArea codeArea;
 
@@ -85,7 +85,7 @@ public class JavaScriptEditor extends BorderPane {
         }
 //        locals = new LocalJSObject(this.webEngine);
 //        globals = GlobalJSObject.getGlobalJSObject(this.webEngine);
-        javaScriptHelpers = new JavaScriptHelpers(this.webEngine);
+        javaScriptHelpers = new BurpKitBridge(this.webEngine);
         this.codeArea = new AutoCompleteCodeArea(new JSAutoCompletionProvider(this.webEngine));
         this.controller = controller;
         this.showConsole = showConsole;

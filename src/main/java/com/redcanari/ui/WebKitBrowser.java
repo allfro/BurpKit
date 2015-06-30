@@ -26,7 +26,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.redcanari.js.BurpExtenderCallbacksBridge;
-import com.redcanari.js.JavaScriptHelpers;
+import com.redcanari.js.BurpKitBridge;
 import com.redcanari.ui.font.FontAwesome;
 import com.redcanari.util.ResourceUtils;
 import com.sun.javafx.scene.web.Debugger;
@@ -97,7 +97,7 @@ public class WebKitBrowser extends JFXPanel {
     private TrafficBrowser trafficBrowser;
     private TabPane detailPane;
     private boolean enabled = false;
-    private JavaScriptHelpers javaScriptHelpers;
+    private BurpKitBridge javaScriptHelpers;
 
     private PageResourcesTab pageResourcesTab;
     private JavaScriptConsoleTab javaScriptConsoleTab;
@@ -300,7 +300,7 @@ public class WebKitBrowser extends JFXPanel {
 
 //        locals = new LocalJSObject(webEngine);
 //        globals = GlobalJSObject.getGlobalJSObject(webEngine);
-        javaScriptHelpers = new JavaScriptHelpers(webEngine);
+        javaScriptHelpers = new BurpKitBridge(webEngine);
         originalUserAgent = webEngine.getUserAgent();
         webEngine.setJavaScriptEnabled(true);
         webEngine.setOnAlert(this::handleAlert);

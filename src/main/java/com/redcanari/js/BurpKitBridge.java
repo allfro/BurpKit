@@ -40,7 +40,7 @@ import java.util.Optional;
 /**
  * Created by ndouba on 15-05-16.
  */
-public class JavaScriptHelpers {
+public class BurpKitBridge {
 
 
     private final LocalJSObject locals;
@@ -48,7 +48,7 @@ public class JavaScriptHelpers {
 
     private final WebEngine webEngine;
 
-    public JavaScriptHelpers(WebEngine webEngine) {
+    public BurpKitBridge(WebEngine webEngine) {
         this.webEngine = webEngine;
         globals = GlobalJSObject.getGlobalJSObject(webEngine);
         locals = new LocalJSObject(webEngine);
@@ -131,6 +131,10 @@ public class JavaScriptHelpers {
                 .showTextInput();
         return result.get();
     }
+
+//    public WebEngine getWebEngine() {
+//        return new WebEngine();
+//    }
 
     protected boolean isFunction(Object object) {
         if (!(object instanceof JSObject))
