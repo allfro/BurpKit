@@ -28,13 +28,15 @@
  * will eventually lead to deadlock issues.
  */
 
-// Our constructor for our `IMessageEditorTab` accepts 1 parameters:
-// `messageEditor`.
-function Base64InputTab(messageEditor) {
+// Our constructor for our `IMessageEditorTab` accepts 2 parameters:
+// `editable`, and `textEditor`.
+function Base64InputTab(editable, textEditor) {
     this.currentMessage = null;
+    this.editable = editable;
     this.helpers = burpCallbacks.getHelpers();
     this.type = 0;
-    this.txtInput = messageEditor;
+    this.txtInput = textEditor;
+    this.txtInput.setEditable(editable);
 }
 
 // Our `Base64InputTab` follows exactly the same interface as that
@@ -57,29 +59,31 @@ Base64InputTab.prototype = {
     'setMessage': function(content, isRequest) {
         if (content == null)
         {
-            this.txtInput.setMessage(null, isRequest);
+            this.txtInput.setText(null);
+            this.txtInput.setEditable(false);
         }
         else
         {
             var parameter = this.helpers.getRequestParameter(content, "data");
             this.type = parameter.getType();
 
-            this.txtInput.setMessage(this.helpers.base64Decode(this.helpers.urlDecode(parameter.getValue())), isRequest);
+            this.txtInput.setText(this.helpers.base64Decode(this.helpers.urlDecode(parameter.getValue())));
+            this.txtInput.setEditable(true);
         }
 
         this.currentMessage = content;
     },
     'getMessage': function() {
-        if (this.txtInput.isMessageModified())
+        if (this.txtInput.isTextModified())
         {
-            var text = this.txtInput.getMessage();
+            var text = this.txtInput.getText();
             var input = this.helpers.urlEncode(this.helpers.base64Encode(text));
             return this.helpers.updateParameter(this.currentMessage, this.helpers.buildParameter("data", input, this.type));
         }
         return this.currentMessage;
     },
     'isModified': function() {
-        return this.txtInput.isMessageModified();
+        return this.txtInput.isTextModified();
     },
     'getSelectedData': function() {
         return this.txtInput.getSelectedData();
@@ -87,12 +91,12 @@ Base64InputTab.prototype = {
 };
 
 // Remove our old message editor tab factory if it was previous defined.
-if ('messageEditorFactory' in window) {
-    alert('Unregistering old message editor tab factory');
-    burpCallbacks.removeMessageEditorTabFactory(messageEditorFactory);
+if ('textEditorFactory' in window) {
+    alert('Unregistering old text editor tab factory');
+    burpCallbacks.removeMessageEditorTabFactory(textEditorFactory);
 }
 
-alert('Registering message editor tab factory!');
+alert('Registering text editor tab factory!');
 
 // Register our new message editor tab factory. Notice the discrepancy
 // between the `IMessageEditorTabFactory` interface defined in BurpSuite's
@@ -101,6 +105,6 @@ alert('Registering message editor tab factory!');
 // that can be used to retrieve an instance of `ITextEditor` using the
 // `editFactory.getTextEditor()` method or an instance of `IMessageEditor`
 // using the `editFactory.getMessageEditor()` method.
-messageEditorFactory = burpCallbacks.registerMessageEditorTabFactory(function(controller, editable, editorFactory) {
-    return new Base64InputTab(editorFactory.getMessageEditor());
+textEditorFactory = burpCallbacks.registerMessageEditorTabFactory(function(controller, editable, editorFactory) {
+    return new Base64InputTab(editable, editorFactory.getTextEditor());
 });
