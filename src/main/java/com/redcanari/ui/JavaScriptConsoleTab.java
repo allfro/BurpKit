@@ -26,7 +26,10 @@ import javafx.concurrent.Worker;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -35,7 +38,6 @@ import javafx.scene.web.WebErrorEvent;
 import javafx.scene.web.WebEvent;
 import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
-import org.controlsfx.control.textfield.AutoCompletionBinding;
 
 
 /**

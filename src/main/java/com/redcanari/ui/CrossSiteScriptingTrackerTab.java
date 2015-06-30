@@ -18,7 +18,6 @@
 
 package com.redcanari.ui;
 
-import com.redcanari.burp.WebKitBrowserTab;
 import com.redcanari.tainter.Tainter;
 import javafx.collections.*;
 import javafx.scene.control.Tab;

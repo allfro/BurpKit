@@ -22,10 +22,10 @@ import javafx.application.Platform;
 import netscape.javascript.JSObject;
 
 import javax.swing.*;
-import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by ndouba on 14-12-09.

@@ -22,7 +22,6 @@ import com.dlsc.trafficbrowser.beans.Traffic;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.scene.control.SkinBase;
@@ -30,10 +29,8 @@ import javafx.scene.control.SortEvent;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.util.Comparator;
 
 
