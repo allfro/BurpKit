@@ -27,8 +27,6 @@ import netscape.javascript.JSObject;
 import org.controlsfx.dialog.Dialogs;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -38,7 +36,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 
 /**
  * Created by ndouba on 15-05-16.

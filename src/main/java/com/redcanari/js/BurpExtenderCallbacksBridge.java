@@ -22,7 +22,6 @@ import burp.*;
 import com.redcanari.js.proxies.*;
 import com.redcanari.js.wrappers.TextEditorWrapper;
 import com.redcanari.swing.SwingFXUtilities;
-import javafx.application.Platform;
 import javafx.scene.web.WebEngine;
 import netscape.javascript.JSObject;
 
@@ -31,7 +30,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.CookieHandler;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
