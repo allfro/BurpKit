@@ -36,12 +36,8 @@ public class TextEditorWrapper implements ITextEditor {
 
     public TextEditorWrapper(ITextEditor textEditor) {
         this.textEditor = textEditor;
-        this.textEditor.getComponent().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
-                text = textEditor.getText();
-            }
+        textEditor.getComponent().addHierarchyListener(e -> {
+            text = textEditor.getText();
         });
     }
 

@@ -23,8 +23,9 @@ import javafx.application.Platform;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Created by ndouba on 15-06-27.
@@ -33,15 +34,13 @@ public class MessageEditorWrapper implements IMessageEditor {
 
     private final IMessageEditor messageEditor;
     private byte[] text;
+    private boolean isModified = false;
 
     public MessageEditorWrapper(IMessageEditor messageEditor) {
         this.messageEditor = messageEditor;
-        this.messageEditor.getComponent().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
-                text = messageEditor.getMessage();
-            }
+        messageEditor.getComponent().addHierarchyListener(e -> {
+            text = messageEditor.getMessage();
+            isModified = messageEditor.isMessageModified();
         });
     }
 
@@ -68,6 +67,8 @@ public class MessageEditorWrapper implements IMessageEditor {
 
     @Override
     public boolean isMessageModified() {
+        if (Platform.isFxApplicationThread())
+            return isModified;
         return messageEditor.isMessageModified();
     }
 
