@@ -22,7 +22,6 @@ import burp.IHttpRequestResponse;
 import burp.IScannerInsertionPoint;
 import burp.IScannerInsertionPointProvider;
 import com.redcanari.js.Helpers;
-import com.sun.tools.corba.se.idl.toJavaPortable.Helper;
 import netscape.javascript.JSObject;
 
 import java.util.List;
