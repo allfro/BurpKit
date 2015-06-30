@@ -20,7 +20,6 @@ package com.redcanari.js.proxies;
 
 import burp.IHttpRequestResponse;
 import burp.IHttpService;
-import com.redcanari.js.Helpers;
 import netscape.javascript.JSObject;
 
 import java.net.URL;
