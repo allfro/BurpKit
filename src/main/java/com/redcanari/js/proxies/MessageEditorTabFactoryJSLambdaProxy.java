@@ -22,10 +22,7 @@ import burp.*;
 import com.redcanari.js.Helpers;
 import com.redcanari.js.wrappers.MessageEditorWrapper;
 import com.redcanari.js.wrappers.TextEditorWrapper;
-import javafx.application.Platform;
 import netscape.javascript.JSObject;
-
-import java.awt.*;
 
 /**
  * Created by ndouba on 14-12-09.
@@ -44,13 +41,13 @@ public class MessageEditorTabFactoryJSLambdaProxy extends JSProxy implements IMe
                         null,
                         controller,
                         editable,
-                        new TextEditorWrapper(BurpExtender.getBurpExtenderCallbacks().createTextEditor())
+                        new EditorFactory(controller, editable)
                 ),
                 MessageEditorTabJSProxy.class
         );
     }
 
-    /*public class EditorFactory {
+    public class EditorFactory {
 
         private final ITextEditor textEditor;
         private final IMessageEditor messageEditor;
@@ -64,9 +61,10 @@ public class MessageEditorTabFactoryJSLambdaProxy extends JSProxy implements IMe
         }
 
         public EditorFactory(IMessageEditorController controller, boolean editable) {
-            textEditor = new TextEditorWrapper(BurpExtender.getBurpExtenderCallbacks().createTextEditor());
-            messageEditor = new MessageEditorWrapper(BurpExtender.getBurpExtenderCallbacks().createMessageEditor(controller, editable));
+            IBurpExtenderCallbacks callbacks = BurpExtender.getBurpExtenderCallbacks();
+            textEditor = new TextEditorWrapper(callbacks.createTextEditor());
+            messageEditor = new MessageEditorWrapper(callbacks.createMessageEditor(controller, editable));
         }
 
-    }*/
+    }
 }
