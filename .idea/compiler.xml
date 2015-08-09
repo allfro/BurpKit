@@ -25,10 +25,24 @@
         <module name="BurpKit" />
         <module name="RealRenderer" />
       </profile>
+      <profile default="false" name="Annotation profile for swing-console-master" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+      </profile>
+      <profile default="false" name="Annotation profile for hexeditor-master 2" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="BurpKit" target="1.8" />
+      <module name="hexeditor-master 2" target="1.6" />
       <module name="RealRenderer" target="1.8" />
+      <module name="swing-console-master" target="1.6" />
     </bytecodeTargetLevel>
   </component>
 </project>

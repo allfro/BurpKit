@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="latest">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../burp/latest.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../burp/latest.jar!/resources/API" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

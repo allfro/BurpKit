@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BurpKit:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BurpKit_jar</output-path>
+    <root id="archive" name="BurpKit.jar">
+      <element id="module-output" name="BurpKit" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/fxmisc/flowless/flowless/0.4.3/flowless-0.4.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/controlsfx/controlsfx/8.20.9-SNAPSHOT/controlsfx-8.20.9-SNAPSHOT.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/reactfx/reactfx/2.0-M4/reactfx-2.0-M4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/fxmisc/wellbehaved/wellbehavedfx/0.1.1/wellbehavedfx-0.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/fxmisc/richtext/richtextfx/0.6.4/richtextfx-0.6.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/fxmisc/undo/undofx/1.1/undofx-1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/xerial/sqlite-jdbc/3.8.10.1/sqlite-jdbc-3.8.10.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.2.2/gson-2.2.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/python/jython-standalone/2.7-b1/jython-standalone-2.7-b1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

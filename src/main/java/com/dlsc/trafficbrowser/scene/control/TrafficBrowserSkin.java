@@ -58,16 +58,13 @@ public class TrafficBrowserSkin extends SkinBase<TrafficBrowser> {
 		table.setItems(sortedData);
 		table.setFixedCellSize(40);
 
-        table.setOnSort(new EventHandler<SortEvent<TableView<Traffic>>>() {
-            @Override
-            public void handle(SortEvent<TableView<Traffic>> event) {
-                sortedData.comparatorProperty().unbind();
-                if (table.getSortOrder().size() == 0) {
-                    sortedData.comparatorProperty().bind(TIMELINE_COMPARATOR_WRAPPER);
-                    table.setSortPolicy(param -> true);
-                } else {
-                    sortedData.comparatorProperty().bind(table.comparatorProperty());
-                }
+        table.setOnSort(event -> {
+            sortedData.comparatorProperty().unbind();
+            if (table.getSortOrder().size() == 0) {
+                sortedData.comparatorProperty().bind(TIMELINE_COMPARATOR_WRAPPER);
+                table.setSortPolicy(param -> true);
+            } else {
+                sortedData.comparatorProperty().bind(table.comparatorProperty());
             }
         });
 

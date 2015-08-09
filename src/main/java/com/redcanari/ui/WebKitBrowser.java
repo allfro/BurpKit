@@ -381,7 +381,7 @@ public class WebKitBrowser extends JFXPanel {
         screenShotButton = new Button(FontAwesome.ICON_CAMERA);
         screenShotButton.setFont(Font.font("FontAwesome", 14));
         screenShotButton.setTooltip(new Tooltip("Take Screen Shot."));
-        screenShotButton.disableProperty().bind(webEngine.getLoadWorker().runningProperty());
+//        screenShotButton.disableProperty().bind(webEngine.getLoadWorker().runningProperty());
         screenShotButton.setOnAction(observable -> {
             WritableImage image = masterPane.snapshot(null, null);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss'.png'");

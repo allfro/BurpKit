@@ -96,7 +96,8 @@ public class Helpers {
     }
 
     private static int getJSArrayLength(JSObject jsObject) {
-        return (int)jsObject.getMember("length");
+        Object length = jsObject.getMember("length");
+        return (length == null)?0:(int)length;
     }
 
     public static <T> T[] toJavaArray(JSObject jsObject, Class cls) {

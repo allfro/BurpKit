@@ -12,6 +12,7 @@
 // Let's create some variables to maintain our spider state. Here we use `loopCount` as a guard
 // variable for initialization and loop counting.
 var locals = burpKit.locals();
+var re = /(aspx?|jspx?|html?|phpx|\/([^\.]+)?)$/; 
 var loopCount = locals.getOrDefault('loopCount', 0);
 
 // `urlsCrawled` and `urlsToCrawl` will track the links we've already crawled and the links we
@@ -67,7 +68,7 @@ if (!loopCount) {
 		var link = hrefs[i].href.split('#', 2)[0]; 
 
 		// Check if URL is HTTP-based and has not been visited or in crawl queue before adding to crawler.
-		if (link.indexOf('http') == 0 && burpCallbacks.isInScope(link) && !isInCrawlQueue(link)) {
+		if (link.indexOf('http') == 0 && re.test(link) && burpCallbacks.isInScope(link) && !isInCrawlQueue(link)) {
 			alert('Adding ' + link + ' to crawl queue.'); 
 			urlsToCrawl.push(link);
 		}
