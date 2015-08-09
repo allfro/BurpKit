@@ -18,6 +18,7 @@
 
 package burp;
 
+import com.redcanari.burp.JythonTab;
 import com.redcanari.burp.WebKitBrowserTab;
 import com.redcanari.net.http.HttpInterceptUrlStreamHandlerFactory;
 import com.redcanari.net.security.TrustManager;
@@ -93,7 +94,6 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
             );
             throw new RuntimeException();
         }
-
         // keep a reference to our callbacks object
         BurpExtender.callbacks = callbacks;
         
@@ -113,6 +113,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         // Add the courtesy BurpKit browser as a top-level tab in BurpSuite.
         callbacks.addSuiteTab(this);
         callbacks.addSuiteTab(new BurpScriptTab());
+        callbacks.addSuiteTab(new JythonTab());
 
         // Ignore invalid SSL certificates.
         try {
