@@ -36,7 +36,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
-import org.controlsfx.control.StatusBar;
 
 import java.io.File;
 import java.io.IOException;

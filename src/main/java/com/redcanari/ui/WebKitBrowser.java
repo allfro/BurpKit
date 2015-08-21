@@ -36,12 +36,14 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Side;
+import javafx.geometry.Orientation;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
@@ -55,13 +57,13 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import netscape.javascript.JSObject;
-import org.controlsfx.control.MasterDetailPane;
-import org.controlsfx.control.StatusBar;
 import org.controlsfx.dialog.Dialogs;
 
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -83,7 +85,7 @@ public class WebKitBrowser extends JFXPanel {
     private WebView webView;
     private Scene scene;
     private IMessageEditorController controller;
-    private MasterDetailPane masterDetailPane;
+    private CollapsibleSplitPane masterDetailPane;
     private ToolBar toolBar;
     private StatusBar statusBar;
     private Button firebugButton;
@@ -112,6 +114,8 @@ public class WebKitBrowser extends JFXPanel {
 
     private final String selectionScript;
     private final String firebugScript;
+
+    private Dialogs dialog;
 
 
     public WebKitBrowser() {
@@ -151,15 +155,17 @@ public class WebKitBrowser extends JFXPanel {
 
     private void createScene() {
 
-        masterDetailPane = new MasterDetailPane();
+        // Fixes issue with blank BurpKitty tabs
+        if (Thread.currentThread().getContextClassLoader() == null) {
+            System.err.println("Warning: context class loader for JFX thread returned null.");
+            Thread.currentThread().setContextClassLoader(ClassLoader.getSystemClassLoader());
+        }
+
         createMasterPane();
         createDetailPane();
-        masterDetailPane.setMasterNode(masterPane);
-        masterDetailPane.setDetailNode(detailPane);
-        masterDetailPane.setDetailSide(Side.BOTTOM);
-        masterDetailPane.setShowDetailNode(true);
-        masterDetailPane.setAnimated(true);
-        masterDetailPane.showDetailNodeProperty().bind(isDetailNodeVisible);
+        masterDetailPane = new CollapsibleSplitPane(masterPane, detailPane);
+        masterDetailPane.setOrientation(Orientation.VERTICAL);
+        masterDetailPane.expandedProperty().bind(isDetailNodeVisible);
 
         scene = new Scene(masterDetailPane);
 
@@ -181,7 +187,7 @@ public class WebKitBrowser extends JFXPanel {
         Tab javaScriptEditorTab = new Tab("BurpScript IDE");
         javaScriptEditorTab.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue)
-                masterDetailPane.setDividerPosition(0.5);
+                masterDetailPane.setDividerPositions(0.5);
         });
         JavaScriptEditor javaScriptEditor = new JavaScriptEditor(webEngine, controller, false);
         javaScriptEditor.setJavaScriptConsoleTab(javaScriptConsoleTab);
@@ -214,8 +220,8 @@ public class WebKitBrowser extends JFXPanel {
                 if (epochObject != null) {
                     double epoch = epochObject.getAsDouble();
                     timeStamp = Instant.ofEpochSecond(
-                            (long)Math.floor(epoch),
-                            (long)(epoch*1000000000%1000000000)
+                            (long) Math.floor(epoch),
+                            (long) (epoch * 1000000000 % 1000000000)
                     );
                 } else {
                     timeStamp = Instant.now();
@@ -236,9 +242,9 @@ public class WebKitBrowser extends JFXPanel {
                         trafficState.put(
                                 requestId,
                                 new Traffic(
-                                        (url == null)?urlString:url.getFile(),
+                                        (url == null) ? urlString : url.getFile(),
                                         timeStamp,
-                                        (url == null)?"":url.getHost(),
+                                        (url == null) ? "" : url.getHost(),
                                         request.get("method").getAsString(),
                                         params.get("documentURL").getAsString()
                                 )
@@ -297,6 +303,11 @@ public class WebKitBrowser extends JFXPanel {
         AnchorPane.setRightAnchor(webView, 0.0);
 
         webEngine = webView.getEngine();
+
+        dialog = Dialogs.create()
+                .lightweight()
+                .modal()
+                .owner(webView);
 
 //        locals = new LocalJSObject(webEngine);
 //        globals = GlobalJSObject.getGlobalJSObject(webEngine);
@@ -449,15 +460,22 @@ public class WebKitBrowser extends JFXPanel {
          * Finally display an alert box if the operator demands it.
          */
         if (showAlerts.getValue()) {
-            Dialogs.create()
-                    .lightweight()
-                    .modal()
-                    .owner(webView)
-                    .title("JavaScript Alert")
+            dialog.title("JavaScript Alert")
                     .message(message)
                     .showInformation();
+            resetParents();
         }
 
+    }
+
+    /**
+     * Used to get rid of LightweightDialog parent container which causes ugly GUI glitches.
+     * Called after every time a dialog window is closed.
+     */
+    private void resetParents() {
+        Parent webViewParent = webView.getParent();
+        webViewAnchorPane.getChildren().remove(webViewParent);
+        webViewAnchorPane.getChildren().add(webView);
     }
 
     public void loadUrl(final String url) {
@@ -507,19 +525,15 @@ public class WebKitBrowser extends JFXPanel {
                 );
             }
         } else if (newValue == Worker.State.FAILED) {
-            Dialogs.create()
-                    .lightweight()
-                    .owner(webView)
-                    .title("Navigation Failed")
+            dialog.title("Navigation Failed")
                     .message(webEngine.getLoadWorker().getException().getMessage())
                     .showInformation();
+            resetParents();
         } else if (newValue == Worker.State.CANCELLED) {
-            Dialogs.create()
-                    .lightweight()
-                    .owner(webView)
-                    .title("Navigation Cancelled")
+            dialog.title("Navigation Cancelled")
                     .message(webEngine.getLoadWorker().getMessage())
                     .showInformation();
+            resetParents();
         }
 
 
