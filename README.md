@@ -53,7 +53,8 @@ The following subsections detail the `burpCallbacks` API and provide brief examp
 
 ---
 
-### `setExtensionName(String name)` method
+### Methods
+#### `setExtensionName(String name)` method
 Sets the name of the BurpKit extension since all BurpScript extensions are operating under the context of the BurpKit plugin.
 
 **Parameters:**
@@ -66,7 +67,7 @@ burpCallbacks.setExtensionName('foo');
 
 ---
 
-### `getHelpers()` method
+#### `getHelpers()` method
 Returns an instance of the `ExtensionHelpersBridge` object, which adheres to the API of the [IExtensionHelpers](https://portswigger.net/burp/extender/api/burp/IExtensionHelpers.html) interface with a few minor exceptions. See (`ExtensionHelpersBridge`)[#extensionshelpersbridge] for more details.
 
 **Returns:**
@@ -84,8 +85,8 @@ helpers.urlDecode('%3cscript%3e'); // returns '<script>'
 The `ExtensionHelpersBridge` is essentially an instance of the BurpSuite `IExtensionHelpers` object with a few minor exceptions to work-around the limitations within the JavaScript scripting language with regards to method overloading.  The helper object can be retrieved using the `burpCallbacks.getHelpers()` method.
 
 ---
-
-### `analyzeRequest(Object request)` method
+### Methods
+#### `analyzeRequest(Object request)` method
 This method can be used to analyze an HTTP request, and obtain various key details about it.  The resulting `IRequestInfo` object will not include the full request URL if `request` is not an `IHttpRequestResponse` object. Alternatively, one can obtain the full URL by using the `analyzeRequest2()` method. 
 
 **Parameters:**
@@ -103,7 +104,7 @@ requestInfo.getMethod(); // returns 'GET'
 
 ---
 
-### `analyzeRequest2(IHttpService httpService, Object request)` method
+#### `analyzeRequest2(IHttpService httpService, Object request)` method
 This method can be used to analyze an HTTP request, and obtain various key details about it.
 
 **Parameters:**
@@ -122,7 +123,7 @@ requestInfo.getMethod(); // returns 'GET'
 
 ---
 
-### `analyzeResponse(Object response)` method
+#### `analyzeResponse(Object response)` method
 This method can be used to analyze an HTTP response, and obtain various key details about it.
 
 **Parameters:**
@@ -139,7 +140,7 @@ responseInfo.getStatusCode(); // returns 200
 
 ---
 
-### `getRequestParameter(Object request, String parameterName)` method
+#### `getRequestParameter(Object request, String parameterName)` method
 This method can be used to retrieve details of a specified parameter within an HTTP request. **Note:** Use `analyzeRequest()` to obtain details of all parameters within the request. 
 
 **Parameters:**
@@ -157,7 +158,7 @@ parameter.getValue(); // returns 'foo'
 
 ---
 
-### `urlDecode(String data)` method
+#### `urlDecode(String data)` method
 This method can be used to URL-decode the specified data.
 
 **Example:**
@@ -167,7 +168,7 @@ helpers.urlDecode('%3cscript%3e'); // returns '<script>'
 
 ---
 
-### `urlDecode2(Object data)` method
+#### `urlDecode2(Object data)` method
 This method can be used to URL-decode the specified data. 
 
 **Parameters:**
@@ -183,7 +184,7 @@ helpers.urlDecode2('f%2fb'); // returns Java byte[]{'f', '/', 'b'}
 
 ---
 
-### `urlEncode(String data)` method
+#### `urlEncode(String data)` method
 This method can be used to URL-encode the specified data. Any characters that do not need to be encoded within HTTP requests are not encoded.
 
 **Parameters:**
@@ -199,7 +200,7 @@ helpers.urlEncode('foo/bar');  // returns 'foo%2fbar'
 
 ---
 
-### `urlEncode2(Object data)` method
+#### `urlEncode2(Object data)` method
 This method can be used to URL-encode the specified data. Any characters that do not need to be encoded within HTTP requests are not encoded. 
 
 **Parameters:**
@@ -215,7 +216,7 @@ helpers.urlEncode2('f/b'); // returns Java byte[] {'f', '%', '2', 'f', 'b'}
 
 ---
 
-### `base64Decode(Object data)` method
+#### `base64Decode(Object data)` method
 This method can be used to Base64-encode the specified data. `data` can be a Java `byte[]` array or a `String`.
 
 **Parameters:**
@@ -231,7 +232,7 @@ helpers.base64Decode('Zm9v'); // returns Java byte[] {'f', 'o', 'o'}
 
 ---
 
-### `base64Decode2(Object data)` method
+#### `base64Decode2(Object data)` method
 This method can be used to Base64-encode the specified data. 
 
 **Parameters:**
@@ -247,7 +248,7 @@ helpers.base64Decode2('Zm9v'); // returns 'foo'
 
 ---
 
-### `base64Encode(Object data)` method
+#### `base64Encode(Object data)` method
 This method can be used to Base64-encode the specified data. `data` can either be a Java `byte[]` array or a `String`.
 
 **Example:**
@@ -257,7 +258,7 @@ helpers.base64Encode('foo'); // returns 'Zm9v'
 
 ---
 
-### `stringToBytes(String data)` method
+#### `stringToBytes(String data)` method
 This method can be used to convert data from String form into an array of bytes. The conversion does not reflect any particular character set, and a character with the hex representation `0xWXYZ` will always be converted into a byte with the representation `0xYZ`. It performs the opposite conversion to the method `bytesToString()`, and byte-based data that is converted to a String and back again using these two methods is guaranteed to retain its integrity (which may not be the case with conversions that reflect a given character set).
 
 **Parameters:**
@@ -273,7 +274,7 @@ helpers.stringToBytes('abc'); // returns Java byte[] {'a', 'b', 'c'}
 
 ---
 
-### `bytesToString(byte[] data)` method
+#### `bytesToString(byte[] data)` method
 This method can be used to convert data from an array of bytes into String form. The conversion does not reflect any particular character set, and a byte with the representation `0xYZ` will always be converted into a character with the hex representation `0x00YZ`. It performs the opposite conversion to the method `stringToBytes()`, and byte-based data that is converted to a String and back again using these two methods is guaranteed to retain its integrity (which may not be the case with conversions that reflect a given character set).
 
 **Parameters:**
@@ -289,7 +290,7 @@ helpers.bytesToString(helpers.stringToBytes('abc')); // returns 'abc'
 
 ---
 
-### `indexOf(Object data, Object pattern, boolean caseSensitive, int from, int to)` method
+#### `indexOf(Object data, Object pattern, boolean caseSensitive, int from, int to)` method
 This method searches a piece of data for the first occurrence of a specified pattern. It works on byte-based data in a way that is similar to the way the native Java method `String.indexOf()` works on String-based data.
 
 **Parameters:**
@@ -310,7 +311,7 @@ helpers.indexOf('GET /?q=foo HTTP/1.1\r\n', '/?Q=foo', true, 0, 10); // returns 
 
 ---
 
-### `buildHttpMessage(Object headers, Object body)` method
+#### `buildHttpMessage(Object headers, Object body)` method
 This method builds an HTTP message containing the specified headers and message body. If applicable, the Content-Length header will be added or updated, based on the length of the body. `body` can be either a Java `byte[]` array or a `String`
 
 **Parameters:**
@@ -327,7 +328,7 @@ var message = helpers.buildHttpMessage(['GET / HTTP/1.1', 'Host: foo.com'], '');
 
 ---
 
-### `buildHttpRequest(String url)` method
+#### `buildHttpRequest(String url)` method
 This method creates a GET request to the specified URL. The headers used in the request are determined by the Request headers settings as configured in Burp Spider's options.
 
 **Parameters:**
@@ -343,7 +344,7 @@ var message = helpers.buildHttpRequest('http://www.bar.com');
 
 ---
 
-### `addParameter(Object request, IParameter parameter)` method
+#### `addParameter(Object request, IParameter parameter)` method
 This method adds a new parameter to an HTTP request, and if appropriate updates the Content-Length header.  See `buildParameter()` for information on building parameters.
 
 **Parameters**:
@@ -363,7 +364,7 @@ var newMessage = helpers.addParameter(
 
 ---
 
-### `removeParameter(Object request, IParameter parameter)` method
+#### `removeParameter(Object request, IParameter parameter)` method
 This method removes a parameter from an HTTP request, and if appropriate updates the Content-Length header.
 
 **Parameters:**
@@ -386,7 +387,7 @@ var newMessage = helpers.removeParameter(
 
 ---
 
-### `updateParameter(Object request, IParameter parameter)` method
+#### `updateParameter(Object request, IParameter parameter)` method
 This method updates the value of a parameter within an HTTP request, and if appropriate updates the `Content-Length` header. Note: This method can only be used to update the value of an existing parameter of a specified type. If you need to change the type of an existing parameter, you should first call `removeParameter()` to remove the parameter with the old type, and then call `addParameter()` to add a parameter with the new type. 
 
 **Parameters**:
@@ -407,7 +408,7 @@ var newMessage = helpers.updateParameter(
 
 ---
 
-### `toggleRequestMethod(Object request)` method
+#### `toggleRequestMethod(Object request)` method
 This method can be used to toggle a request's method between `GET` and `POST`. Parameters are relocated between the URL query string and message body as required, and the `Content-Length` header is created or removed as applicable. 
 
 **Parameters**:
@@ -424,7 +425,7 @@ request = helpers.toggleRequestMethod(request); // Changes GET to POST request
 
 ---
 
-### `buildHttpService(String host, int port, String protocol)` method
+#### `buildHttpService(String host, int port, String protocol)` method
 This method constructs an `IHttpService` object based on the details provided.
 
 **Parameters**:
@@ -442,7 +443,7 @@ var httpService = helpers.buildHttpService('foo.com', 80, 'http');
 
 ---
 
-### `buildHttpService2(String host, int port, boolean useHttps)` method
+#### `buildHttpService2(String host, int port, boolean useHttps)` method
 This method constructs an `IHttpService` object based on the details provided.
 
 **Parameters**:
@@ -460,7 +461,7 @@ var httpService = helpers.buildHttpService2('foo.com', 80, true); // SSL enabled
 
 ---
 
-### `buildParameter(String name, String value, int type)` method
+#### `buildParameter(String name, String value, int type)` method
 This method constructs an `IParameter` object based on the details provided.
 
 **Parameters:**
@@ -478,7 +479,7 @@ var parameter = helpers.buildParameter('foo', 'bar', burpCallbacks.PARAM_URL); /
 
 ---
 
-### `makeScannerInsertionPoint(String insertionPointName, Object baseRequest, int from, int to)` method
+#### `makeScannerInsertionPoint(String insertionPointName, Object baseRequest, int from, int to)` method
 This method constructs an `IScannerInsertionPoint` object based on the details provided. It can be used to quickly create a simple insertion point based on a fixed payload location within a base request.
 
 **Parameters:**
@@ -514,6 +515,7 @@ BurpKit is distributed as an [IntelliJ IDEA](https://www.jetbrains.com/idea/) pr
 ---
 
 ## Known Issues
+The following sections detail known issues that have been discovered within BurpKit and possible workarounds.
 
 ---
 
