@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BurpKit</title>
+  
+
+  <link rel="shortcut icon" href="./img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="./css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "None";
+  </script>
+  
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="./js/highlight.pack.js"></script>
+  <script src="./js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> BurpKit</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href=".">Home</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#welcome-to-burpkit">Welcome to BurpKit</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getting-started">Getting Started</a></li>
+                
+                    <li><a class="toctree-l4" href="#system-requirements">System Requirements</a></li>
+                
+                    <li><a class="toctree-l4" href="#installation">Installation</a></li>
+                
+                    <li><a class="toctree-l4" href="#compiling-burpkit">Compiling BurpKit</a></li>
+                
+                    <li><a class="toctree-l4" href="#known-issues">Known Issues</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="burpScript/">BurpScript</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>API</span></li>
+
+        
+            
+    <ul class="subnav">
+    <li><span>burpCallbacks object</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="API/callbacks-overview/">Overview</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="API/callbacks-api/">Methods</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="API/callbacks-constants/">Constants</a>
+        
+    </li>
+
+        
+    </ul>
+
+        
+            
+    <ul class="subnav">
+    <li><span>ExtensionHelpersBridge class</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="API/helpers-overview/">Overview</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="API/helpers-api/">Methods</a>
+        
+    </li>
+
+        
+    </ul>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">BurpKit</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/allfro/BurpKit" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="welcome-to-burpkit">Welcome to BurpKit</h1>
+<p>Welcome to the next generation of web application penetration testing - using WebKit to own the web.
+BurpKit is a BurpSuite plugin which helps in assessing complex web apps that render the contents of
+their pages dynamically. As part of its rich feature set, BurpKit  provides a bi-directional
+JavaScript bridge API which allows users to quickly create BurpSuite plugins  which can interact 
+directly with the DOM and Burp's extender API at the same time. This permits BurpSuite plugin
+developers to run their web application testing logic directly within the DOM itself whilst taking
+advantage of BurpSuite's other features as well!</p>
+<p>For example, imagine building an intruder payload generator that dynamically generates a word list
+while crawling a Web 2.0 web application such as Twitter. Or maybe using the BurpScript extensions
+to scrape web pages and save those results to a file. What about building a better web spider that 
+can render AJAX-based pages and send discovered content to the active scanner? All this can be done
+with BurpKit and more! </p>
+<hr />
+<h1 id="getting-started">Getting Started</h1>
+<h2 id="system-requirements">System Requirements</h2>
+<p>BurpKit has the following system requirements:</p>
+<ul>
+<li>Oracle JDK &gt;=8u50 and &lt;9 (<a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Download</a>)</li>
+<li>At least 4GB of RAM</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>Installing BurpKit is simple:</p>
+<ol>
+<li>Download the latest prebuilt release from the <a href="https://github.com/allfro/BurpKit/releases">GitHub releases page</a>.</li>
+<li>Open BurpSuite and navigate to the <code>Extender</code> tab.</li>
+<li>Under <code>Burp Extensions</code> click the <code>Add</code> button.</li>
+<li>In the <code>Load Burp Extension</code> dialog, make sure that <code>Extension Type</code> is set to <code>Java</code> and click the <code>Select file ...</code> button under <code>Extension Details</code>.</li>
+<li>Select the <code>BurpKit-&lt;version&gt;.jar</code> file and click <code>Next</code> when done.</li>
+</ol>
+<p>If all goes well, you will see three additional top-level tabs appear in BurpSuite:</p>
+<ol>
+<li><code>BurpKitty</code>: a courtesy browser for navigating the web within BurpSuite.</li>
+<li><code>BurpScript IDE</code>: a lightweight integrated development environment for writing JavaScript-based BurpSuite plugins and other things.</li>
+<li><code>Jython</code>: an integrated python interpreter console and lightweight script text editor.</li>
+</ol>
+<h2 id="compiling-burpkit">Compiling BurpKit</h2>
+<p>BurpKit is distributed as an <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> project. Once the project is opened in IntelliJ, compilation should be trivial. The JAR file can be built using the <code>Build Artifacts...</code> menu item under the <code>Build</code> menu. The compiled output will appear under the <code>out</code> directory.</p>
+<h2 id="known-issues">Known Issues</h2>
+<p>The following sections detail known issues that have been discovered within BurpKit and possible workarounds.</p>
+<h3 id="no-upstream-proxy-support">No Upstream Proxy Support</h3>
+<p>Upstream proxies set within BurpSuite's <code>Options</code> tab are currently not supported as there exists no way to monitor BurpSuite setting modifications. Therefore, upstream proxies will have to be configured at the system level or via the Java command line arguments. BurpKit may leverage BurpSuite's internal request framework in future releases.</p>
+<h3 id="blank-tabs">Blank Tabs</h3>
+<p>Unhandled exceptions within the JavaFX event loop may trigger this condition. Currently, BurpKit-v1.01-pre attempts to resolve this issue. If you are still experiencing this issue, please run BurpSuite from the command line (e.g. <code>java -jar burpsuite_&lt;version&gt;.jar -Xmx4g</code>)  and <a href="https://github.com/allfro/BurpKit/issues/new">open a GitHub issue</a> with the following details:</p>
+<ol>
+<li>OS and system details (please include RAM size);</li>
+<li>Console output, if any;</li>
+<li>Java version (<code>java -version</code>); and</li>
+<li>BurpSuite runtime arguments, if applicable.</li>
+</ol>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="burpScript/" class="btn btn-neutral float-right" title="BurpScript"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>BurpKit Project</p>
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+      
+        <span style="margin-left: 15px"><a href="burpScript/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 0.14.0
+Build Date UTC : 2015-08-23 04:57:49.382484
+-->

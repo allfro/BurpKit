@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Methods - BurpKit</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Methods";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> BurpKit</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../burpScript/">BurpScript</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>API</span></li>
+
+        
+            
+    <ul class="subnav">
+    <li><span>burpCallbacks object</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../callbacks-overview/">Overview</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Methods</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#setextensionnamestring-name">setExtensionName(String name)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#gethelpers">getHelpers()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getstdout">getStdout()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getstderr">getStderr()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#printoutputstring-message">printOutput(String message)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#printerrorstring-message">printError(String message)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registerextensionstatelistenerobject-listener">registerExtensionStateListener(Object listener)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getextensionstatelisteners">getExtensionStateListeners()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removeextensionstatelisteneriextensionstatelistener-listener">removeExtensionStateListener(IExtensionStateListener listener)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registerhttplistenerobject-listener">registerHttpListener(Object listener)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#gethttplisteners">getHttpListeners()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removehttplistenerihttplistener-listener">removeHttpListener(IHttpListener listener)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registerproxylistenerobject-listener">registerProxyListener(Object listener)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getproxylisteners">getProxyListeners()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removeproxylisteneriproxylistener-listener">removeProxyListener(IProxyListener listener)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registerscannerlistenerobject-listener">registerScannerListener(Object listener)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getscannerlisteners">getScannerListeners()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removescannerlisteneriscannerlistener-listener">removeScannerListener(IScannerListener listener)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registerscopechangelistenerobject-listener">registerScopeChangeListener(Object listener)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getscopechangelisteners">getScopeChangeListeners()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removescopechangelisteneriscannerlistener-listener">removeScopeChangeListener(IScannerListener listener)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registercontextmenufactoryobject-factory">registerContextMenuFactory(Object factory)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getcontextmenufactories">getContextMenuFactories()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removecontextmenufactoryicontextmenufactory-factory">removeContextMenuFactory(IContextMenuFactory factory)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registermessageeditortabfactoryobject-factory">registerMessageEditorTabFactory(Object factory)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getmessageeditortabfactories">getMessageEditorTabFactories()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removemessageeditortabfactoryimessageeditortabfactory-factory">removeMessageEditorTabFactory(IMessageEditorTabFactory factory)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registerscannerinsertionpointproviderobject-provider">registerScannerInsertionPointProvider(Object provider)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getscannerinsertionpointproviders">getScannerInsertionPointProviders()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removescannerinsertionpointprovideriscannerinsertionpointprovider-provider">removeScannerInsertionPointProvider(IScannerInsertionPointProvider provider)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registerscannercheckobject-check">registerScannerCheck(Object check)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getscannerchecks">getScannerChecks()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removescannercheckiscannercheck-check">removeScannerCheck(IScannerCheck check)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registerintruderpayloadgeneratorfactoryobject-factory">registerIntruderPayloadGeneratorFactory(Object factory)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getintruderpayloadgeneratorfactories">getIntruderPayloadGeneratorFactories()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removeintruderpayloadgeneratorfactoryiintruderpayloadgeneratorfactory-factory">removeIntruderPayloadGeneratorFactory(IIntruderPayloadGeneratorFactory factory)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registerintruderpayloadprocessorobject-factory">registerIntruderPayloadProcessor(Object factory)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getintruderpayloadprocessors">getIntruderPayloadProcessors()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removeintruderpayloadprocessoricontextmenufactory-factory">removeIntruderPayloadProcessor(IContextMenuFactory factory)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#registersessionhandlingactionobject-action">registerSessionHandlingAction(Object action)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getsessionhandlingactions">getSessionHandlingActions()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removesessionhandlingactionisessionhandlingaction-action">removeSessionHandlingAction(ISessionHandlingAction action)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#unloadextension">unloadExtension()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#addsuitetabobject-tab">addSuiteTab(Object tab)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removesuitetabitab-tab">removeSuiteTab(ITab tab)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#customizeuicomponentcomponent-component">customizeUiComponent(Component component)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#createmessageeditorobject-controller-boolean-editable-jsobject-callback">createMessageEditor(Object controller, boolean editable, JSObject callback)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getcommandlinearguments">getCommandLineArguments()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#saveextensionsettingstring-name-string-value">saveExtensionSetting(String name, String value)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#loadextensionsettingstring-name">loadExtensionSetting(String name)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#createtexteditor">createTextEditor()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#todo-add-rest-of-burpcallbacks-api">TODO: add rest of burpCallbacks API</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../callbacks-constants/">Constants</a>
+        
+    </li>
+
+        
+    </ul>
+
+        
+            
+    <ul class="subnav">
+    <li><span>ExtensionHelpersBridge class</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../helpers-overview/">Overview</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../helpers-api/">Methods</a>
+        
+    </li>
+
+        
+    </ul>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">BurpKit</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>burpCallbacks object &raquo;</li>
+        
+      
+    
+    <li>Methods</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/allfro/BurpKit" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="setextensionnamestring-name"><code>setExtensionName(String name)</code></h2>
+<p>Sets the name of the BurpKit extension since all BurpScript extensions are operating under the context of the BurpKit plugin.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>name</code>: the name you wish to set for this extension.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.setExtensionName('foo');
+</code></pre>
+
+<hr />
+<h2 id="gethelpers"><code>getHelpers()</code></h2>
+<p>Returns an instance of the <code>ExtensionHelpersBridge</code> object, which adheres to the API of the <a href="https://portswigger.net/burp/extender/api/burp/IExtensionHelpers.html">IExtensionHelpers</a> interface with a few minor exceptions. See the <a href="../../API/helpers/">ExtensionHelpersBridge</a> page for more details on the API.</p>
+<p><strong>Returns:</strong>
+An <code>ExtensionHelpersBridge</code> object.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var helpers = burpCallbacks.getHelpers();
+helpers.urlDecode('%3cscript%3e'); // returns '&lt;script&gt;'
+</code></pre>
+
+<hr />
+<h2 id="getstdout"><code>getStdout()</code></h2>
+<p>This method is used to obtain the current extension's standard output stream. Extensions should write all output
+to this stream, allowing the Burp user to configure how that output is handled from within the UI.</p>
+<p><strong>Returns:</strong>
+The extension's standard output stream.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getStdout().write(
+  burpCallbacks.getHelpers().stringToBytes('Hello World!\n')
+);
+</code></pre>
+
+<hr />
+<h2 id="getstderr"><code>getStderr()</code></h2>
+<p>This method is used to obtain the current extension's standard error stream. Extensions should write all output
+to this stream, allowing the Burp user to configure how that output is handled from within the UI.</p>
+<p><strong>Returns:</strong>
+The extension's standard error stream.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getStderr().write(
+  burpCallbacks.getHelpers().stringToBytes('Hello World!\n')
+);
+</code></pre>
+
+<hr />
+<h2 id="printoutputstring-message"><code>printOutput(String message)</code></h2>
+<p>This method prints a line of output to the current extension's standard output stream.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>message</code> - The message to print.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.printOutput(&quot;hello\n&quot;);
+</code></pre>
+
+<hr />
+<h2 id="printerrorstring-message"><code>printError(String message)</code></h2>
+<p>This method prints a line of output to the current extension's standard error stream.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>message</code> - The message to print.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.printError(&quot;hello\n&quot;);
+</code></pre>
+
+<hr />
+<h2 id="registerextensionstatelistenerobject-listener"><code>registerExtensionStateListener(Object listener)</code></h2>
+<p>This method is used to register a listener which will be notified of changes to the extension's state. <strong>Note:</strong> Any
+extensions that start background threads or open system resources (such as files or database connections) should
+register a listener and terminate threads / close resources when the extension is unloaded.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>listener</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/IExtensionStateListener.html">IExtensionStateListener</a> interface or a lambda function that has the same prototype as the <a href="https://portswigger.net/burp/extender/api/burp/IExtensionStateListener.html#extensionUnloaded()">IExtensionStateListener.extensionUnloaded()</a> method.</li>
+</ul>
+<p><strong>Returns:</strong>
+The Java instance of <code>burp.IExtensionStateListener</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerExtensionStateListener(function() { 
+  alert('Extension Unloaded!');
+});
+</code></pre>
+
+<p>or:</p>
+<pre><code class="javascript">burpCallbacks.registerExtensionStateListener({
+  'extensionUnloaded': function() {
+    alert('Extension Unloaded!');
+  }
+});
+</code></pre>
+
+<hr />
+<h2 id="getextensionstatelisteners"><code>getExtensionStateListeners()</code></h2>
+<p>This method is used to retrieve the extension state listeners that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+A list of extension state listeners that are currently registered by this extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getExtensionStateListeners();
+</code></pre>
+
+<hr />
+<h2 id="removeextensionstatelisteneriextensionstatelistener-listener"><code>removeExtensionStateListener(IExtensionStateListener listener)</code></h2>
+<p>This method is used to remove an extension state listener that has been registered by the extension. <strong>Note:</strong> you must
+pass the object returned from <code>registerExtensionStateListener()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based extension state listener. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>listener</code> - The extension state listener to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var listener = burpCallbacks.registerExtensionStateListener(function() { 
+  alert('Extension Unloaded!');
+});
+
+burpCallbacks.removeExtensionStateListener(listener);
+</code></pre>
+
+<hr />
+<h2 id="registerhttplistenerobject-listener"><code>registerHttpListener(Object listener)</code></h2>
+<p>This method is used to register a listener which will be notified of requests and responses made by any Burp tool.
+Extensions can perform custom analysis or modification of these messages by registering an HTTP listener.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>listener</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/IHttpListener.html">IHttpListener</a> interface or a lambda function that has the same prototype as the <a href="https://portswigger.net/burp/extender/api/burp/IHttpListener.html#processHttpMessage(int,%20boolean,%20burp.IHttpRequestResponse)">IHttpListener.processHttpMessage()</a>.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.IHttpListener</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerHttpListener(function(toolFlag, isRequest, messageInfo) {
+  alert('Processing message from ' + burpCallbacks.getToolName(toolFlag));
+});
+</code></pre>
+
+<p>or:</p>
+<pre><code class="javascript">burpCallbacks.registerHttpListener({
+  'processHttpMessage': function(toolFlag, isRequest, messageInfo) {
+    alert('Processing message from ' + burpCallbacks.getToolName(toolFlag));
+  }
+});
+</code></pre>
+
+<hr />
+<h2 id="gethttplisteners"><code>getHttpListeners()</code></h2>
+<p>This method is used to retrieve the HTTP listeners that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+A list of HTTP listeners that are currently registered by this extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getHttpListeners();
+</code></pre>
+
+<hr />
+<h2 id="removehttplistenerihttplistener-listener"><code>removeHttpListener(IHttpListener listener)</code></h2>
+<p>This method is used to remove an HTTP listener that has been registered by the extension. <strong>Note:</strong> you must
+pass the object returned from <code>registerHttpListener()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based HTTP listener. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>listener</code> - The HTTP listener to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">listener = burpCallbacks.registerHttpListener({
+  'processHttpMessage': function(toolFlag, isRequest, messageInfo) {
+    alert('Processing message from ' + burpCallbacks.getToolName(toolFlag));
+  }
+});
+burpCallbacks.removeHttpListener(listener);
+</code></pre>
+
+<hr />
+<h2 id="registerproxylistenerobject-listener"><code>registerProxyListener(Object listener)</code></h2>
+<p>This method is used to register a listener which will be notified of requests and responses being processed by
+the Proxy tool. Extensions can perform custom analysis or modification of these messages, and control in-UI
+message interception, by registering a proxy listener.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>listener</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/IProxyListener.html">IProxyListener</a> interface or a lambda function that has the same prototype as the <a href="https://portswigger.net/burp/extender/api/burp/IProxyListener.html#processProxyMessage(boolean,%20burp.IInterceptedProxyMessage)">IHttpListener.processProxyMessage()</a>.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.IProxyListener</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerProxyListener(function(isRequest, messageInfo) {
+  alert('Is request? ' + isRequest);
+});
+</code></pre>
+
+<p>or:</p>
+<pre><code class="javascript">burpCallbacks.registerProxyListener({
+  'processProxyMessage': function(isRequest, messageInfo) {
+    alert('Is request? ' + isRequest);
+  }
+});
+</code></pre>
+
+<hr />
+<h2 id="getproxylisteners"><code>getProxyListeners()</code></h2>
+<p>This method is used to retrieve the Proxy listeners that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+A list of Proxy listeners that are currently registered by this extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getProxyListeners();
+</code></pre>
+
+<hr />
+<h2 id="removeproxylisteneriproxylistener-listener"><code>removeProxyListener(IProxyListener listener)</code></h2>
+<p>This method is used to remove a Proxy listener that has been registered by the extension. <strong>Note:</strong> you must
+pass the object returned from <code>registerProxyListener()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based proxy listener. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>listener</code> - The HTTP listener to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">listener = burpCallbacks.registerProxyListener(function(isRequest, messageInfo) {
+  alert('Is request? ' + isRequest);
+});
+burpCallbacks.removeProxyListener(listener);
+</code></pre>
+
+<hr />
+<h2 id="registerscannerlistenerobject-listener"><code>registerScannerListener(Object listener)</code></h2>
+<p>This method is used to register a listener which will be notified of new issues that are reported by the Scanner
+tool. Extensions can perform custom analysis or logging of Scanner issues by registering a Scanner listener.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>listener</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/IScannerListener.html">IScannerListener</a> interface or a lambda function that has the same prototype as the <a href="https://portswigger.net/burp/extender/api/burp/IScannerListener.html#newScanIssue(burp.IScanIssue)">IScannerListener.newScanIssue()</a>.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.IScannerListener</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerScannerListener(function(scanIssue) {
+  alert('Got issue: ' + scanIssue.getIssueName());
+});
+</code></pre>
+
+<p>or:</p>
+<pre><code class="javascript">burpCallbacks.registerScannerListener({
+  'processProxyMessage': function(isRequest, messageInfo) {
+    alert('Got issue: ' + scanIssue.getIssueName());
+  }
+});
+</code></pre>
+
+<hr />
+<h2 id="getscannerlisteners"><code>getScannerListeners()</code></h2>
+<p>This method is used to retrieve the Scanner listeners that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+A list of Scanner listeners that are currently registered by this extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getScannerListeners();
+</code></pre>
+
+<hr />
+<h2 id="removescannerlisteneriscannerlistener-listener"><code>removeScannerListener(IScannerListener listener)</code></h2>
+<p>This method is used to remove a Scanner listener that has been registered by the extension. <strong>Note:</strong> you must
+pass the object returned from <code>registerScannerListener()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based scanner listener. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>listener</code> - The Scanner listener to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">listener = burpCallbacks.registerScannerListener(function(scanIssue) {
+ alert('Got issue: ' + scanIssue.getIssueName());
+});
+burpCallbacks.removeScannerListener(listener);
+</code></pre>
+
+<hr />
+<h2 id="registerscopechangelistenerobject-listener"><code>registerScopeChangeListener(Object listener)</code></h2>
+<p>This method is used to register a listener which will be notified of changes to Burp's suite-wide target scope.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>listener</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/IScopeChangeListener.html">IScopeChangeListener</a> interface or a lambda function that has the same prototype as the <a href="https://portswigger.net/burp/extender/api/burp/IScopeChangeListener.html#scopeChanged()">IScannerListener.scopeChanged()</a>.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.IScannerListener</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerScopeChangeListener(function() {
+  alert('Scope changed!');
+});
+</code></pre>
+
+<p>or:</p>
+<pre><code class="javascript">burpCallbacks.registerScopeChangeListener({
+  'scopeChanged': function() {
+     alert('Scope changed!');
+  }
+});
+</code></pre>
+
+<hr />
+<h2 id="getscopechangelisteners"><code>getScopeChangeListeners()</code></h2>
+<p>This method is used to retrieve the scope change listeners that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+A list of scope change listeners that are currently registered by this extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getScopeChangeListeners();
+</code></pre>
+
+<hr />
+<h2 id="removescopechangelisteneriscannerlistener-listener"><code>removeScopeChangeListener(IScannerListener listener)</code></h2>
+<p>This method is used to remove a scope change listener that has been registered by the extension. <strong>Note:</strong> you must
+pass the object returned from <code>registerScopeChangeListener()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based scope change listener. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>listener</code> - The listener to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">listener = burpCallbacks.registerScopeChangeListener(function() {
+ alert('Scope changed!');
+});
+burpCallbacks.removeScopeChangeListener(listener);
+</code></pre>
+
+<hr />
+<h2 id="registercontextmenufactoryobject-factory"><code>registerContextMenuFactory(Object factory)</code></h2>
+<p>This method is used to register a factory for custom context menu items. When the user invokes a context menu
+anywhere within Burp, the factory will be passed details of the invocation event, and asked to provide any
+custom context menu items that should be shown.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>factory</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/IContextMenuFactory.html">IContextMenuFactory</a> interface or a lambda function that has the same prototype as the <a href="https://portswigger.net/burp/extender/api/burp/IContextMenuFactory.html#createMenuItems(burp.IContextMenuInvocation)">IContextMenuFactory.createMenuItems()</a>.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.IContextMenuFactory</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerContextMenuFactory(function(invocation) {
+  alert('Context menu was invoked from ' + burpCallbacks.getToolName(invocation.getToolFlag()));
+});
+</code></pre>
+
+<p>or:</p>
+<pre><code class="javascript">burpCallbacks.registerContextMenuFactory({
+  'createMenuItems': function(invocation) {
+     alert('Context menu was invoked from ' + burpCallbacks.getToolName(invocation.getToolFlag()));
+  }
+});
+</code></pre>
+
+<hr />
+<h2 id="getcontextmenufactories"><code>getContextMenuFactories()</code></h2>
+<p>This method is used to retrieve the context menu factories that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+A list of context menu factories that are currently registered by this extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getContextMenuFactories();
+</code></pre>
+
+<hr />
+<h2 id="removecontextmenufactoryicontextmenufactory-factory"><code>removeContextMenuFactory(IContextMenuFactory factory)</code></h2>
+<p>This method is used to remove a context menu factory that has been registered by the extension. <strong>Note:</strong> you must
+pass the object returned from <code>registerContextMenuFactory()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based context menu factory. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>factory</code> - The context menu factory to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">factory = burpCallbacks.registerContextMenuFactory(function(invocation) {
+  alert('Context menu was invoked from ' + burpCallbacks.getToolName(invocation.getToolFlag()));
+});
+burpCallbacks.removeContextMenuFactory(factory);
+</code></pre>
+
+<hr />
+<h2 id="registermessageeditortabfactoryobject-factory"><code>registerMessageEditorTabFactory(Object factory)</code></h2>
+<p>This method is used to register a factory for custom message editor tabs. For each message editor that already
+exists, or is subsequently created, within Burp, the factory will be asked to provide a new instance of an
+<code>burp.IMessageEditorTab</code> object, which can provide custom rendering or editing of HTTP messages. <strong>Note:</strong> there is
+a small difference between the interface provided by BurpSuite for <code>IMessageEditorTabFactory</code> and the interface
+of the JavaScript-based <code>IMessageEditorTabFactory</code>. An extra <code>textEditor</code> parameter is passed to the <code>createNewInstance()</code>
+which contains an instance of <code>ITextEditor</code>. This is done to avoid deadlocks due to interweaving call sequences between
+the JavaFX and Swing event loops. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>factory</code> - An object created by the extension that implements a variant of the <a href="https://portswigger.net/burp/extender/api/burp/IMessageEditorTabFactory.html">IMessageEditorTabFactory</a> interface or a lambda function that has a variant of the prototype defined by the <a href="https://portswigger.net/burp/extender/api/burp/IMessageEditorTabFactory.html#createNewInstance(burp.IMessageEditorController,%20boolean)">IMessageEditorTabFactory.createNewInstance()</a> with an extra <code>textEditor</code> parameter passed to <code>createNewInstance()</code>. See examples for nuances.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.IMessageEditorTabFactory</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerMessageEditorTabFactory(function(controller, editable, textEditor) {
+  alert('Created controller=' + controller + ', editable=' + editable + ', textEditor=' + textEditor);
+});
+</code></pre>
+
+<p>or:</p>
+<pre><code class="javascript">burpCallbacks.registerMessageEditorTabFactory({
+  'createNewInstance': function(controller, editable, textEditor) {
+     alert('Created controller=' + controller + ', editable=' + editable + ', textEditor=' + textEditor);
+  }
+});
+</code></pre>
+
+<hr />
+<h2 id="getmessageeditortabfactories"><code>getMessageEditorTabFactories()</code></h2>
+<p>This method is used to retrieve the message editor tab factories that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+A list of message editor tab factories that are currently registered by this extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getMessageEditorTabFactories();
+</code></pre>
+
+<hr />
+<h2 id="removemessageeditortabfactoryimessageeditortabfactory-factory"><code>removeMessageEditorTabFactory(IMessageEditorTabFactory factory)</code></h2>
+<p>This method is used to remove a message editor tab factory that has been registered by the extension. <strong>Note:</strong> you must
+pass the object returned from <code>registerContextMenuFactory()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based message editor tab factory. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>factory</code> - The message editor tab factory to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">factory = burpCallbacks.registerMessageEditorTabFactory(function(controller, editable, textEditor) {
+  alert('Created controller=' + controller + ', editable=' + editable + ', textEditor=' + textEditor);
+});
+burpCallbacks.removeMessageEditorTabFactory(factory);
+</code></pre>
+
+<hr />
+<h2 id="registerscannerinsertionpointproviderobject-provider"><code>registerScannerInsertionPointProvider(Object provider)</code></h2>
+<p>This method is used to register a provider of Scanner insertion points. For each base request that is actively
+scanned, Burp will ask the provider to provide any custom scanner insertion points that are appropriate for the
+request.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>provider</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/IScannerInsertionPointProvider.html">IScannerInsertionPointProvider</a> interface or a lambda function that has the same prototype as the <a href="https://portswigger.net/burp/extender/api/burp/IScannerInsertionPointProvider.html#getInsertionPoints(burp.IHttpRequestResponse)">IScannerInsertionPointProvider.getInsertionPoints()</a>.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.IScannerInsertionPointProvider</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerScannerInsertionPointProvider(function(baseRequestResponse) {
+  baseRequestResponse.setComment('BurpKit rules!');
+});
+</code></pre>
+
+<p>or:</p>
+<pre><code class="javascript">burpCallbacks.registerScannerInsertionPointProvider({
+  'getInsertionPoints': function(baseRequestResponse) {
+     baseRequestResponse.setComment('BurpKit rules!');
+  }
+});
+</code></pre>
+
+<hr />
+<h2 id="getscannerinsertionpointproviders"><code>getScannerInsertionPointProviders()</code></h2>
+<p>This method is used to retrieve the Scanner insertion point providers that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+A list of Scanner insertion point providers that are currently registered by this extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getContextMenuFactories();
+</code></pre>
+
+<hr />
+<h2 id="removescannerinsertionpointprovideriscannerinsertionpointprovider-provider"><code>removeScannerInsertionPointProvider(IScannerInsertionPointProvider provider)</code></h2>
+<p><strong>Note:</strong> you must
+pass the object returned from <code>registerScannerInsertionPointProvider()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based scope change listener. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>provider</code> - The scanner insertion point provider to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">provider = burpCallbacks.registerScannerInsertionPointProvider(function(baseRequestResponse) {
+  baseRequestResponse.setComment('BurpKit rules!');
+});
+burpCallbacks.removeScannerInsertionPointProvider(factory);
+</code></pre>
+
+<hr />
+<h2 id="registerscannercheckobject-check"><code>registerScannerCheck(Object check)</code></h2>
+<p>This method is used to register a custom Scanner check. When performing scanning, Burp will ask the check to
+perform active or passive scanning on the base request, and report any Scanner issues that are identified.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>check</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/IScannerCheck.html">IScannerCheck</a> interface.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.IScannerCheck</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerScannerCheck({
+  'doPassiveScan': function(baseRequestResponse, newIssue) {
+    // do passive scan logic
+  },
+  'doActiveScan': function(baseRequestResponse, insertionPoint) {
+    // do active scan logic
+  },
+  'consolidateDuplicateIssues(existingIssue, newIssue) {
+    // do comparison
+    return 0;
+  }
+});
+</code></pre>
+
+<hr />
+<h2 id="getscannerchecks"><code>getScannerChecks()</code></h2>
+<p>This method is used to retrieve the Scanner checks that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+A list of Scanner checks that are currently registered by this extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getScannerChecks();
+</code></pre>
+
+<hr />
+<h2 id="removescannercheckiscannercheck-check"><code>removeScannerCheck(IScannerCheck check)</code></h2>
+<p>This method is used to remove a Scanner check that has been registered by the extension. <strong>Note:</strong> you must
+pass the object returned from <code>registerScannerCheck()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based scanner check. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>check</code> - The scanner check to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">check = burpCallbacks.registerScannerCheck({
+  'doPassiveScan': function(baseRequestResponse, newIssue) {
+    // do passive scan logic
+  },
+  'doActiveScan': function(baseRequestResponse, insertionPoint) {
+    // do active scan logic
+  },
+  'consolidateDuplicateIssues(existingIssue, newIssue) {
+    // do comparison
+    return 0;
+  }
+});
+burpCallbacks.removeScannerCheck(check);
+</code></pre>
+
+<hr />
+<h2 id="registerintruderpayloadgeneratorfactoryobject-factory"><code>registerIntruderPayloadGeneratorFactory(Object factory)</code></h2>
+<p>This method is used to register a factory for Intruder payloads. Each registered factory will be available within
+the Intruder UI for the user to select as the payload source for an attack. When this is selected, the factory
+will be asked to provide a new instance of an <code>burp.IIntruderPayloadGenerator</code> object, which will
+be used to generate payloads for the attack.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>factory</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/IIntruderPayloadGeneratorFactory.html">IIntruderPayloadGeneratorFactory</a> interface.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.IIntruderPayloadGeneratorFactory</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerIntruderPayloadGeneratorFactory({
+    'createNewInstance': function(attack) {
+        return new MyIntruderPayloadGenerator(attack); // your IIntruderPayloadGenerator object
+    },
+    'getGeneratorName': function() {
+        return 'foo';
+    }
+});
+</code></pre>
+
+<hr />
+<h2 id="getintruderpayloadgeneratorfactories"><code>getIntruderPayloadGeneratorFactories()</code></h2>
+<p>This method is used to retrieve the Intruder payload generator factories that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+A list of Intruder payload generator factories that are currently registered by this extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getIntruderPayloadGeneratorFactories();
+</code></pre>
+
+<hr />
+<h2 id="removeintruderpayloadgeneratorfactoryiintruderpayloadgeneratorfactory-factory"><code>removeIntruderPayloadGeneratorFactory(IIntruderPayloadGeneratorFactory factory)</code></h2>
+<p>This method is used to remove an Intruder payload generator factory that has been registered by the extension. <strong>Note:</strong> you must
+pass the object returned from <code>registerIntruderPayloadGeneratorFactory()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based intruder payload generator factory. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>factory</code> - The intruder payload generator factory to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerIntruderPayloadGeneratorFactory({
+    'createNewInstance': function(attack) {
+        return new MyIntruderPayloadGenerator(attack);
+    },
+    'getGeneratorName': function() {
+        return 'foo';
+    }
+});
+burpCallbacks.removeContextMenuFactory(factory);
+</code></pre>
+
+<hr />
+<h2 id="registerintruderpayloadprocessorobject-factory"><code>registerIntruderPayloadProcessor(Object factory)</code></h2>
+<p>This method is used to register a custom Intruder payload processor. Each registered processor will be available
+within the Intruder UI for the user to select as the action for a payload processing rule.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>processor</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/IIntruderPayloadProcessor.html">IIntruderPayloadProcessor</a> interface.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.IIntruderPayloadProcessor</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerIntruderPayloadProcessor({
+  'getProcessorName': function() {
+     return 'BurpKit Processor';
+  },
+  'processPayload': function(currentPayload, originalPayload, baseValue) {
+     // change something
+     return modifiedBytes;
+  }
+});
+</code></pre>
+
+<hr />
+<h2 id="getintruderpayloadprocessors"><code>getIntruderPayloadProcessors()</code></h2>
+<p>This method is used to retrieve the Intruder payload processors that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+A list of Intruder payload processors that are currently registered by this extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getIntruderPayloadProcessors();
+</code></pre>
+
+<hr />
+<h2 id="removeintruderpayloadprocessoricontextmenufactory-factory"><code>removeIntruderPayloadProcessor(IContextMenuFactory factory)</code></h2>
+<p>This method is used to remove an Intruder payload processor that has been registered by the extension. <strong>Note:</strong> you must
+pass the object returned from <code>registerIntruderPayloadProcessor()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based intruder payload processor. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>processor</code> - The intruder payload processor to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">processor = burpCallbacks.registerIntruderPayloadProcessor({
+  'getProcessorName': function() {
+     return 'BurpKit Processor';
+  },
+  'processPayload': function(currentPayload, originalPayload, baseValue) {
+     // change something
+     return modifiedBytes;
+  }
+});
+burpCallbacks.removeIntruderPayloadProcessor(processor);
+</code></pre>
+
+<hr />
+<h2 id="registersessionhandlingactionobject-action"><code>registerSessionHandlingAction(Object action)</code></h2>
+<p>This method is used to register a custom session handling action. Each registered action will be available within
+the session handling rule UI for the user to select as a rule action. Users can choose to invoke an action
+directly in its own right, or following execution of a macro.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>action</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/ISessionHandlingAction.html">ISessionHandlingAction</a> interface.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.ISessionHandlingAction</code> that was registered.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.registerSessionHandlingAction({
+  'getActionName': function() {
+     return 'BurpKit Action';
+  },
+  'performAction': function(currentRequest, macroItems) {
+     // do something here
+  }
+});
+</code></pre>
+
+<hr />
+<h2 id="getsessionhandlingactions"><code>getSessionHandlingActions()</code></h2>
+<p>This method is used to retrieve the session handling actions that are registered by the extension.</p>
+<p><strong>Returns:</strong>
+This method is used to retrieve the session handling actions that are registered by the extension.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getSessionHandlingActions();
+</code></pre>
+
+<hr />
+<h2 id="removesessionhandlingactionisessionhandlingaction-action"><code>removeSessionHandlingAction(ISessionHandlingAction action)</code></h2>
+<p>This method is used to remove a session handling action that has been registered by the extension. <strong>Note:</strong> you must
+pass the object returned from <code>registerSessionHandlingAction()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based session handling action. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>action</code> - The extension session handling action to be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">action = burpCallbacks.registerSessionHandlingAction({
+  'getActionName': function() {
+     return 'BurpKit Action';
+  },
+  'performAction': function(currentRequest, macroItems) {
+     // do something here
+  }
+});
+burpCallbacks.removeSessionHandlingAction(action);
+</code></pre>
+
+<hr />
+<h2 id="unloadextension"><code>unloadExtension()</code></h2>
+<p>This method is used to unload the extension from Burp Suite. If called, <code>BurpKit</code> will be unloaded.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.unloadExtension();
+</code></pre>
+
+<hr />
+<h2 id="addsuitetabobject-tab"><code>addSuiteTab(Object tab)</code></h2>
+<p>This method is used to add a custom tab to the main Burp Suite window. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>tab</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/ITab.html">ITab</a> interface.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.ITab</code> that was created.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.addTab({
+    'getTabCaption': function() {
+        return 'foo';
+    },
+    'getUiComponent': function() {
+        return new MyUiComponent();
+    }
+});
+</code></pre>
+
+<hr />
+<h2 id="removesuitetabitab-tab"><code>removeSuiteTab(ITab tab)</code></h2>
+<p>This method is used to remove a previously-added tab from the main Burp Suite window. <strong>Note:</strong> you must
+pass the object returned from <code>addSuiteTab()</code> instead of the JavaScript object if you are trying to
+remove a JavaScript-based tab. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>tab</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/ITab.html">ITab</a> interface.</li>
+</ul>
+<p><strong>Returns:</strong>
+The instance of <code>burp.ITab</code> that was created.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.addTab({
+    'getTabCaption': function() {
+        return 'foo';
+    },
+    'getUiComponent': function() {
+        return new MyUiComponent();
+    }
+});
+</code></pre>
+
+<hr />
+<h2 id="customizeuicomponentcomponent-component"><code>customizeUiComponent(Component component)</code></h2>
+<p>This method is used to customize UI components in line with Burp's UI style, including font size, colors, table
+line spacing, etc. The action is performed recursively on any child components of the passed-in component.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>component</code> - The UI component to be customized.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.customizeUiComponent(component);
+</code></pre>
+
+<hr />
+<h2 id="createmessageeditorobject-controller-boolean-editable-jsobject-callback"><code>createMessageEditor(Object controller, boolean editable, JSObject callback)</code></h2>
+<p>This method is used to create a new instance of Burp's HTTP message editor, for the extension to use in its own
+UI.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>controller</code> - An object created by the extension that implements the <a href="https://portswigger.net/burp/extender/api/burp/IMessageEditorController.html">IMessageEditorController</a>  interface. This parameter is optional and may be <code>null</code>. If it is provided, then the message editor will query the controller when required to obtain details about the currently displayed message, including the <code>IHttpService</code> for the message, and the associated request or response message. If a controller is not provided, then the message editor will not support context menu actions, such as sending requests to other Burp tools.</li>
+<li><code>editable</code> - Indicates whether the editor created should be editable, or used only for message viewing.</li>
+<li><code>callback</code> - A JavaScript callback function that will be called once the <code>IMessageEditor</code> instance is created. The instance of <code>IMessageEditor</code> will be passed to the callback function as the first parameter.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.createMessageEditor(
+    controller, 
+    true,
+    function(editor) {
+        alert('Created an editor!');
+    }
+);
+</code></pre>
+
+<hr />
+<h2 id="getcommandlinearguments"><code>getCommandLineArguments()</code></h2>
+<p>This method returns the command line arguments that were passed to Burp on startup.</p>
+<p><strong>Returns:</strong>
+The command line arguments that were passed to Burp on startup.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.getCommandLineArguments();
+</code></pre>
+
+<hr />
+<h2 id="saveextensionsettingstring-name-string-value"><code>saveExtensionSetting(String name, String value)</code></h2>
+<p>This method is used to save configuration settings for the extension in a persistent way that survives reloads of
+the extension and of Burp Suite. Saved settings can be retrieved using the method <code>loadExtensionSetting()</code>.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>name</code> - The name of the setting.</li>
+<li><code>value</code> - The value of the setting. If this value is <code>null</code> then any existing setting with the specified name will be removed.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.saveExtensionSetting('foo', 'bar');
+</code></pre>
+
+<hr />
+<h2 id="loadextensionsettingstring-name"><code>loadExtensionSetting(String name)</code></h2>
+<p>This method is used to load configuration settings for the extension that were saved using the method <code>saveExtensionSetting()</code>.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>name</code> - The name of the setting.</li>
+</ul>
+<p><strong>Returns:</strong>
+The value of the setting, or <code>null</code> if no value is set.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.saveExtensionSetting('foo'); // returns 'bar'
+</code></pre>
+
+<hr />
+<h2 id="createtexteditor"><code>createTextEditor()</code></h2>
+<p>This method is used to create a new instance of Burp's plain text editor, for the extension to use in its own UI.</p>
+<p><strong>Returns</strong>:
+An instance of <code>burp.ITextEditor</code>.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpCallbacks.createTextEditor();
+</code></pre>
+
+<hr />
+<h1 id="todo-add-rest-of-burpcallbacks-api">TODO: add rest of <code>burpCallbacks</code> API</h1>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../callbacks-constants/" class="btn btn-neutral float-right" title="Constants"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../callbacks-overview/" class="btn btn-neutral" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>BurpKit Project</p>
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../callbacks-overview/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../callbacks-constants/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

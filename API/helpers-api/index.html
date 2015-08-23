@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Methods - BurpKit</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Methods";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> BurpKit</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../burpScript/">BurpScript</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>API</span></li>
+
+        
+            
+    <ul class="subnav">
+    <li><span>burpCallbacks object</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../callbacks-overview/">Overview</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../callbacks-api/">Methods</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../callbacks-constants/">Constants</a>
+        
+    </li>
+
+        
+    </ul>
+
+        
+            
+    <ul class="subnav">
+    <li><span>ExtensionHelpersBridge class</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../helpers-overview/">Overview</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Methods</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#analyzerequestobject-request">analyzeRequest(Object request)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#analyzerequest2ihttpservice-httpservice-object-request">analyzeRequest2(IHttpService httpService, Object request)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#analyzeresponseobject-response">analyzeResponse(Object response)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#getrequestparameterobject-request-string-parametername">getRequestParameter(Object request, String parameterName)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#urldecodestring-data">urlDecode(String data)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#urldecode2object-data">urlDecode2(Object data)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#urlencodestring-data">urlEncode(String data)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#urlencode2object-data">urlEncode2(Object data)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#base64decodeobject-data">base64Decode(Object data)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#base64decode2object-data">base64Decode2(Object data)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#base64encodeobject-data">base64Encode(Object data)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#stringtobytesstring-data">stringToBytes(String data)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#bytestostringbyte-data">bytesToString(byte[] data)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#indexofobject-data-object-pattern-boolean-casesensitive-int-from-int-to">indexOf(Object data, Object pattern, boolean caseSensitive, int from, int to)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#buildhttpmessageobject-headers-object-body">buildHttpMessage(Object headers, Object body)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#buildhttprequeststring-url">buildHttpRequest(String url)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#addparameterobject-request-iparameter-parameter">addParameter(Object request, IParameter parameter)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#removeparameterobject-request-iparameter-parameter">removeParameter(Object request, IParameter parameter)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#updateparameterobject-request-iparameter-parameter">updateParameter(Object request, IParameter parameter)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#togglerequestmethodobject-request">toggleRequestMethod(Object request)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#buildhttpservicestring-host-int-port-string-protocol">buildHttpService(String host, int port, String protocol)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#buildhttpservice2string-host-int-port-boolean-usehttps">buildHttpService2(String host, int port, boolean useHttps)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#buildparameterstring-name-string-value-int-type">buildParameter(String name, String value, int type)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#makescannerinsertionpointstring-insertionpointname-object-baserequest-int-from-int-to">makeScannerInsertionPoint(String insertionPointName, Object baseRequest, int from, int to)</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+    </ul>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">BurpKit</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>ExtensionHelpersBridge class &raquo;</li>
+        
+      
+    
+    <li>Methods</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/allfro/BurpKit" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="analyzerequestobject-request"><code>analyzeRequest(Object request)</code></h2>
+<p>This method can be used to analyze an HTTP request, and obtain various key details about it.  The resulting <code>IRequestInfo</code> object will not include the full request URL if <code>request</code> is not an <code>IHttpRequestResponse</code> object. Alternatively, one can obtain the full URL by using the <code>analyzeRequest2()</code> method. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>request</code> - A Java <code>byte[]</code>, <code>String</code>, or <code>IHttpRequestResponse</code> object containing the request to be analyzed.</li>
+</ul>
+<p><strong>Returns:</strong>
+An <code>IRequestInfo</code> object that can be queried to obtain details about the request.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var requestInfo = helpers.analyzeRequest('GET / HTTP/1.1\r\nHost: foo.com\r\n\r\n');
+requestInfo.getMethod(); // returns 'GET'
+</code></pre>
+
+<hr />
+<h2 id="analyzerequest2ihttpservice-httpservice-object-request"><code>analyzeRequest2(IHttpService httpService, Object request)</code></h2>
+<p>This method can be used to analyze an HTTP request, and obtain various key details about it.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>httpService</code> - The HTTP service associated with the request. This is optional and may be <code>null</code>, in which case the resulting <code>IRequestInfo</code> object will not include the full request URL.</li>
+<li><code>request</code> - A Java <code>byte[]</code> or <code>String</code> object the request to be analyzed.</li>
+</ul>
+<p><strong>Returns:</strong>
+An <code>IRequestInfo</code> object that can be queried to obtain details about the request.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var requestInfo = helpers.analyzeRequest('GET / HTTP/1.1\r\nHost: foo.com\r\n\r\n');
+requestInfo.getMethod(); // returns 'GET'
+</code></pre>
+
+<hr />
+<h2 id="analyzeresponseobject-response"><code>analyzeResponse(Object response)</code></h2>
+<p>This method can be used to analyze an HTTP response, and obtain various key details about it.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>response</code> - a Java <code>byte[]</code> or <code>String</code> object containing the response to be analyzed.</li>
+</ul>
+<p><strong>Returns:</strong>
+An <code>IResponseInfo</code> object that can be queried to obtain details about the response.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var responseInfo = helpers.analyzeResponse('HTTP/1.1 200 OK\r\nDate: Fri, 06 Nov 2009 00:35:42 GMT\r\nServer: Apache\r\nContent-Length: 0\r\nKeep-Alive: timeout=15, max=100\r\nConnection: Keep-Alive\r\nContent-Type: text/plain\r\n\r\n');
+responseInfo.getStatusCode(); // returns 200
+</code></pre>
+
+<hr />
+<h2 id="getrequestparameterobject-request-string-parametername"><code>getRequestParameter(Object request, String parameterName)</code></h2>
+<p>This method can be used to retrieve details of a specified parameter within an HTTP request. <strong>Note:</strong> Use <code>analyzeRequest()</code> to obtain details of all parameters within the request. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>request</code> - a Java <code>byte[]</code> or <code>String</code> object containing the request to be inspected for the specified parameter..</li>
+<li><code>parameterName</code> - The name of the parameter to retrieve.</li>
+</ul>
+<p><strong>Returns:</strong>
+An <code>IParameter</code> object that can be queried to obtain details about the parameter, or <code>null</code> if the parameter was not found.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var parameter = helpers.getRequestParameter('GET /?q=foo HTTP/1.1\r\nHost: www.bar.com\r\n\r\n', 'q');
+parameter.getValue(); // returns 'foo'
+</code></pre>
+
+<hr />
+<h2 id="urldecodestring-data"><code>urlDecode(String data)</code></h2>
+<p>This method can be used to URL-decode the specified data.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> - a Java <code>byte[]</code> or <code>String</code> object containing the data to be URL decoded.</li>
+</ul>
+<p><strong>Returns:</strong>
+The decoded data as a <code>String</code>.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">helpers.urlDecode('%3cscript%3e'); // returns '&lt;script&gt;'
+</code></pre>
+
+<hr />
+<h2 id="urldecode2object-data"><code>urlDecode2(Object data)</code></h2>
+<p>This method can be used to URL-decode the specified data. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> - a Java <code>byte[]</code> or <code>String</code> object containing the data to be URL decoded.</li>
+</ul>
+<p><strong>Returns:</strong>
+The decoded data as a <code>byte[]</code>.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">helpers.urlDecode2('f%2fb'); // returns Java byte[]{'f', '/', 'b'}
+</code></pre>
+
+<hr />
+<h2 id="urlencodestring-data"><code>urlEncode(String data)</code></h2>
+<p>This method can be used to URL-encode the specified data. Any characters that do not need to be encoded within HTTP requests are not encoded.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> - The data to be URL encoded.</li>
+</ul>
+<p><strong>Returns:</strong>
+The encoded data as a <code>String</code>.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">helpers.urlEncode('foo/bar');  // returns 'foo%2fbar'
+</code></pre>
+
+<hr />
+<h2 id="urlencode2object-data"><code>urlEncode2(Object data)</code></h2>
+<p>This method can be used to URL-encode the specified data. Any characters that do not need to be encoded within HTTP requests are not encoded. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> - a Java <code>byte[]</code> or <code>String</code> object containing the data to be URL encoded.</li>
+</ul>
+<p><strong>Returns:</strong>
+The encoded data as a <code>byte[]</code>.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">helpers.urlEncode2('f/b'); // returns Java byte[] {'f', '%', '2', 'f', 'b'}
+</code></pre>
+
+<hr />
+<h2 id="base64decodeobject-data"><code>base64Decode(Object data)</code></h2>
+<p>This method can be used to Base64-encode the specified data. <code>data</code> can be a Java <code>byte[]</code> array or a <code>String</code>.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> - a Java <code>byte[]</code> or <code>String</code> object containing the data to be Base64 decoded.</li>
+</ul>
+<p><strong>Returns:</strong>
+The decoded data as a <code>byte[]</code>.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">helpers.base64Decode('Zm9v'); // returns Java byte[] {'f', 'o', 'o'}
+</code></pre>
+
+<hr />
+<h2 id="base64decode2object-data"><code>base64Decode2(Object data)</code></h2>
+<p>This method can be used to Base64-encode the specified data. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> - a Java <code>byte[]</code> or <code>String</code> object containing the data to be Base64 decoded.</li>
+</ul>
+<p><strong>Returns:</strong>
+The Base64 decoded data as a <code>String</code>.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">helpers.base64Decode2('Zm9v'); // returns 'foo'
+</code></pre>
+
+<hr />
+<h2 id="base64encodeobject-data"><code>base64Encode(Object data)</code></h2>
+<p>This method can be used to Base64-encode the specified data. <code>data</code> can either be a Java <code>byte[]</code> array or a <code>String</code>.</p>
+<ul>
+<li><code>data</code> - Java <code>byte[]</code> or <code>String</code> object containin the data to be Base64 encoded.</li>
+</ul>
+<p><strong>Returns:</strong>
+The Base64 encoded data.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">helpers.base64Encode('foo'); // returns 'Zm9v'
+</code></pre>
+
+<hr />
+<h2 id="stringtobytesstring-data"><code>stringToBytes(String data)</code></h2>
+<p>This method can be used to convert data from String form into an array of bytes. The conversion does not reflect any particular character set, and a character with the hex representation <code>0xWXYZ</code> will always be converted into a byte with the representation <code>0xYZ</code>. It performs the opposite conversion to the method <code>bytesToString()</code>, and byte-based data that is converted to a String and back again using these two methods is guaranteed to retain its integrity (which may not be the case with conversions that reflect a given character set).</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> - The data to be converted.</li>
+</ul>
+<p><strong>Returns:</strong>
+The converted data.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">helpers.stringToBytes('abc'); // returns Java byte[] {'a', 'b', 'c'}
+</code></pre>
+
+<hr />
+<h2 id="bytestostringbyte-data"><code>bytesToString(byte[] data)</code></h2>
+<p>This method can be used to convert data from an array of bytes into String form. The conversion does not reflect any particular character set, and a byte with the representation <code>0xYZ</code> will always be converted into a character with the hex representation <code>0x00YZ</code>. It performs the opposite conversion to the method <code>stringToBytes()</code>, and byte-based data that is converted to a String and back again using these two methods is guaranteed to retain its integrity (which may not be the case with conversions that reflect a given character set).</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> - The data to be converted.</li>
+</ul>
+<p><strong>Returns:</strong>
+The converted data.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">helpers.bytesToString(helpers.stringToBytes('abc')); // returns 'abc'
+</code></pre>
+
+<hr />
+<h2 id="indexofobject-data-object-pattern-boolean-casesensitive-int-from-int-to"><code>indexOf(Object data, Object pattern, boolean caseSensitive, int from, int to)</code></h2>
+<p>This method searches a piece of data for the first occurrence of a specified pattern. It works on byte-based data in a way that is similar to the way the native Java method <code>String.indexOf()</code> works on String-based data.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>data</code> - A Java <code>byte[]</code> or <code>String</code> object containing the data to be searched.</li>
+<li><code>pattern</code> - A Java <code>byte[]</code> or <code>String</code> object containing the pattern to be searched for.</li>
+<li><code>caseSensitive</code> - Flags whether or not the search is case-sensitive.</li>
+<li><code>from</code> - The offset within data where the search should begin.</li>
+<li><code>to</code> - The offset within data where the search should end.</li>
+</ul>
+<p><strong>Returns:</strong>
+The offset of the first occurrence of the pattern within the specified bounds, or <code>-1</code> if no match is found.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">helpers.indexOf('GET /?q=foo HTTP/1.1\r\n', '/?q=foo', true, 0, 10); // returns 5;
+helpers.indexOf('GET /?q=foo HTTP/1.1\r\n', '/?Q=foo', true, 0, 10); // returns -1;
+</code></pre>
+
+<hr />
+<h2 id="buildhttpmessageobject-headers-object-body"><code>buildHttpMessage(Object headers, Object body)</code></h2>
+<p>This method builds an HTTP message containing the specified headers and message body. If applicable, the Content-Length header will be added or updated, based on the length of the body. <code>body</code> can be either a Java <code>byte[]</code> array or a <code>String</code></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>headers</code> - A Java <code>List&lt;String&gt;</code> or a JavaScript <code>String</code> array containing the headers to include in the message.</li>
+<li><code>body</code> - The body of the message, of null if the message has an empty body.</li>
+</ul>
+<p><strong>Returns:</strong>
+The resulting full HTTP message.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var message = helpers.buildHttpMessage(['GET / HTTP/1.1', 'Host: foo.com'], ''); // returns a Java byte[] array containing HTTP request
+</code></pre>
+
+<hr />
+<h2 id="buildhttprequeststring-url"><code>buildHttpRequest(String url)</code></h2>
+<p>This method creates a GET request to the specified URL. The headers used in the request are determined by the Request headers settings as configured in Burp Spider's options.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>url</code> - a <code>String</code> containing the URL to which the request should be made.</li>
+</ul>
+<p><strong>Returns:</strong>
+A request to the specified URL.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var message = helpers.buildHttpRequest('http://www.bar.com');
+</code></pre>
+
+<hr />
+<h2 id="addparameterobject-request-iparameter-parameter"><code>addParameter(Object request, IParameter parameter)</code></h2>
+<p>This method adds a new parameter to an HTTP request, and if appropriate updates the Content-Length header.  See <code>buildParameter()</code> for information on building parameters.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>request</code> - a Java <code>byte[]</code> array or a <code>String</code> containing the request to which the parameter should be added.</li>
+<li><code>parameter</code> - An IParameter object containing details of the parameter to be added. Supported parameter types are: <code>PARAM_URL</code>, <code>PARAM_BODY</code> and <code>PARAM_COOKIE</code>.</li>
+</ul>
+<p><strong>Returns</strong>:
+A new HTTP request with the new parameter added.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var newMessage = helpers.addParameter(
+    'GET / HTTP/1.1\r\nHost: www.foo.com\r\n\r\n',
+    helpers.buildParameter('q', 'bar', burpCallbacks.PARAM_URL)
+); // returns 'GET /?q=bar' HTTP request.
+</code></pre>
+
+<hr />
+<h2 id="removeparameterobject-request-iparameter-parameter"><code>removeParameter(Object request, IParameter parameter)</code></h2>
+<p>This method removes a parameter from an HTTP request, and if appropriate updates the Content-Length header.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>request</code> - a Java <code>byte[]</code> array or a <code>String</code> containing the request from which the parameter should be removed.</li>
+<li><code>parameter</code> - An IParameter object containing details of the parameter to be removed. Supported parameter types are: <code>PARAM_URL</code>, <code>PARAM_BODY</code> and <code>PARAM_COOKIE</code>.</li>
+</ul>
+<p><strong>Returns:</strong>
+A new HTTP request with the parameter removed.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var request = 'GET /?q=bar HTTP/1.1\r\nHost: www.foo.com\r\n\r\n';
+var requestInfo = helpers.analyzeRequest(request); // parse the request
+var parameters = requestInfo.getParameters(); // get its parameters
+var newMessage = helpers.removeParameter(
+    message, 
+    parameters[0]
+); // remove 'q' parameter from GET request
+</code></pre>
+
+<hr />
+<h2 id="updateparameterobject-request-iparameter-parameter"><code>updateParameter(Object request, IParameter parameter)</code></h2>
+<p>This method updates the value of a parameter within an HTTP request, and if appropriate updates the <code>Content-Length</code> header. Note: This method can only be used to update the value of an existing parameter of a specified type. If you need to change the type of an existing parameter, you should first call <code>removeParameter()</code> to remove the parameter with the old type, and then call <code>addParameter()</code> to add a parameter with the new type. </p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>request</code> - The request containing the parameter to be updated as a Java <code>byte[]</code> array or a <code>String</code>.</li>
+<li><code>parameter</code> - An IParameter object containing details of the parameter to be updated. Supported parameter types are: <code>PARAM_URL</code>, <code>PARAM_BODY</code> and <code>PARAM_COOKIE</code>.</li>
+</ul>
+<p><strong>Returns</strong>:
+ A new HTTP request with the parameter updated.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var request = 'GET /?q=bar HTTP/1.1\r\nHost: www.foo.com\r\n\r\n';
+var newMessage = helpers.updateParameter(
+    message, 
+    helpers.buildParameter('q', 'bar2')
+); // updates value of 'q' parameter to 'bar2'
+</code></pre>
+
+<hr />
+<h2 id="togglerequestmethodobject-request"><code>toggleRequestMethod(Object request)</code></h2>
+<p>This method can be used to toggle a request's method between <code>GET</code> and <code>POST</code>. Parameters are relocated between the URL query string and message body as required, and the <code>Content-Length</code> header is created or removed as applicable. </p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>request</code> - a Java <code>byte[]</code> array or <code>String</code> containing the HTTP request whose method should be toggled.</li>
+</ul>
+<p><strong>Returns:</strong>
+A new HTTP request using the toggled method.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var request = 'GET /?q=bar HTTP/1.1\r\nHost: www.foo.com\r\n\r\n'; 
+request = helpers.toggleRequestMethod(request); // Changes GET to POST request
+</code></pre>
+
+<hr />
+<h2 id="buildhttpservicestring-host-int-port-string-protocol"><code>buildHttpService(String host, int port, String protocol)</code></h2>
+<p>This method constructs an <code>IHttpService</code> object based on the details provided.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>host</code> - The HTTP service host.</li>
+<li><code>port</code> - The HTTP service port.</li>
+<li><code>protocol</code> - The HTTP service protocol (i.e. <code>'http'</code> or <code>'https'</code>).</li>
+</ul>
+<p><strong>Returns:</strong>
+An <code>IHttpService</code> object based on the details provided.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var httpService = helpers.buildHttpService('foo.com', 80, 'http');
+</code></pre>
+
+<hr />
+<h2 id="buildhttpservice2string-host-int-port-boolean-usehttps"><code>buildHttpService2(String host, int port, boolean useHttps)</code></h2>
+<p>This method constructs an <code>IHttpService</code> object based on the details provided.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><code>host</code> - The HTTP service host.</li>
+<li><code>port</code> - The HTTP service port.</li>
+<li><code>useHttps</code> - Flags whether the HTTP service protocol is HTTPS or HTTP.</li>
+</ul>
+<p><strong>Returns:</strong>
+An <code>IHttpService</code> object based on the details provided.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var httpService = helpers.buildHttpService2('foo.com', 80, true); // SSL enabled service
+</code></pre>
+
+<hr />
+<h2 id="buildparameterstring-name-string-value-int-type"><code>buildParameter(String name, String value, int type)</code></h2>
+<p>This method constructs an <code>IParameter</code> object based on the details provided.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>name</code> - The parameter name.</li>
+<li><code>value</code> - The parameter value.</li>
+<li><code>type</code> - The parameter type, as defined in the <code>burpCallbacks</code> object beginning with the <code>PARAM_</code> prefix.</li>
+</ul>
+<p><strong>Returns:</strong>
+An <code>IParameter</code> object based on the details provided.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var parameter = helpers.buildParameter('foo', 'bar', burpCallbacks.PARAM_URL); // builds a GET parameter 'foo=bar'
+</code></pre>
+
+<hr />
+<h2 id="makescannerinsertionpointstring-insertionpointname-object-baserequest-int-from-int-to"><code>makeScannerInsertionPoint(String insertionPointName, Object baseRequest, int from, int to)</code></h2>
+<p>This method constructs an <code>IScannerInsertionPoint</code> object based on the details provided. It can be used to quickly create a simple insertion point based on a fixed payload location within a base request.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>insertionPointName</code> - The name of the insertion point.</li>
+<li><code>baseRequest</code> - A Java <code>byte[]</code> array or <code>String</code> containing the request from which to build scan requests.</li>
+<li><code>from</code> - The offset of the start of the payload location.</li>
+<li><code>to</code> - The offset of the end of the payload location.</li>
+</ul>
+<p><strong>Returns:</strong>
+An <code>IScannerInsertionPoint</code> object based on the details provided.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var request = 'GET /?q=bar HTTP/1.1\r\nHost: foo.com\r\n\r\n'
+var requestInfo = helpers.analyzeRequest(request);
+
+// get 'q' parameter
+var parameter = requestInfo.getParameters()[0];
+
+var insertionPoint = helpers.makeScannerInsertionPoint(
+    '&quot;q&quot; Parameter Insertion Point', 
+    request,
+    parameter.getValueStart(),
+    parameter.getValueEnd()
+); // defines value of 'q' parameter ('bar') as insertion point
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../helpers-overview/" class="btn btn-neutral" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>BurpKit Project</p>
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../helpers-overview/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+
+</body>
+</html>
