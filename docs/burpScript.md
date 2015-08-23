@@ -6,4 +6,4 @@ BurpScript is a JavaScript langauge extension that provides additional language 
 *  BurpExtender - exposes the BurpSuite interface to the JS engine so that you can write your own BurpSuite plugins using JavaScript.
 
 BurpScript can be used to perform a variety of tasks ranging from OSINT automation scripts to full-fledged BurpSuite
-extensions. Take a look at the `examples` folder in the code repository to see how BurpKit can be leveraged.
+extensions. Take a look at the [examples](https://github.com/allfro/BurpKit/tree/master/examples) folder in the code repository to see how BurpKit can be leveraged.

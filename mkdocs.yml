@@ -8,7 +8,10 @@ theme: readthedocs
 pages:
 - Home: index.md
 - BurpScript: burpScript.md
-- API: 
+- API:
+    - burpKit object:
+        - Overview: API/burpkit-overview.md
+        - Methods: API/burpkit-api.md
     - burpCallbacks object: 
         - Overview: API/callbacks-overview.md
         - Methods: API/callbacks-api.md

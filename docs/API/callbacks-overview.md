@@ -6,6 +6,7 @@ The `burpCallbacks` object is automatically injected into the DOM every time a `
 4. Methods with the same name but multiple signatures (i.e. `foo(String)`, `foo(String, int)`, etc.) are numbered due to limitations within JavaScript (i.e. `foo(String)`, `foo2(String, int)`, etc.).
 
 The following example demonstrates how one could easily create a simple proxy listener using JavaScript with the BurpKit extensions:
+
 ```javascript
 // inject an HTTP helper library for message parsing
 burpKit.requireLib('httplib');
@@ -25,4 +26,5 @@ burpCallbacks.registerProxyListener(function(isRequest, message) {
   }
 });
 ```
+
 This is just a simple example of how powerful BurpKit is. Many more examples can be found in the bundled [examples](https://github.com/allfro/BurpKit/tree/master/examples) directory that comes with BurpKit. The following subsections detail the methods available within the `burpCallbacks` object.
