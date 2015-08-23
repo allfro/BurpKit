@@ -1,0 +1,18 @@
+site_name: BurpKit
+site_description: Using WebKit to Own the Web!
+repo_url: https://github.com/allfro/BurpKit
+repo_name: GitHub
+site_author: Nadeem Douba
+copyright: BurpKit Project
+theme: readthedocs
+pages:
+- Home: index.md
+- BurpScript: burpScript.md
+- API: 
+    - burpCallbacks object: 
+        - Overview: API/callbacks-overview.md
+        - Methods: API/callbacks-api.md
+        - Constants: API/callbacks-constants.md
+    - ExtensionHelpersBridge class:
+        - Overview: API/helpers-overview.md
+        - Methods: API/helpers-api.md
