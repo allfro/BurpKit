@@ -40,3 +40,6 @@ If all goes well, you will see three additional top-level tabs appear in BurpSui
 2.  `burpCallbacks`: the JavaScript equivalent of the `IBurpExtenderCallbacks` interface in `Java` with a few slight modifications.
 
 Take a look at the `examples` folder for more information.
+
+## More Information?
+A readable version of the `docs` can be found at [here](http://allfro.github.io/BurpKit/)
