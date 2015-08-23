@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Methods - BurpKit</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Methods";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> BurpKit</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../burpScript/">BurpScript</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>API</span></li>
+
+        
+            
+    <ul class="subnav">
+    <li><span>burpKit object</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../burpkit-overview/">Overview</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Methods</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#httpgetbytesstring-url">httpGetBytes(String url)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#httpgetstringstring-url">httpGetString(String url)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#requirestring-url">require(String url)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#requirelibstring-library">requireLib(String library)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#savefiledialogstring-title">saveFileDialog(String title)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#openfiledialogstring-title">openFileDialog(String title)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#openmultipledialogstring-title">openMultipleDialog(String title)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#writetofilestring-file-string-data">writeToFile(String file, String data)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#appendtofilestring-file-string-data">appendToFile(String file, String data)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#readfromfilestring-file">readFromFile(String file)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#loginpromptjsobject-callback">loginPrompt(JSObject callback)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#promptstring-question">prompt(String question)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#homedirectory">homeDirectory()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#pathjoinstring-first-jsobject-pathlist">pathJoin(String first, JSObject pathList)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#locals-and-globals">locals() and globals()</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#createjmenuitemstring-caption-jsobject-handler">createJMenuItem(String caption, JSObject handler)</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+    </ul>
+
+        
+            
+    <ul class="subnav">
+    <li><span>burpCallbacks object</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../callbacks-overview/">Overview</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../callbacks-api/">Methods</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../callbacks-constants/">Constants</a>
+        
+    </li>
+
+        
+    </ul>
+
+        
+            
+    <ul class="subnav">
+    <li><span>ExtensionHelpersBridge class</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../helpers-overview/">Overview</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../helpers-api/">Methods</a>
+        
+    </li>
+
+        
+    </ul>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">BurpKit</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>burpKit object &raquo;</li>
+        
+      
+    
+    <li>Methods</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/allfro/BurpKit" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="httpgetbytesstring-url"><code>httpGetBytes(String url)</code></h2>
+<p>Makes an HTTP GET request for the given URL void of the same-origin policy.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>url</code> - the URL to fetch content from.</li>
+</ul>
+<p><strong>Returns:</strong>
+A Java <code>byte[]</code> containing the HTTP response.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var responseBytes = burpKit.httpGetBytes('http://www.google.com');
+</code></pre>
+
+<hr />
+<h2 id="httpgetstringstring-url"><code>httpGetString(String url)</code></h2>
+<p>Makes an HTTP GET request for the given URL void of the same-origin policy.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>url</code> - the URL to fetch content from.</li>
+</ul>
+<p><strong>Returns:</strong>
+A string containing the HTTP response.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var responseStr = burpKit.httpGetString('http://www.google.com');
+</code></pre>
+
+<hr />
+<h2 id="requirestring-url"><code>require(String url)</code></h2>
+<p>Executes the contents of the JavaScript script file located at the given URL in the context of the current DOM. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>url</code> - the URL to fetch the JavaScript script contents from.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpKit.require('https://code.jquery.com/jquery-2.1.4.js');
+</code></pre>
+
+<hr />
+<h2 id="requirelibstring-library"><code>requireLib(String library)</code></h2>
+<p>Injects the library identified by the <code>library</code> parameter into the current DOM. See the parameters description for a list
+of valid libraries that come pre-packaged with BurpKit. The library is usually contained within a <code>window.&lt;libname&gt;</code> object, 
+with exception to the jQuery library which is directly injected into the DOM.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>library</code> - the name of the library you'd like to inject. Valid values are <code>'csvlib'</code>, <code>'httplib'</code>, <code>'beautifylib'</code>, <code>'iplib'</code>, <code>'rotlib'</code>, <code>'structlib'</code>, <code>'jquery'</code>, and <code>'cryptolib'</code>. </li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpKit.require('csvlib'); // Can be accessed using window.csvlib
+burpKit.require('httplib'); // Can be accessed using window.httplib
+</code></pre>
+
+<hr />
+<h2 id="savefiledialogstring-title"><code>saveFileDialog(String title)</code></h2>
+<p>Opens a file save dialog with the specified title, allowing the user to choose where a file is to be saved.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>title</code> - the title of the save file dialog window. </li>
+</ul>
+<p><strong>Returns:</strong>
+The full path of the file to save contents to.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var csvFileName = burpKit.saveFileDialog('Where should we save your CSV?');
+</code></pre>
+
+<hr />
+<h2 id="openfiledialogstring-title"><code>openFileDialog(String title)</code></h2>
+<p>Opens a file open dialog with the specified title, allowing the user to choose a file to open.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>title</code> - the title of the open file dialog window. </li>
+</ul>
+<p><strong>Returns:</strong>
+The full path of the file to open.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var csvFileName = burpKit.openFileDialog('Where is your CSV?');
+</code></pre>
+
+<hr />
+<h2 id="openmultipledialogstring-title"><code>openMultipleDialog(String title)</code></h2>
+<p>Just like the <code>fileOpenDialog()</code> but allows multiple file selections.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>title</code> - the title of the multiple open file dialog window. </li>
+</ul>
+<p><strong>Returns:</strong>
+An array of full path file names.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var csvFileNames = burpKit.openMultipleDialog('Where are your CSVs?');
+</code></pre>
+
+<hr />
+<h2 id="writetofilestring-file-string-data"><code>writeToFile(String file, String data)</code></h2>
+<p>Writes the contents of <code>data</code> to the file name specified in <code>file</code>. The file is opened and closed every time this method
+is called. If the file exists already, the contents of the existing file will be replaced with the contents of <code>data</code>.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>file</code> - the file path to write to.</li>
+<li><code>data</code> - the data to write to file.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var fileName = burpKit.saveFileDialog('Save location...');
+burpKit.writeToFile(fileName, 'foo');
+</code></pre>
+
+<hr />
+<h2 id="appendtofilestring-file-string-data"><code>appendToFile(String file, String data)</code></h2>
+<p>Appends the contents of <code>data</code> to the file name specified in <code>file</code>. The file is opened and closed every time this method
+is called.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>file</code> - the file path to write to.</li>
+<li><code>data</code> - the data to append to file.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var fileName = burpKit.saveFileDialog('Save location...');
+burpKit.writeToFile(fileName, 'foo');
+burpKit.appendToFile(fileName, 'bar');
+</code></pre>
+
+<hr />
+<h2 id="readfromfilestring-file"><code>readFromFile(String file)</code></h2>
+<p>The contents of the file specified by <code>file</code> are slurped into a string and returned. The file is opened and closed every
+time this method is invoked.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>file</code> - the file name to read data from.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var fileName = burpKit.openFileDialog('Select file...');
+alert(burpKit.readFromFile(fileName));
+</code></pre>
+
+<hr />
+<h2 id="loginpromptjsobject-callback"><code>loginPrompt(JSObject callback)</code></h2>
+<p>Prompts the user from login credentials. This can be used to write scripts that are driven by the BurpKit <code>document.onload</code>
+event loop.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>callback</code> - a callback function that accepts two parameters: <code>username</code> and <code>password</code>.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpKit.loginPrompt(function(username, password) {
+    // Here we are leveraging jQuery to select, fill, and submit the login form.
+    // Luckily Twitter has already included jQuery as part of the page. 
+    var form = $('form.signin')[0];
+    $('[name=&quot;session[username_or_email]&quot;]', form)[0].value = username;
+    $('[name=&quot;session[password]&quot;]', form)[0].value = password;
+    locals.put('loopCount', loopCount + 1);
+    form.submit();
+});
+</code></pre>
+
+<hr />
+<h2 id="promptstring-question"><code>prompt(String question)</code></h2>
+<p>Prompts the user for input. Similar to <code>window.prompt()</code>.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>question</code> - the question that the user needs to provide input for.</li>
+</ul>
+<p><strong>Returns:</strong>
+A string containing the answer.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var identity = burpKit.prompt(&quot;Who are you?&quot;);
+</code></pre>
+
+<hr />
+<h2 id="homedirectory"><code>homeDirectory()</code></h2>
+<p>Returns the user's home directory. Useful for default file save locations.</p>
+<p><strong>Returns:</strong>
+A string containing the user's home directory path.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">var homeDir = burpKit.homeDirectory();
+</code></pre>
+
+<hr />
+<h2 id="pathjoinstring-first-jsobject-pathlist"><code>pathJoin(String first, JSObject pathList)</code></h2>
+<p>Joins the paths in <code>first</code> and <code>pathList</code> using the native OS separator character.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>first</code> - the first part of the path (i.e. '/Users')</li>
+<li><code>pathList</code> - an array of paths to join (i.e. ['foo', 'bar'])</li>
+</ul>
+<p><strong>Returns:</strong>
+A string with the joined path.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpKit.pathJoin('/Users', ['foo', 'bar']); // returns '/Users/foo/bar'
+</code></pre>
+
+<hr />
+<h2 id="locals-and-globals"><code>locals()</code> and <code>globals()</code></h2>
+<p>Returns a global Java <code>Map</code> object that persists between <code>document.onload</code> events. <code>locals()</code> returns a map that is
+global to the current BurpKit tab, whereas <code>globals()</code> returns a map that is global to all of the BurpKit tabs. Values
+and names are strings, therefore the result of <code>toString()</code> will be stored where non-string objects are encountered.
+Persistence of complex objects can be achieved using a variety of string-based formats including XML, JSON, etc.</p>
+<p><strong>Returns:</strong>
+A Java <code>Map</code> object that persists between page loads.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">// Run in console.
+burpKit.locals().set('foo', 'bar');
+document.location = 'http://www.google.ca';
+burpKit.locals().get('foo') // returns 'bar'
+</code></pre>
+
+<hr />
+<h2 id="createjmenuitemstring-caption-jsobject-handler"><code>createJMenuItem(String caption, JSObject handler)</code></h2>
+<p>Creates a <code>JMenuItem</code> component that is useful for creating context menu items for BurpSuite plugins. </p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>caption</code> - the label of the menu item</li>
+<li><code>handler</code> - an object that adheres to the <code>ActionListener</code> interface or a lambda function that accepts an <code>ActionEvent</code> argument.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="javascript">burpKit.createJMenuItem('Test', function(event) { alert('clicked!'); });
+});
+</code></pre>
+
+<p>or </p>
+<pre><code class="javascript">burpKit.createJMenuItem('Test', {
+    'actionPerformed': function(event) { alert('clicked!'); }
+});
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../callbacks-overview/" class="btn btn-neutral float-right" title="Overview"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../burpkit-overview/" class="btn btn-neutral" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>BurpKit Project</p>
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../burpkit-overview/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../callbacks-overview/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
