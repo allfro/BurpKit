@@ -33,6 +33,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -99,55 +100,24 @@ public class JConsole extends JTextArea {
     }
 
     private class CommandHistory {
-        private class Command {
-            public Command next;
-            public Command previous;
-            public final String value;
-
-            public Command(String value) {
-                this.value = value;
-                next = this;
-                previous = this;
-            }
-
-            public Command(String value, Command previous, Command next) {
-                this.value = value;
-                previous.next = this;
-                this.previous = previous;
-                this.next = next;
-            }
-        }
-
-        private Command top = new Command("");
-        private Command end = top;
-        private Command current = top;
+        final List<String> commands = new ArrayList<>();
+        int current = -1;
 
         public synchronized void add(String command) {
-            if (!command.isEmpty())
-                end = new Command(command, end, top);
-        }
-
-        public String next() {
-            current = current.next;
-            return current.value;
+            commands.add(0, command);
+            current = 0;
         }
 
         public String previous() {
-            current = current.previous;
-            return current.value;
+            if (current == 0)
+                return "";
+            return commands.get(current--);
         }
 
-        public void reset() {
-            current = top;
-        }
-
-        public void clear() {
-            top.next = top;
-            top.previous = top;
-        }
-
-        public void seekLast() {
-            current = end.previous;
+        public String next() {
+            if (current == commands.size() - 1)
+                return commands.get(current);
+            return commands.get(current++);
         }
     }
 
@@ -173,7 +143,6 @@ public class JConsole extends JTextArea {
             {
                 if (addToHistory) {
                     history.add(source);
-                    history.seekLast();
                 }
                 return interpreter.push(source);
             }
