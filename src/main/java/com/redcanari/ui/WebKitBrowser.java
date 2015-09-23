@@ -77,6 +77,26 @@ public class WebKitBrowser extends JFXPanel {
 
 //    private LocalJSObject locals;
 //    private LocalJSObject globals;
+    private static final SimpleBooleanProperty isProxyingEnabled = new SimpleBooleanProperty(false);
+    static {
+        isProxyingEnabled.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                System.setProperty("http.proxySet", "true");
+                System.setProperty("http.proxyHost", "127.0.0.1");
+                System.setProperty("http.proxyPort", "8080");
+                System.setProperty("https.proxySet", "true");
+                System.setProperty("https.proxyHost", "127.0.0.1");
+                System.setProperty("https.proxyPort", "8080");
+            } else {
+                System.clearProperty("http.proxySet");
+                System.clearProperty("http.proxyHost");
+                System.clearProperty("http.proxyPort");
+                System.clearProperty("https.proxySet");
+                System.clearProperty("https.proxyHost");
+                System.clearProperty("https.proxyPort");
+            }
+        });
+    }
 
     private WebEngine webEngine;
     private WebView webView;
@@ -88,6 +108,7 @@ public class WebKitBrowser extends JFXPanel {
     private Button firebugButton;
     private ToggleButton consoleToggleButton;
     private ToggleButton showAlertsToggleButton;
+    private ToggleButton proxyRequestsToggleButton;
     private AnchorPane webViewAnchorPane;
     private Button screenShotButton;
     private BorderPane masterPane;
@@ -351,6 +372,7 @@ public class WebKitBrowser extends JFXPanel {
         createShowAlertsButton();
         createFirebugButton();
         createScreenShotButton();
+        createProxyRequestsButton();
 
         toolBar = new ToolBar();
 
@@ -359,7 +381,8 @@ public class WebKitBrowser extends JFXPanel {
                 consoleToggleButton,
                 showAlertsToggleButton,
                 firebugButton,
-                screenShotButton
+                screenShotButton,
+                proxyRequestsToggleButton
         );
     }
 
@@ -375,6 +398,14 @@ public class WebKitBrowser extends JFXPanel {
         consoleToggleButton.setTextFill(Color.DARKBLUE);
         consoleToggleButton.setTooltip(new Tooltip("Show/Hide Console."));
         consoleToggleButton.selectedProperty().bindBidirectional(isDetailNodeVisible);
+    }
+
+    private void createProxyRequestsButton() {
+        proxyRequestsToggleButton = new ToggleButton(FontAwesome.ICON_EXCHANGE);
+        proxyRequestsToggleButton.setFont(Font.font("FontAwesome", 14));
+        proxyRequestsToggleButton.setTextFill(Color.BLACK);
+        proxyRequestsToggleButton.setTooltip(new Tooltip("Enable/Disable Proxying via Burp"));
+        proxyRequestsToggleButton.selectedProperty().bindBidirectional(isProxyingEnabled);
     }
 
     private void createShowAlertsButton() {

@@ -25,6 +25,7 @@ import com.redcanari.net.security.TrustManager;
 import com.redcanari.tainter.Tainter;
 import com.redcanari.ui.WebKitBrowser;
 import com.redcanari.ui.font.FontAwesome;
+import com.redcanari.util.SSLUtilities;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -116,16 +117,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         callbacks.addSuiteTab(new JythonTab());
 
         // Ignore invalid SSL certificates.
-        try {
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, new TrustManager[] { new TrustManager() }, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            HttpsURLConnection.setDefaultHostnameVerifier((string, ssls) -> true);
-//            System.setProperty("https.proxyHost", "localhost");
-//            System.setProperty("https.proxyPort", "8080");
-        } catch (KeyManagementException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        SSLUtilities.trustAll();
 
 
         // Setup our request interceptor for the JVM
