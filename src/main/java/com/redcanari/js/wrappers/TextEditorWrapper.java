@@ -23,8 +23,6 @@ import javafx.application.Platform;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * Created by ndouba on 15-06-25.

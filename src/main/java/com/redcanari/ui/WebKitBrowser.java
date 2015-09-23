@@ -36,7 +36,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
@@ -62,8 +61,6 @@ import org.controlsfx.dialog.Dialogs;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -261,11 +258,11 @@ public class WebKitBrowser extends JFXPanel {
                             String[] requestLineParts = requestLine.getAsString().split(" ", 3);
                             traffic.setStatusCode(new Integer(requestLineParts[1]));
                             traffic.setStatusText(requestLineParts[2]);
-                            traffic.setSize((contentLength == null) ? "" : contentLength.getAsString());
+                            traffic.setSize((contentLength == null) ? "0" : contentLength.getAsString());
                         } else {
                             traffic.setStatusCode(200);
                             traffic.setStatusText("OK");
-                            traffic.setSize("");
+                            traffic.setSize("0");
                         }
                         break;
                     case "Network.loadingFinished":

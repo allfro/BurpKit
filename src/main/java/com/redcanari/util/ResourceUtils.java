@@ -18,17 +18,18 @@
 
 package com.redcanari.util;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
 /**
- * Created by ndouba on 15-01-01.
+ * @author  Nadeem Douba
+ * @version 1.0
+ * @since   2015-01-01.
  */
 public class ResourceUtils {
 
     public static String getResourceContentsAsString(String filename) {
         InputStream inputStream = ResourceUtils.class.getResourceAsStream(filename);
-        return  new Scanner(inputStream).useDelimiter("\\Z").next();
+        return new Scanner(inputStream).useDelimiter("\\Z").next();
     }
 }
