@@ -129,6 +129,8 @@ public class InterceptedHttpURLConnection extends HttpURLConnection {
      */
     private synchronized String getRepeaterDigest() {
         String userAgent = getRequestProperty("User-Agent");
+        if (userAgent == null)
+            return null;
         Matcher matcher = pattern.matcher(userAgent);
         if (!matcher.find())
             return null;
