@@ -34,6 +34,6 @@ public class TrafficSizeTableCell extends TrafficTableCellBase {
 	
 	@Override
 	protected String lookupText1(Traffic traffic) {
-		return getItem().getSize();
+		return getItem().getPrettySize();
 	}
 }

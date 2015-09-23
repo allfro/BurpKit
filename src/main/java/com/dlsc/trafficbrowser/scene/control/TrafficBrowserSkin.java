@@ -23,9 +23,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.transformation.SortedList;
-import javafx.event.EventHandler;
 import javafx.scene.control.SkinBase;
-import javafx.scene.control.SortEvent;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -148,31 +146,21 @@ public class TrafficBrowserSkin extends SkinBase<TrafficBrowser> {
 		getChildren().add(table);
 	}
 
+	private static final String TIMELINE_HEADER_TITLE = "Timeline (Duration: %s)";
 	private void updateTimelineColumnHeader() {
 		String timeSpan;
 		Duration d = Duration.between(getSkinnable().getStartTime(), getSkinnable().getEndTime());
+		long nanos = d.getNano();
+		float seconds = (float) (d.getSeconds() + (nanos/1000000000.0));
 
-		long seconds = d.getSeconds();
-		long hours = (int) Math.floor(seconds/3600);
-		seconds %= 3600;
-		long minutes = (int) Math.floor(seconds/60);
-		seconds %= 60;
-
-		if (hours > 0) {
-			timeSpan = String.format("%d.%02dh", hours, (int) Math.floor(minutes/60.0*100));
-		} else if (minutes > 0) {
-			timeSpan = String.format("%d.%02dh", minutes, (int)Math.floor(seconds/60.0*100));
+		if (seconds > 1) {
+			timeSpan = Traffic.getHumanValue(seconds, 60, Traffic.largeTimeScale);
+		} else if (nanos > 1000000) {
+			timeSpan = Traffic.getHumanValue(nanos, 1000000, Traffic.smallTimeScale);
 		} else {
-			int nanos = d.getNano();
-			int millis = (int)Math.floor(d.getNano() / 1000000);
-			nanos %= 1000000;
-			if (seconds > 0) {
-				timeSpan = String.format("%d.%03ds", seconds, millis);
-			} else {
-				timeSpan = String.format("%d.%03dms", millis, (int) Math.floor(nanos / 1000));
-			}
+			timeSpan = "< 1 ms";
 		}
 
-		timelineColumn.setText("Timeline (Duration: " + timeSpan + ")");
+		timelineColumn.setText(String.format(TIMELINE_HEADER_TITLE, timeSpan));
 	}
 }

@@ -162,33 +162,32 @@ public class Traffic {
         return Duration.between(startTime, endTime);
     }
 
+	public static final String[] largeTimeScale = { "s", "min", "hrs" };
+	public static final String[] smallTimeScale = { "ns", "ms" };
 	public String getTime() {
-        String timeSpan;
-        Duration d = Duration.between(startTime, endTime);
+		Duration d = Duration.between(startTime, endTime);
+		long nanos = d.getNano();
+		float seconds = (float) (d.getSeconds() + (nanos/1000000000.0));
 
-        long seconds = d.getSeconds();
-        long hours = (int) Math.floor(seconds/3600);
-        seconds %= 3600;
-        long minutes = (int) Math.floor(seconds/60);
-        seconds %= 60;
+		if (seconds > 1) {
+			return getHumanValue(seconds, 60, largeTimeScale);
+		} else if (nanos > 1000000) {
+			return getHumanValue(nanos, 1000000, smallTimeScale);
+		}
+		return "< 1 ms";
+	}
 
-        if (hours > 0) {
-            timeSpan = String.format("%d.%02dh", hours, (int) Math.floor(minutes/60.0*100));
-        } else if (minutes > 0) {
-            timeSpan = String.format("%d.%02dh", minutes, (int)Math.floor(seconds/60.0*100));
-        } else {
-            int nanos = d.getNano();
-            int millis = (int)Math.floor(d.getNano() / 1000000);
-            nanos %= 1000000;
-            if (seconds > 0) {
-                timeSpan = String.format("%d.%03ds", seconds, millis);
-            } else {
-                timeSpan = String.format("%d.%03dms", millis, (int) Math.floor(nanos / 1000));
-            }
-        }
+	public static String getHumanValue(float value, long unit, String[] scale) {
+		if (value < unit)
+			return String.format("%.02f %s", value, scale[0]);
+		int exp = (int)Math.floor(Math.log(value)/Math.log(unit));
+		return String.format("%.2f %s", value/Math.pow(unit, exp), scale[exp]);
+	}
 
-        return timeSpan;
-    }
+	private static final String[] byteScale = {"B", "KB", "MB", "GB", "TB", "PB", "EB"};
+	public String getPrettySize() {
+		return getHumanValue(Integer.valueOf(size), 1024, byteScale);
+	}
 
 	public boolean isError() {
 		return getStatusCode() >= 400;
