@@ -101,7 +101,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         helpers = callbacks.getHelpers();
         
         // set our extension name
-        callbacks.setExtensionName("BurpKit 1.0");
+        callbacks.setExtensionName("BurpKit 1.02");
         
         // register ourselves as a message editor tab factory
         callbacks.registerMessageEditorTabFactory(this);
