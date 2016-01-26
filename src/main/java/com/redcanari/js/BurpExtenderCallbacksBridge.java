@@ -96,7 +96,10 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
     public static final byte CONTENT_TYPE_XML = IRequestInfo.CONTENT_TYPE_XML;
     public static final byte CONTENT_TYPE_JSON = IRequestInfo.CONTENT_TYPE_JSON;
     public static final byte CONTENT_TYPE_AMF = IRequestInfo.CONTENT_TYPE_AMF;
-    
+
+    public static final byte INS_URL_PATH_FOLDER = IScannerInsertionPoint.INS_URL_PATH_FOLDER;
+    public static final byte INS_URL_PATH_REST = IScannerInsertionPoint.INS_URL_PATH_REST;
+    public static final byte INS_ENTIRE_BODY = IScannerInsertionPoint.INS_ENTIRE_BODY;
     public static final byte INS_PARAM_URL = IScannerInsertionPoint.INS_PARAM_URL;
     public static final byte INS_PARAM_BODY = IScannerInsertionPoint.INS_PARAM_BODY;
     public static final byte INS_PARAM_COOKIE = IScannerInsertionPoint.INS_PARAM_COOKIE;
@@ -106,7 +109,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
     public static final byte INS_PARAM_JSON = IScannerInsertionPoint.INS_PARAM_JSON;
     public static final byte INS_PARAM_AMF = IScannerInsertionPoint.INS_PARAM_AMF;
     public static final byte INS_HEADER = IScannerInsertionPoint.INS_HEADER;
-    public static final byte INS_URL_REST = IScannerInsertionPoint.INS_URL_REST;
+    public static final byte INS_URL_PATH_FILENAME = IScannerInsertionPoint.INS_URL_PATH_FILENAME;
     public static final byte INS_PARAM_NAME_URL = IScannerInsertionPoint.INS_PARAM_NAME_URL;
     public static final byte INS_PARAM_NAME_BODY = IScannerInsertionPoint.INS_PARAM_NAME_BODY;
     public static final byte INS_USER_PROVIDED = IScannerInsertionPoint.INS_USER_PROVIDED;
@@ -632,7 +635,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
     /**
      * This method is used to register a factory for Intruder payloads. Each registered factory will be available within
      * the Intruder UI for the user to select as the payload source for an attack. When this is selected, the factory
-     * will be asked to provide a new instance of an {@link burp.IIntruderPayloadGeneratorFactory} object, which will
+     * will be asked to provide a new instance of an {@link burp.IIntruderPayloadGenerator} object, which will
      * be used to generate payloads for the attack.
      *
      * @param factory An object created by the extension that implements
@@ -874,15 +877,8 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
     /**
      * This method is used to create a new instance of Burp's plain text editor, for the extension to use in its own UI.
      *
-     * @param callback a JavaScript callback function that is called with an instance of {@link ITextEditor} as its
-     *                 first argument once the {@link ITextEditor} instance has been successfully created.
+     * @return an instance of {@link burp.ITextEditor}
      */
-//    public void createTextEditor(JSObject callback) {
-//        SwingFXUtilities.invokeLater(
-//                burpExtenderCallbacks::createTextEditor,
-//                callback
-//        );
-//    }
     public ITextEditor createTextEditor() {
         return new TextEditorWrapper(burpExtenderCallbacks.createTextEditor());
     }
@@ -915,7 +911,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
      * GET requests.
      *
      * This method will automatically build an HTTP GET request by simply processing the URL and inserting cookie
-     * information from the WebKit/JavaFX cookie jar.
+     * information from the Web Kit/JavaFX cookie jar.
      *
      * @param url           The URL of the request to send to the repeater.
      * @param tabCaption    An optional caption which will appear on the Repeater tab containing the request. If this
@@ -1109,7 +1105,7 @@ public class BurpExtenderCallbacksBridge extends JavaScriptBridge {
     /**
      * A shortcut method to performing HTTP GET requests by providing only the URL.
      *
-     * @param url The HTTP service to which the request should be sent.
+     * @param url The destination URL to make a request for.
      * @return an instance of {@link burp.IHttpRequestResponse}.
      * @throws java.net.MalformedURLException
      */
