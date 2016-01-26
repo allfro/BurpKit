@@ -38,6 +38,11 @@ public class CookieJSProxy extends JSProxy implements ICookie {
     }
 
     @Override
+    public String getPath() {
+        return call("getPath");
+    }
+
+    @Override
     public Date getExpiration() {
         return call("getExpiration");
     }
