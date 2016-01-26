@@ -68,7 +68,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         int revision = Integer.valueOf(splitVersion[2]);
         int update = Integer.valueOf(splitVersion[3]);
 
-        return (major >= 1 && minor == 8 && revision >= 0 && update >= 31);
+        return (major >= 1 && minor == 8 && revision >= 0 && update >= 45);
     }
 
     /**
@@ -91,7 +91,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         if (!isRunningSupportedJVM()) {
             callbacks.printError(
                     "The current version of Java/JFX you're running is currently not supported\n" +
-                    "by this plugin. Please download at least 1.8.0u31-b31 from the Oracle website."
+                    "by this plugin. Please download at least 1.8.0u45 from the Oracle website."
             );
             throw new RuntimeException();
         }
@@ -102,7 +102,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         helpers = callbacks.getHelpers();
         
         // set our extension name
-        callbacks.setExtensionName("BurpKit 1.02");
+        callbacks.setExtensionName("BurpKit 1.03");
         
         // register ourselves as a message editor tab factory
         callbacks.registerMessageEditorTabFactory(this);
