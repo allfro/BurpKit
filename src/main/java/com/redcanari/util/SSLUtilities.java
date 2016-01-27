@@ -48,15 +48,16 @@ public final class SSLUtilities {
             public void checkServerTrusted(X509Certificate[] certs, String authType){}
         }};
 
-        // Install the all-trusting trust managers
-//        for (String protocol: protocols) {
         try {
-            SSLContext sc = SSLContext.getInstance(protocols[2]);
-            sc.init(null, trustAllCerts, new SecureRandom());
-            SSLContext.setDefault(sc);
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            for (String protocol : protocols) {
+                SSLContext sc = SSLContext.getInstance(protocol);
+                sc.init(null, trustAllCerts, new SecureRandom());
+                if (protocol.equals("TLSv1.2")) {
+                    SSLContext.setDefault(sc);
+                    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+                }
+            }
         } catch (Exception ignored) {}
-//        }
 
         HttpsURLConnection.setDefaultHostnameVerifier((s, sslSession) -> true);
     }
