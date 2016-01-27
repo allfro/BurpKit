@@ -19,6 +19,7 @@
 package com.redcanari.js;
 
 import com.redcanari.ui.JSInputDialog;
+import com.redcanari.ui.JSLoginDialog;
 import com.redcanari.util.ResourceUtils;
 import javafx.application.Platform;
 import javafx.scene.web.PromptData;
@@ -111,11 +112,9 @@ public class BurpKitBridge {
     }
 
     public void loginPrompt(JSObject callback) {
-
-//        Dialogs.create().showLogin(new Pair<>("", ""), (params) -> {
-//            callback.call("call", null, params.getKey(), params.getValue());
-//            return null;
-//        });
+        Pair<String, String> result = new JSLoginDialog().login("Login");
+        if (result != null)
+            callback.call("call", null, result.getKey(), result.getValue());
     }
 
     public LocalJSObject locals() {
