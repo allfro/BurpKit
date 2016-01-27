@@ -32,8 +32,8 @@ switch (loopCount) {
 
 // Ask which Twitter handle to scrape and go to their followers page.
 function goToFollowers() {
-	// `burpKit.prompt()` provides a dialog box with a single text field for input. 
-	targetUser = burpKit.prompt('Which Twitter user would you like to scrape?');
+	// `prompt()` provides a dialog box with a single text field for input.
+	targetUser = prompt('Which Twitter user would you like to scrape?');
 
 	// persist our `targetUser` and `loopCount` so that we can retrieve it over page navigations.
 	locals.put('targetUser', targetUser);

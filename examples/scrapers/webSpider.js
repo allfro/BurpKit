@@ -49,7 +49,7 @@ function saveText(fileName) {
 // If we've just started looping, we will initialize our state and navigate to our first URL.
 if (!loopCount) {
 	saveState();
-	document.location = burpKit.prompt("Which site would you like to crawl?");
+	document.location = prompt("Which site would you like to crawl?");
 } else {
 	// mark URL as crawled in crawl queue
 	urlsCrawled[document.location] = 1; 
