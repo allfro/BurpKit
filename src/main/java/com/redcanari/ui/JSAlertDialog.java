@@ -1,88 +1,72 @@
-/*
- * BurpKit - WebKit-based penetration testing plugin for BurpSuite
- * Copyright (C) 2015  Red Canari, Inc.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package com.redcanari.ui;
 
+import com.sun.javafx.tk.Toolkit;
+import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
  * Created by ndouba on 15-07-02.
  */
-public class JSAlertDialog {
+public class JSAlertDialog extends Alert {
 
-    final Alert alertBox = new Alert(Alert.AlertType.INFORMATION);
-    final Stage stage = new Stage(StageStyle.UNDECORATED);
-    final Parent owner;
+    private final StackPane stackPane;
+    private final Node owner;
 
-    public JSAlertDialog(Parent owner) {
+    public JSAlertDialog(Node owner) {
+        super(AlertType.INFORMATION);
         this.owner = owner;
-
-        alertBox.initStyle(StageStyle.UNDECORATED);
-        alertBox.setHeaderText("JavaScript Alert");
-
-        Pane alertPane = alertBox.getDialogPane();
-
-        stage.setScene(alertPane.getScene());
-        stage.setAlwaysOnTop(true);
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(owner.getScene().getWindow());
-        stage.getScene().getRoot().setEffect(new DropShadow());
-
-        Bounds bounds = owner.localToScreen(owner.getBoundsInLocal());
-
-        alertPane.layoutBoundsProperty().addListener(l -> {
-            stage.setX(bounds.getMinX() + (bounds.getWidth() - alertPane.getWidth()) / 2);
-            stage.setY(bounds.getMinY() + (bounds.getHeight() - alertPane.getHeight()) / 2);
-        });
-
-        owner.getScene().getWindow().xProperty().addListener((observable) -> {
-            Bounds bounds1 = owner.localToScreen(owner.getBoundsInLocal());
-            stage.setX(bounds1.getMinX() + (bounds1.getWidth() - alertPane.getWidth()) / 2);
-        });
-
-        owner.getScene().getWindow().yProperty().addListener((observable) -> {
-            Bounds bounds2 = owner.localToScreen(owner.getBoundsInLocal());
-            stage.setY(bounds2.getMinY() + (bounds2.getHeight() - alertPane.getHeight()) / 2);
-        });
-
-        ((Button)((ButtonBar)alertBox
-                .getDialogPane()
-                .getChildren()
-                .get(2))
-                .getButtons()
-                .get(0))
-                .setOnAction(e -> stage.close());
+        Parent parent = owner.getParent();
+        if (!(parent instanceof StackPane)) {
+            if (parent instanceof Pane) {
+                ObservableList<Node> nodes = ((Pane) parent).getChildren();
+                Bounds bounds = owner.getBoundsInParent();
+                nodes.remove(owner);
+                stackPane = new StackPane();
+                AnchorPane.setBottomAnchor(stackPane, AnchorPane.getBottomAnchor(owner));
+                AnchorPane.setTopAnchor(stackPane, AnchorPane.getTopAnchor(owner));
+                AnchorPane.setLeftAnchor(stackPane, AnchorPane.getLeftAnchor(owner));
+                AnchorPane.setRightAnchor(stackPane, AnchorPane.getRightAnchor(owner));
+                HBox.setHgrow(stackPane, HBox.getHgrow(owner));
+                VBox.setVgrow(stackPane, VBox.getVgrow(owner));
+                stackPane.getChildren().add(owner);
+                nodes.add(stackPane);
+            } else {
+                throw new RuntimeException("Parent of owner needs to be a subclass of Pane.");
+            }
+        } else {
+            stackPane = (StackPane)parent;
+        }
+//        initOwner(owner.getScene().getWindow());
+        initModality(Modality.NONE);
+        initStyle(StageStyle.UNDECORATED);
+        setHeaderText("JavaScript Alert");
     }
 
     public void alert(String message) {
-        owner.setEffect(new BoxBlur());
-        alertBox.setContentText(message);
-        stage.showAndWait();
-        owner.setEffect(null);
+        setContentText(message);
+        Pane dialogPane = getDialogPane();
+        dialogPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        dialogPane.setEffect(new DropShadow());
+        HBox rootPane = new HBox(dialogPane);
+        rootPane.setAlignment(Pos.CENTER);
+        rootPane.setStyle("-fx-background-color: rgba(0,0,0,0.5);");
+        stackPane.getChildren().add(rootPane);
+        ButtonBar bar = (ButtonBar)dialogPane.getChildren().get(2);
+        Button button = (Button)bar.getButtons().get(0);
+        button.setOnMouseClicked((event) -> {
+            Toolkit.getToolkit().exitNestedEventLoop(this, null);
+            stackPane.getChildren().remove(rootPane);
+        });
+        Toolkit.getToolkit().enterNestedEventLoop(this);
     }
 }

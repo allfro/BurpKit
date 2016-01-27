@@ -56,7 +56,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import netscape.javascript.JSObject;
-import org.controlsfx.dialog.Dialogs;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -132,8 +131,6 @@ public class WebKitBrowser extends JFXPanel {
 
     private final String selectionScript;
     private final String firebugScript;
-
-    private Dialogs dialog;
 
 
     public WebKitBrowser() {
@@ -322,10 +319,10 @@ public class WebKitBrowser extends JFXPanel {
 
         webEngine = webView.getEngine();
 
-        dialog = Dialogs.create()
-                .lightweight()
-                .modal()
-                .owner(webView);
+//        dialog = Dialogs.create()
+//                .lightweight()
+//                .modal()
+//                .owner(webView);
 
 //        locals = new LocalJSObject(webEngine);
 //        globals = GlobalJSObject.getGlobalJSObject(webEngine);
@@ -488,10 +485,8 @@ public class WebKitBrowser extends JFXPanel {
          * Finally display an alert box if the operator demands it.
          */
         if (showAlerts.getValue()) {
-            dialog.title("JavaScript Alert")
-                    .message(message)
-                    .showInformation();
-            resetParents();
+            new JSAlertDialog(webView).alert((String) event.getData());
+//            resetParents();
         }
 
     }
@@ -553,17 +548,10 @@ public class WebKitBrowser extends JFXPanel {
                 );
             }
         } else if (newValue == Worker.State.FAILED) {
-            dialog.title("Navigation Failed")
-                    .message(webEngine.getLoadWorker().getException().getMessage())
-                    .showInformation();
-            resetParents();
-        } else if (newValue == Worker.State.CANCELLED) {
-            dialog.title("Navigation Cancelled")
-                    .message(webEngine.getLoadWorker().getMessage())
-                    .showInformation();
-            resetParents();
+            JSAlertDialog alert = new JSAlertDialog(webView);
+            alert.setHeaderText("Navigation Failed");
+            alert.alert(webEngine.getLoadWorker().getException().getMessage());
         }
-
 
     }
 
