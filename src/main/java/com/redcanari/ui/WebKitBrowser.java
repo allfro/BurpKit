@@ -131,6 +131,7 @@ public class WebKitBrowser extends JFXPanel {
 
     private final String selectionScript;
     private final String firebugScript;
+    private JSInputDialog promptDialog;
 
 
     public WebKitBrowser() {
@@ -198,6 +199,8 @@ public class WebKitBrowser extends JFXPanel {
         addAlertListener(crossSiteScriptingTrackerTab::handleAlert);
 
         pageResourcesTab = new PageResourcesTab(webEngine);
+
+        promptDialog = new JSInputDialog();
 
         Tab javaScriptEditorTab = new Tab("BurpScript IDE");
         javaScriptEditorTab.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -331,6 +334,11 @@ public class WebKitBrowser extends JFXPanel {
         webEngine.setJavaScriptEnabled(true);
         webEngine.setOnAlert(this::handleAlert);
         webEngine.setOnError(this::handleError);
+        webEngine.setPromptHandler(promptData -> {
+            if (showAlerts.getValue())
+                return promptDialog.prompt(promptData);
+            return "Prompt disabled (toggle alert button to see prompts).";
+        });
         webEngine.setConfirmHandler(param -> true);
         webEngine.getLoadWorker().stateProperty().addListener(this::workerStateChanged);
 
@@ -485,7 +493,7 @@ public class WebKitBrowser extends JFXPanel {
          * Finally display an alert box if the operator demands it.
          */
         if (showAlerts.getValue()) {
-            new JSAlertDialog(webView).alert((String) event.getData());
+            new JSAlertDialog(webView).alert(message);
 //            resetParents();
         }
 
@@ -495,11 +503,11 @@ public class WebKitBrowser extends JFXPanel {
      * Used to get rid of LightweightDialog parent container which causes ugly GUI glitches.
      * Called after every time a dialog window is closed.
      */
-    private void resetParents() {
-        Parent webViewParent = webView.getParent();
-        webViewAnchorPane.getChildren().remove(webViewParent);
-        webViewAnchorPane.getChildren().add(webView);
-    }
+//    private void resetParents() {
+//        Parent webViewParent = webView.getParent();
+//        webViewAnchorPane.getChildren().remove(webViewParent);
+//        webViewAnchorPane.getChildren().add(webView);
+//    }
 
     public void loadUrl(final String url) {
         Platform.runLater(() -> webEngine.load(url));

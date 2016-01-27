@@ -18,13 +18,14 @@
 
 package com.redcanari.js;
 
+import com.redcanari.ui.JSInputDialog;
 import com.redcanari.util.ResourceUtils;
 import javafx.application.Platform;
+import javafx.scene.web.PromptData;
 import javafx.scene.web.WebEngine;
 import javafx.stage.FileChooser;
 import javafx.util.Pair;
 import netscape.javascript.JSObject;
-import org.controlsfx.dialog.Dialogs;
 
 import javax.swing.*;
 import java.io.File;
@@ -110,10 +111,11 @@ public class BurpKitBridge {
     }
 
     public void loginPrompt(JSObject callback) {
-        Dialogs.create().showLogin(new Pair<>("", ""), (params) -> {
-            callback.call("call", null, params.getKey(), params.getValue());
-            return null;
-        });
+
+//        Dialogs.create().showLogin(new Pair<>("", ""), (params) -> {
+//            callback.call("call", null, params.getKey(), params.getValue());
+//            return null;
+//        });
     }
 
     public LocalJSObject locals() {
@@ -123,18 +125,6 @@ public class BurpKitBridge {
     public LocalJSObject globals() {
         return globals;
     }
-
-    public String prompt(String question) {
-        Optional<String> result = Dialogs.create()
-                .masthead(question)
-                .title("Input Required!")
-                .showTextInput();
-        return result.get();
-    }
-
-//    public WebEngine getWebEngine() {
-//        return new WebEngine();
-//    }
 
     protected boolean isFunction(Object object) {
         if (!(object instanceof JSObject))
